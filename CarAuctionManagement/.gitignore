@@ -1,0 +1,49 @@
+# Ignore arquivos gerados pelo Rider/IDEA
+.idea/
+*.DotSettings
+*.DotSettings.user
+
+# Arquivos gerados pelo sistema de build
+bin/
+obj/
+
+# Arquivos gerados pelo Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Arquivos temporários e de log
+*.log
+*.temp
+*.tmp
+*.svd
+
+# Arquivos gerados pelo sistema operacional
+Thumbs.db
+*.DS_Store
+
+# Arquivos de backup de editores
+*.bak
+*.old
+*.swp
+*.swo
+*.orig
+
+# Diretório de pacotes e dependências
+packages/
+.vscode/
+node_modules/
+project.lock.json
+project.fragment.lock.json
+*.nuget.props
+*.nuget.targets
+
+# Configurações de ambiente específicas
+.env
+.env.*
+
+# Configurações geradas localmente
+logs/
+artifacts/
+.vs/
