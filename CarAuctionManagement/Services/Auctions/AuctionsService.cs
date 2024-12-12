@@ -66,12 +66,12 @@ public class AuctionsService : IAuctionsService
     private void StartAuctionValidations(Auction? auction)
     {
         List<Auction> auctions = _auctionsRepository.GetAuctions();
-        if (auctions.Any(a => a.Vehicle?.Id == auction?.Vehicle?.Id))
+        if (auctions.Any(actualAuction => actualAuction.Vehicle?.Id == auction?.Vehicle?.Id))
             throw new CustomExceptions.AuctionAlreadyActiveException(auction?.Vehicle?.Id);
-        if (auctions.Any(a => a.Id == auction?.Id))
+        if (auctions.Any(actualAuction => actualAuction.Id == auction?.Id))
             throw new CustomExceptions.AuctionSameIdException(auction?.Id);
         List<Vehicle?> allVehicles = _vehiclesRepository.GetVehicles();
-        if (allVehicles.All(v => v?.Id != auction?.Vehicle?.Id))
+        if (allVehicles.All(vehicle => vehicle?.Id != auction?.Vehicle?.Id))
             throw new CustomExceptions.VehicleNotFoundException(auction?.Vehicle?.Id);
     }
 
