@@ -5,7 +5,7 @@ namespace CarAuctionManagement.Repository.Auctions;
 
 public class AuctionsRepository : IAuctionsRepository
 {
-    private List<Auction> _auctions = new();
+    private readonly List<Auction> _auctions = new();
     
     public void StartAuction(Auction auction)
     {

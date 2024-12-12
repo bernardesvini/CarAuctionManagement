@@ -4,7 +4,7 @@ namespace CarAuctionManagement.Models.Vehicles;
 
 public class Truck : Vehicle
 {
-    public double? LoadCapacity { get; set; }
+    public decimal? LoadCapacity { get; set; }
     
     public override void Validate()
     {

@@ -26,7 +26,7 @@ public class AuctionServiceTests
     {
         var auction = new Mock<Auction> { CallBase = true };
         auction.Object.Id = "12";
-        auction.Object.Vehicle = new Hatchback { Id = "2", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 };
+        auction.Object.Vehicle = new Hatchback { Id = "2", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00m, NumberOfDoors = 4 };
 
         _auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(new List<Auction> { auction.Object });
 
@@ -40,9 +40,9 @@ public class AuctionServiceTests
         var auction = new Mock<Auction> { CallBase = true };
         var exitingAuction = new Mock<Auction> { CallBase = true };
         auction.Object.Id = "1";
-        auction.Object.Vehicle = new Hatchback { Id = "3", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 };
+        auction.Object.Vehicle = new Hatchback { Id = "3", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00m, NumberOfDoors = 4 };
         exitingAuction.Object.Id = "1";
-        exitingAuction.Object.Vehicle = new Hatchback { Id = "1", Manufacturer = "Honda", Year = 2020, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 };
+        exitingAuction.Object.Vehicle = new Hatchback { Id = "1", Manufacturer = "Honda", Year = 2020, Model = "Civic", StartingBid = 1500.00m, NumberOfDoors = 4 };
 
         _auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(new List<Auction> { exitingAuction.Object });
 
@@ -55,7 +55,7 @@ public class AuctionServiceTests
     {
         var auction = new Mock<Auction> { CallBase = true };
         auction.Object.Id = "123";
-        auction.Object.Vehicle = new Truck { Id = "1", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, LoadCapacity = 4 };
+        auction.Object.Vehicle = new Truck { Id = "1", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00m, LoadCapacity = 4 };
 
         _vehiclesRepositoryMock.Setup(repo => repo.GetVehicles()).Returns(new List<Vehicle?>());
 
@@ -68,7 +68,7 @@ public class AuctionServiceTests
     {
         var auction = new Mock<Auction> { CallBase = true };
         auction.Object.Id = "1";
-        auction.Object.Vehicle = new Suv { Id = "1", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfSeats = 4 };
+        auction.Object.Vehicle = new Suv { Id = "1", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00m, NumberOfSeats = 4 };
 
         _vehiclesRepositoryMock.Setup(repo => repo.GetVehicles()).Returns(new List<Vehicle?> { auction.Object.Vehicle });
 
@@ -131,8 +131,8 @@ public class AuctionServiceTests
         {
             Id = "1",
             IsActive = true,
-            Vehicle = new Suv { Id = "1", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfSeats = 4 },
-            HighestBid = 1500.00,
+            Vehicle = new Suv { Id = "1", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00m, NumberOfSeats = 4 },
+            HighestBid = 1500.00m,
             HighestBidder = "1"
         };
 
@@ -186,7 +186,7 @@ public class AuctionServiceTests
 
     [Theory]
     [InlineData(80, "The bid amount 80 is lower or equal to the current highest bid 100.")]
-    public void PlaceBid_ShouldThrowException_WhenBidAmountTooLow(double bidAmount, string expectedMessage)
+    public void PlaceBid_ShouldThrowException_WhenBidAmountTooLow(decimal bidAmount, string expectedMessage)
     {
         var auction = new Auction
         {
