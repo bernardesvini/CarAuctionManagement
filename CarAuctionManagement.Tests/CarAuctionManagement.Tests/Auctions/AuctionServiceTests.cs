@@ -10,6 +10,17 @@ namespace CarAuctionManagement.Tests.Auctions;
 
 public class AuctionServiceTests
 {
+    private readonly Mock<IAuctionsRepository> _auctionsRepositoryMock;
+    private readonly Mock<IVehiclesRepository> _vehiclesRepositoryMock;
+    private readonly AuctionsService _service;
+
+    public AuctionServiceTests()
+    {
+        _auctionsRepositoryMock = new Mock<IAuctionsRepository>();
+        _vehiclesRepositoryMock = new Mock<IVehiclesRepository>();
+        _service = new AuctionsService(_auctionsRepositoryMock.Object, _vehiclesRepositoryMock.Object);
+    }
+
     [Fact]
     public void StartAuction_ShouldThrowException_WhenAuctionAlreadyActive()
     {
@@ -17,12 +28,9 @@ public class AuctionServiceTests
         auction.Object.Id = "12";
         auction.Object.Vehicle = new Hatchback { Id = "2", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 };
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(new List<Auction> { auction.Object });
+        _auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(new List<Auction> { auction.Object });
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, Mock.Of<IVehiclesRepository>());
-
-        var exception = Assert.Throws<CustomExceptions.AuctionAlreadyActiveException>(() => service.StartAuction(auction.Object));
+        var exception = Assert.Throws<CustomExceptions.AuctionAlreadyActiveException>(() => _service.StartAuction(auction.Object));
         Assert.Equal("An auction is already active for vehicle ID 2.", exception.Message);
     }
 
@@ -36,12 +44,9 @@ public class AuctionServiceTests
         exitingAuction.Object.Id = "1";
         exitingAuction.Object.Vehicle = new Hatchback { Id = "1", Manufacturer = "Honda", Year = 2020, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 };
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(new List<Auction> { exitingAuction.Object });
+        _auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(new List<Auction> { exitingAuction.Object });
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, Mock.Of<IVehiclesRepository>());
-
-        var exception = Assert.Throws<CustomExceptions.AuctionSameIdException>(() => service.StartAuction(auction.Object));
+        var exception = Assert.Throws<CustomExceptions.AuctionSameIdException>(() => _service.StartAuction(auction.Object));
         Assert.Equal("An auction with the ID 1 already exists.", exception.Message);
     }
 
@@ -52,12 +57,9 @@ public class AuctionServiceTests
         auction.Object.Id = "123";
         auction.Object.Vehicle = new Truck { Id = "1", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, LoadCapacity = 4 };
 
-        var vehiclesRepositoryMock = new Mock<IVehiclesRepository>();
-        vehiclesRepositoryMock.Setup(repo => repo.GetVehicles()).Returns(new List<Vehicle?>());
+        _vehiclesRepositoryMock.Setup(repo => repo.GetVehicles()).Returns(new List<Vehicle?>());
 
-        var service = new AuctionsService(Mock.Of<IAuctionsRepository>(), vehiclesRepositoryMock.Object);
-
-        var exception = Assert.Throws<CustomExceptions.VehicleNotFoundException>(() => service.StartAuction(auction.Object));
+        var exception = Assert.Throws<CustomExceptions.VehicleNotFoundException>(() => _service.StartAuction(auction.Object));
         Assert.Equal($"Vehicle with ID 1 not found.", exception.Message);
     }
 
@@ -68,28 +70,20 @@ public class AuctionServiceTests
         auction.Object.Id = "1";
         auction.Object.Vehicle = new Suv { Id = "1", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfSeats = 4 };
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        var vehiclesRepositoryMock = new Mock<IVehiclesRepository>();
-        vehiclesRepositoryMock.Setup(repo => repo.GetVehicles()).Returns(new List<Vehicle?> { auction.Object.Vehicle });
+        _vehiclesRepositoryMock.Setup(repo => repo.GetVehicles()).Returns(new List<Vehicle?> { auction.Object.Vehicle });
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, vehiclesRepositoryMock.Object);
+        _service.StartAuction(auction.Object);
 
-        service.StartAuction(auction.Object);
-
-        auctionsRepositoryMock.Verify(repo => repo.StartAuction(auction.Object), Times.Once);
+        _auctionsRepositoryMock.Verify(repo => repo.StartAuction(auction.Object), Times.Once);
     }
 
     [Fact]
     public void GetAuctions_ShouldReturnAuctions_WhenAuctionsExist()
     {
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        var vehiclesRepositoryMock = new Mock<IVehiclesRepository>();
         var auctions = new List<Auction> { new Mock<Auction>().Object };
-        auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(auctions);
+        _auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(auctions);
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, vehiclesRepositoryMock.Object);
-
-        var result = service.GetAuctions();
+        var result = _service.GetAuctions();
 
         Assert.Equal(auctions, result);
     }
@@ -97,13 +91,9 @@ public class AuctionServiceTests
     [Fact]
     public void GetAuctions_ShouldThrowException_WhenNoAuctionsFound()
     {
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        var vehiclesRepositoryMock = new Mock<IVehiclesRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(new List<Auction>());
+        _auctionsRepositoryMock.Setup(repo => repo.GetAuctions()).Returns(new List<Auction>());
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, vehiclesRepositoryMock.Object);
-
-        var exception = Assert.Throws<CustomExceptions.NoAuctionsFoundException>(() => service.GetAuctions());
+        var exception = Assert.Throws<CustomExceptions.NoAuctionsFoundException>(() => _service.GetAuctions());
 
         Assert.Equal("No auctions found.", exception.Message);
     }
@@ -114,12 +104,9 @@ public class AuctionServiceTests
         var auction = new Mock<Auction> { CallBase = true };
         auction.Object.Id = "1";
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction>());
+        _auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction>());
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, Mock.Of<IVehiclesRepository>());
-
-        var exception = Assert.Throws<CustomExceptions.AuctionNotFoundException>(() => service.EndAuction(auction.Object));
+        var exception = Assert.Throws<CustomExceptions.AuctionNotFoundException>(() => _service.EndAuction(auction.Object));
         Assert.Equal($"Auction with ID 1 not found or isn't active.", exception.Message);
     }
 
@@ -130,14 +117,11 @@ public class AuctionServiceTests
         auction.Object.Id = "1";
         auction.Object.IsActive = true;
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction> { auction.Object });
+        _auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction> { auction.Object });
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, Mock.Of<IVehiclesRepository>());
+        _service.EndAuction(auction.Object);
 
-        service.EndAuction(auction.Object);
-
-        auctionsRepositoryMock.Verify(repo => repo.EndAuction(auction.Object), Times.Once);
+        _auctionsRepositoryMock.Verify(repo => repo.EndAuction(auction.Object), Times.Once);
     }
 
     [Fact]
@@ -152,15 +136,12 @@ public class AuctionServiceTests
             HighestBidder = "1"
         };
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction> { auction });
-        auctionsRepositoryMock.Setup(repo => repo.EndAuction(It.IsAny<Auction>())).Callback<Auction>(a => a.IsActive = false);
+        _auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction> { auction });
+        _auctionsRepositoryMock.Setup(repo => repo.EndAuction(It.IsAny<Auction>())).Callback<Auction>(a => a.IsActive = false);
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, Mock.Of<IVehiclesRepository>());
+        _service.EndAuction(auction);
 
-        service.EndAuction(auction);
-
-        auctionsRepositoryMock.Verify(repo => repo.EndAuction(It.Is<Auction>(a => a.Id == "1")), Times.Once);
+        _auctionsRepositoryMock.Verify(repo => repo.EndAuction(It.Is<Auction>(a => a.Id == "1")), Times.Once);
         Assert.False(auction.IsActive);
     }
 
@@ -175,41 +156,37 @@ public class AuctionServiceTests
         };
         var newBid = new Bid { Id = "2", BidderId = "2", AuctionId = "1", Amount = 150 };
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction> { auction });
-        auctionsRepositoryMock.Setup(repo => repo.PlaceBid(It.IsAny<Bid>())).Callback<Bid>(bid =>
+        _auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction> { auction });
+        _auctionsRepositoryMock.Setup(repo => repo.PlaceBid(It.IsAny<Bid>())).Callback<Bid>(bid =>
         {
             auction.HighestBid = bid.Amount;
             auction.HighestBidder = bid.BidderId;
             auction.Bids.Add(bid);
         });
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, Mock.Of<IVehiclesRepository>());
+        _service.PlaceBid(newBid);
 
-        service.PlaceBid(newBid);
-
-        auctionsRepositoryMock.Verify(repo => repo.PlaceBid(It.Is<Bid>(a => a.Amount == 150 && a.BidderId == "2")), Times.Once);
+        _auctionsRepositoryMock.Verify(repo => repo.PlaceBid(It.Is<Bid>(a => a.Amount == 150 && a.BidderId == "2")), Times.Once);
         Assert.Equal(150, auction.HighestBid);
         Assert.Equal("2", auction.HighestBidder);
         Assert.Contains(newBid, auction.Bids);
     }
 
-    [Fact]
-    public void PlaceBid_ShouldThrowException_WhenAuctionNotFound()
+    [Theory]
+    [InlineData("1", "Auction with ID 1 not found or isn't active.")]
+    public void PlaceBid_ShouldThrowException_WhenAuctionNotFound(string auctionId, string expectedMessage)
     {
-        var newBid = new Bid { AuctionId = "1", Amount = 150, BidderId = "2", Id = "2" };
+        var newBid = new Bid { AuctionId = auctionId, Amount = 150, BidderId = "2", Id = "2" };
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction>());
+        _auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction>());
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, Mock.Of<IVehiclesRepository>());
-
-        var exception = Assert.Throws<CustomExceptions.AuctionNotFoundException>(() => service.PlaceBid(newBid));
-        Assert.Equal($"Auction with ID 1 not found or isn't active.", exception.Message);
+        var exception = Assert.Throws<CustomExceptions.AuctionNotFoundException>(() => _service.PlaceBid(newBid));
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
-    [Fact]
-    public void PlaceBid_ShouldThrowException_WhenBidAmountTooLow()
+    [Theory]
+    [InlineData(80, "The bid amount 80 is lower or equal to the current highest bid 100.")]
+    public void PlaceBid_ShouldThrowException_WhenBidAmountTooLow(double bidAmount, string expectedMessage)
     {
         var auction = new Auction
         {
@@ -217,14 +194,11 @@ public class AuctionServiceTests
             Vehicle = new Sedan { Id = "1", Manufacturer = "Toyota", Year = 2020, Model = "Corolla", StartingBid = 50, NumberOfDoors = 4 },
             Bids = new List<Bid?> { new Bid { Id = "1", AuctionId = "1", Amount = 100, BidderId = "1" } }
         };
-        var newBid = new Bid { Id = "3", BidderId = "55", AuctionId = "1", Amount = 80 };
+        var newBid = new Bid { Id = "3", BidderId = "55", AuctionId = "1", Amount = bidAmount };
 
-        var auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-        auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction> { auction });
+        _auctionsRepositoryMock.Setup(repo => repo.GetActiveAuctions()).Returns(new List<Auction> { auction });
 
-        var service = new AuctionsService(auctionsRepositoryMock.Object, Mock.Of<IVehiclesRepository>());
-
-        var exception = Assert.Throws<CustomExceptions.BidAmountTooLowException>(() => service.PlaceBid(newBid));
-        Assert.Equal($"The bid amount 80 is lower or equal to the current highest bid 100.", exception.Message);
+        var exception = Assert.Throws<CustomExceptions.BidAmountTooLowException>(() => _service.PlaceBid(newBid));
+        Assert.Equal(expectedMessage, exception.Message);
     }
 }

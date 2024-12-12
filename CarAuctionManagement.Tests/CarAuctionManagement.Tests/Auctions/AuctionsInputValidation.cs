@@ -7,37 +7,23 @@ namespace CarAuctionManagement.Tests.Auctions;
 
 public class AuctionsInputValidation
 {
-    [Fact]
-    public void Validate_ShouldThrowException_WhenIdIsNull()
+    public static IEnumerable<object[]> GetInvalidAuctionData()
     {
-        var auction = new Mock<Auction> { CallBase = true };
-        auction.Object.Id = null;
-        auction.Object.Vehicle = new Sedan { Id = "2", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 };
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => auction.Object.Validate());
-        Assert.Equal("Id must be provided.", exception.Message);
+        yield return new object[] { null, new Sedan { Id = "2", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 }, "Id must be provided." };
+        yield return new object[] { "", new Hatchback { Id = "2", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 }, "Id must be provided." };
+        yield return new object[] { "1", null, "Vehicle must be provided." };
     }
 
-    [Fact]
-    public void Validate_ShouldThrowException_WhenIdIsEmpty()
+    [Theory]
+    [MemberData(nameof(GetInvalidAuctionData))]
+    public void Validate_ShouldThrowException_WithInvalidAuction(string id, Vehicle vehicle, string expectedMessage)
     {
         var auction = new Mock<Auction> { CallBase = true };
-        auction.Object.Id = "";
-        auction.Object.Vehicle = new Hatchback { Id = "2", Manufacturer = "Honda", Year = 2019, Model = "Civic", StartingBid = 1500.00, NumberOfDoors = 4 };
+        auction.Object.Id = id;
+        auction.Object.Vehicle = vehicle;
 
         var exception = Assert.Throws<CustomExceptions.ValidationException>(() => auction.Object.Validate());
-        Assert.Equal("Id must be provided.", exception.Message);
-    }
-
-    [Fact]
-    public void Validate_ShouldThrowException_WhenVehicleIsNull()
-    {
-        var auction = new Mock<Auction> { CallBase = true };
-        auction.Object.Id = "1";
-        auction.Object.Vehicle = null;
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => auction.Object.Validate());
-        Assert.Equal("Vehicle must be provided.", exception.Message);
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
     [Fact]
@@ -53,76 +39,26 @@ public class AuctionsInputValidation
         vehicleMock.Verify(v => v.Validate(), Times.Once);
     }
 
-    [Fact]
-    public void Validate_ShouldThrowException_WhenBidIdIsNull()
+    public static IEnumerable<object[]> GetInvalidBidData()
     {
-        var bid = new Bid { Id = null, BidderId = "55", AuctionId = "456", Amount = 50 };
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => bid.Validate());
-        Assert.Equal("Id must be provided.", exception.Message);
+        yield return new object[] { null, "55", "456", 50, "Id must be provided." };
+        yield return new object[] { "", "2", "13", 1589, "Id must be provided." };
+        yield return new object[] { "1", null, "456", 2000, "BidderId must be provided." };
+        yield return new object[] { "1", "", "456", 100, "BidderId must be provided." };
+        yield return new object[] { "1", "25", null, 1000, "AuctionId must be provided." };
+        yield return new object[] { "1", "88", "", 5, "AuctionId must be provided." };
+        yield return new object[] { "1", "88", "33", 0, "Amount must be greater than 0." };
+        yield return new object[] { "1", "45", "12", -10, "Amount must be greater than 0." };
     }
 
-    [Fact]
-    public void Validate_ShouldThrowException_WhenBidIdIsEmpty()
+    [Theory]
+    [MemberData(nameof(GetInvalidBidData))]
+    public void Validate_ShouldThrowException_WithInvalidBid(string id, string bidderId, string auctionId, double amount, string expectedMessage)
     {
-        var bid = new Bid { Id = "", BidderId = "2", AuctionId = "13", Amount = 1589 };
+        var bid = new Bid { Id = id, BidderId = bidderId, AuctionId = auctionId, Amount = amount };
 
         var exception = Assert.Throws<CustomExceptions.ValidationException>(() => bid.Validate());
-        Assert.Equal("Id must be provided.", exception.Message);
-    }
-
-    [Fact]
-    public void Validate_ShouldThrowException_WhenBidBidderIdIsNull()
-    {
-        var bid = new Bid { Id = "1", BidderId = null, AuctionId = "456", Amount = 2000 };
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => bid.Validate());
-        Assert.Equal("BidderId must be provided.", exception.Message);
-    }
-
-    [Fact]
-    public void Validate_ShouldThrowException_WhenBidBidderIdIsEmpty()
-    {
-        var bid = new Bid { Id = "1", BidderId = "", AuctionId = "456", Amount = 100 };
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => bid.Validate());
-        Assert.Equal("BidderId must be provided.", exception.Message);
-    }
-
-    [Fact]
-    public void Validate_ShouldThrowException_WhenBidAuctionIdIsNull()
-    {
-        var bid = new Bid { Id = "1", BidderId = "25", AuctionId = null, Amount = 1000 };
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => bid.Validate());
-        Assert.Equal("AuctionId must be provided.", exception.Message);
-    }
-
-    [Fact]
-    public void Validate_ShouldThrowException_WhenBidAuctionIdIsEmpty()
-    {
-        var bid = new Bid { Id = "1", BidderId = "88", AuctionId = "", Amount = 5 };
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => bid.Validate());
-        Assert.Equal("AuctionId must be provided.", exception.Message);
-    }
-
-    [Fact]
-    public void Validate_ShouldThrowException_WhenBidAmountIsZero()
-    {
-        var bid = new Bid { Id = "1", BidderId = "88", AuctionId = "33", Amount = 0 };
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => bid.Validate());
-        Assert.Equal("Amount must be greater than 0.", exception.Message);
-    }
-
-    [Fact]
-    public void Validate_ShouldThrowException_WhenBidAmountIsNegative()
-    {
-        var bid = new Bid { Id = "1", BidderId = "45", AuctionId = "12", Amount = -10 };
-
-        var exception = Assert.Throws<CustomExceptions.ValidationException>(() => bid.Validate());
-        Assert.Equal("Amount must be greater than 0.", exception.Message);
+        Assert.Equal(expectedMessage, exception.Message);
     }
 
     [Fact]

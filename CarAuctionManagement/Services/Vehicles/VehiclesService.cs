@@ -21,9 +21,9 @@ public class VehiclesService : IVehiclesService
         _vehiclesRepository.AddVehicle(vehicle);
     }
 
-    public Vehicle? GetVehicleById(string? id)
+    public Vehicle GetVehicleById(string? id)
     {
-        Vehicle? vehicle = GetVehicleByIdValidation(id);
+        Vehicle vehicle = GetVehicleByIdValidation(id);
         return vehicle;
     }
 
@@ -33,7 +33,7 @@ public class VehiclesService : IVehiclesService
         return vehicles;
     }
 
-    public List<Vehicle?>? GetVehicleSearch(string? type = null, string? manufacturer = null, string? model = null, int? year = null)
+    public List<Vehicle?> GetVehicleSearch(string? type = null, string? manufacturer = null, string? model = null, int? year = null)
     {
         return ApplyFilterOptions(type, manufacturer, model, year);
     }
@@ -41,7 +41,7 @@ public class VehiclesService : IVehiclesService
     public void UpdateVehicle(Vehicle? vehicle)
     {
         vehicle?.Validate();
-        List<Vehicle?>? existingVehicles = _vehiclesRepository.GetVehicles();
+        List<Vehicle?> existingVehicles = _vehiclesRepository.GetVehicles();
         VehicleValidations(vehicle, existingVehicles, true);
         Vehicle? vehicleToUpdate = UpdateVehicleType(vehicle, existingVehicles);
         _vehiclesRepository.UpdateVehicle(vehicleToUpdate);
@@ -49,7 +49,7 @@ public class VehiclesService : IVehiclesService
 
     public void RemoveVehicle(string? id)
     {
-        Vehicle? vehicleToRemoved = GetVehicleByIdValidation(id);
+        Vehicle vehicleToRemoved = GetVehicleByIdValidation(id);
         _vehiclesRepository.RemoveVehicle(vehicleToRemoved);
     }
 
@@ -61,7 +61,7 @@ public class VehiclesService : IVehiclesService
         return vehicles;
     }
 
-    private Vehicle? GetVehicleByIdValidation(string? id)
+    private Vehicle GetVehicleByIdValidation(string? id)
     {
         List<Vehicle?> allVehicles = _vehiclesRepository.GetVehicles();
         if (allVehicles.Count == 0)
@@ -75,10 +75,10 @@ public class VehiclesService : IVehiclesService
         return vehicle;
     }
 
-    private List<Vehicle?>? ApplyFilterOptions(string? type = null, string? manufacturer = null, string? model = null, int? year = null)
+    private List<Vehicle?> ApplyFilterOptions(string? type = null, string? manufacturer = null, string? model = null, int? year = null)
     {
         List<Vehicle?> vehicles = _vehiclesRepository.GetVehicles();
-        List<Vehicle?> filteredVehicles = vehicles?
+        List<Vehicle?> filteredVehicles = vehicles
             .Where(vehicle =>
                 (type == null ||
                  (type.Equals("Sedan", StringComparison.OrdinalIgnoreCase) && vehicle is Sedan) ||
@@ -88,7 +88,7 @@ public class VehiclesService : IVehiclesService
                 (manufacturer == null || vehicle?.Manufacturer?.Equals(manufacturer, StringComparison.OrdinalIgnoreCase) == true) &&
                 (model == null || vehicle?.Model?.Equals(model, StringComparison.OrdinalIgnoreCase) == true) &&
                 (year == null || vehicle?.Year == year)
-            ).ToList() ?? new List<Vehicle?>();
+            ).ToList();
 
         if (filteredVehicles.Count == 0)
             throw new CustomExceptions.NoVehiclesFoundWithFiltersException();
@@ -114,7 +114,7 @@ public class VehiclesService : IVehiclesService
         if (existingVehicle?.GetType() == vehicle?.GetType())
             return vehicle;
 
-        Vehicle? newVehicle = vehicle switch
+        Vehicle newVehicle = vehicle switch
         {
             Sedan => new Sedan(),
             Hatchback => new Hatchback(),
@@ -123,11 +123,11 @@ public class VehiclesService : IVehiclesService
             _ => throw new CustomExceptions.InvalidVehicleTypeException()
         };
 
-        newVehicle.Id = vehicle?.Id;
-        newVehicle.Manufacturer = vehicle?.Manufacturer;
-        newVehicle.Model = vehicle?.Model;
-        newVehicle.Year = vehicle?.Year;
-        newVehicle.StartingBid = vehicle?.StartingBid;
+        newVehicle.Id = vehicle.Id;
+        newVehicle.Manufacturer = vehicle.Manufacturer;
+        newVehicle.Model = vehicle.Model;
+        newVehicle.Year = vehicle.Year;
+        newVehicle.StartingBid = vehicle.StartingBid;
 
         switch (newVehicle)
         {
