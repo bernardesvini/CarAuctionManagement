@@ -1,30 +1,36 @@
 ﻿
 using CarAuctionManagement.Models.Auctions;
+using CarAuctionManagement.Repository.Database;
 
 namespace CarAuctionManagement.Repository.Auctions;
 
 public class AuctionsRepository : IAuctionsRepository
 {
-    private readonly List<Auction> _auctions = new();
+    private readonly InMemoryDatabase _database;
+    
+    public AuctionsRepository(InMemoryDatabase database)
+    {
+        _database = database;
+    }
     
     public void StartAuction(Auction auction)
     {
-        _auctions.Add(auction);
+        _database.Auctions.Add(auction);
     }
     
     public List<Auction> GetAuctions()
     {
-        return _auctions;
+        return _database.Auctions;
     }
 
     public void EndAuction(Auction auction)
     {
-        _auctions.Where(activeAuction => activeAuction == auction).ToList().ForEach(auction1 => auction1.IsActive = false);
+        _database.Auctions.Where(activeAuction => activeAuction == auction).ToList().ForEach(auction1 => auction1.IsActive = false);
     }
     
     public void PlaceBid(Bid? bidAdd)
     {
-        _auctions.Where(activeAuction => activeAuction.Id == bidAdd?.AuctionId).ToList().ForEach(auction1 =>
+        _database.Auctions.Where(activeAuction => activeAuction.Id == bidAdd?.AuctionId).ToList().ForEach(auction1 =>
         {
             auction1.HighestBid = bidAdd?.Amount;
             auction1.HighestBidder = bidAdd?.BidderId;
@@ -34,11 +40,11 @@ public class AuctionsRepository : IAuctionsRepository
 
     public List<Auction> GetClosedAuctions()
     {
-        return _auctions.Where(auction => auction.IsActive == false).ToList();
+        return _database.Auctions.Where(auction => auction.IsActive == false).ToList();
     }
 
     public List<Auction> GetActiveAuctions()
     {
-        return _auctions.Where(auction => auction.IsActive).ToList();
+        return _database.Auctions.Where(auction => auction.IsActive).ToList();
     }
 }

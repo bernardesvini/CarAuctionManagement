@@ -4,7 +4,7 @@ namespace CarAuctionManagement.Models.Vehicles;
 
 public class Vehicle
 {
-    public string? Id { get; set; }
+    public Guid? Id { get; set; }
     public string? Manufacturer { get; set; }
     public string? Model { get; set; }
     public int? Year { get; set; }
@@ -12,7 +12,7 @@ public class Vehicle
 
     public virtual void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Id))
+        if (string.IsNullOrWhiteSpace(Id.ToString()))
         {
             throw new CustomExceptions.ValidationException("Vehicle id must be provided.");
         }

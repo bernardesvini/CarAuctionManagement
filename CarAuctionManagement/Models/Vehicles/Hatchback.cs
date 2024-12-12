@@ -10,8 +10,8 @@ public class Hatchback : Vehicle
     {
         base.Validate();
         
-        if (NumberOfDoors < 3)
-            throw new CustomExceptions.ValidationException("Hatchback number of doors must be greater than 3.");
+        if (NumberOfDoors < 2)
+            throw new CustomExceptions.ValidationException("Hatchback number of doors must be greater than 2.");
         if (NumberOfDoors > 5)
             throw new CustomExceptions.ValidationException("Hatchback number of doors can't be greater than 5.");
         
