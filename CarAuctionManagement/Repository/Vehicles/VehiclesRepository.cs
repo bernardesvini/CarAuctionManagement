@@ -1,24 +1,31 @@
 ﻿using CarAuctionManagement.Models.Vehicles;
+using CarAuctionManagement.Repository.Database;
 
 namespace CarAuctionManagement.Repository.Vehicles;
 
 public class VehiclesRepository : IVehiclesRepository
 {
-    private readonly List<Vehicle?> _vehicles = new();
-
-    public void AddVehicle(Vehicle? vehicle)
+    private readonly InMemoryDatabase _database;
+    
+    public VehiclesRepository(InMemoryDatabase database)
     {
-        _vehicles.Add(vehicle);
+        _database = database;
+    }
+
+    public Vehicle AddVehicle(Vehicle vehicle)
+    {
+        _database.Vehicles.Add(vehicle);
+        return vehicle;
     }
 
     public List<Vehicle?> GetVehicles()
     {
-        return _vehicles;
+        return _database.Vehicles;
     }
 
     public void UpdateVehicle(Vehicle? vehicle)
     {
-        _vehicles.Where(existingVehicle => existingVehicle?.Id == vehicle?.Id)
+        _database.Vehicles.Where(existingVehicle => existingVehicle?.Id == vehicle?.Id)
             .ToList()
             .ForEach(existingVehicle =>
                 {
@@ -51,6 +58,6 @@ public class VehiclesRepository : IVehiclesRepository
 
     public void RemoveVehicle(Vehicle? vehicle)
     {
-        _vehicles.Remove(vehicle);
+        _database.Vehicles.Remove(vehicle);
     }
 }

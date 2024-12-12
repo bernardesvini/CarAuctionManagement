@@ -13,15 +13,16 @@ public class VehiclesService : IVehiclesService
         _vehiclesRepository = vehiclesRepository;
     }
 
-    public void AddVehicle(Vehicle? vehicle)
+    public Vehicle AddVehicle(Vehicle vehicle)
     {
-        vehicle?.Validate();
+        vehicle.Validate();
         List<Vehicle?> existingVehicles = _vehiclesRepository.GetVehicles();
         VehicleValidations(vehicle, existingVehicles);
-        _vehiclesRepository.AddVehicle(vehicle);
+        var response =  _vehiclesRepository.AddVehicle(vehicle);
+        return response;
     }
 
-    public Vehicle GetVehicleById(string? id)
+    public Vehicle GetVehicleById(Guid? id)
     {
         Vehicle vehicle = GetVehicleByIdValidation(id);
         return vehicle;
@@ -29,7 +30,8 @@ public class VehiclesService : IVehiclesService
 
     public List<Vehicle?> GetVehicles()
     {
-        List<Vehicle?> vehicles = GetVehiclesValidation();
+        List<Vehicle?> vehicles = _vehiclesRepository.GetVehicles();
+        GetVehiclesValidation(vehicles);
         return vehicles;
     }
 
@@ -47,21 +49,19 @@ public class VehiclesService : IVehiclesService
         _vehiclesRepository.UpdateVehicle(vehicleToUpdate);
     }
 
-    public void RemoveVehicle(string? id)
+    public void RemoveVehicle(Guid? id)
     {
         Vehicle vehicleToRemoved = GetVehicleByIdValidation(id);
         _vehiclesRepository.RemoveVehicle(vehicleToRemoved);
     }
 
-    private List<Vehicle?> GetVehiclesValidation()
+    private void GetVehiclesValidation(List<Vehicle?>? vehicles)
     {
-        List<Vehicle?> vehicles = _vehiclesRepository.GetVehicles();
-        if (vehicles.Count == 0)
+        if (vehicles?.Count == 0)
             throw new CustomExceptions.NoVehiclesFoundException();
-        return vehicles;
     }
 
-    private Vehicle GetVehicleByIdValidation(string? id)
+    private Vehicle GetVehicleByIdValidation(Guid? id)
     {
         List<Vehicle?> allVehicles = _vehiclesRepository.GetVehicles();
         if (allVehicles.Count == 0)

@@ -146,6 +146,10 @@
             "FluentValidation": {
               "target": "Package",
               "version": "[11.11.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.2.0, )"
             }
           },
           "imports": [
@@ -160,6 +164,9 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
