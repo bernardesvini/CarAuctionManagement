@@ -26,18 +26,18 @@ public class AuctionsRepository : IAuctionsRepository
     {
         _auctions.Where(activeAuction => activeAuction.Id == bidAdd?.AuctionId).ToList().ForEach(auction1 =>
         {
-            auction1.HighestBid = bidAdd.Amount;
+            auction1.HighestBid = bidAdd?.Amount;
             auction1.HighestBidder = bidAdd?.BidderId;
-            auction1?.Bids?.Add(bidAdd);
+            auction1.Bids?.Add(bidAdd);
         });
     }
 
-    public List<Auction>? GetClosedAuctions()
+    public List<Auction> GetClosedAuctions()
     {
         return _auctions.Where(auction => auction.IsActive == false).ToList();
     }
 
-    public List<Auction>? GetActiveAuctions()
+    public List<Auction> GetActiveAuctions()
     {
         return _auctions.Where(auction => auction.IsActive).ToList();
     }

@@ -1,5 +1,4 @@
-﻿using CarAuctionManagement.Models;
-using CarAuctionManagement.Models.Auctions;
+﻿using CarAuctionManagement.Models.Auctions;
 
 namespace CarAuctionManagement.Repository.Auctions;
 

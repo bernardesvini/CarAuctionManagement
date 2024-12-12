@@ -109,3 +109,4 @@ C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tes
 C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tests\CarAuctionManagement.Tests\obj\Debug\net8.0\CarAuctionManagement.Tests.pdb
 C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tests\CarAuctionManagement.Tests\obj\Debug\net8.0\CarAuctionManagement.Tests.genruntimeconfig.cache
 C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tests\CarAuctionManagement.Tests\obj\Debug\net8.0\ref\CarAuctionManagement.Tests.dll
+C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tests\CarAuctionManagement.Tests\obj\Debug\net8.0\CarAuctionManagement.Tests.sourcelink.json
