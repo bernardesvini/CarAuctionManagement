@@ -9,7 +9,7 @@ public class Auction
     public Vehicle? Vehicle { get; set; }
     public bool IsActive { get; set; }
     public List<Bid?>? Bids { get; set; }
-    public double? HighestBid { get; set; }
+    public decimal? HighestBid { get; set; }
     public string? HighestBidder { get; set; }
     
     public void Validate()

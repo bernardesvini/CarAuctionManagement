@@ -4,7 +4,7 @@ namespace CarAuctionManagement.Repository.Vehicles;
 
 public class VehiclesRepository : IVehiclesRepository
 {
-    private List<Vehicle?> _vehicles = new();
+    private readonly List<Vehicle?> _vehicles = new();
 
     public void AddVehicle(Vehicle? vehicle)
     {

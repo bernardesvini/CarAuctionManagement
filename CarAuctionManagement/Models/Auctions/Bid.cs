@@ -7,7 +7,7 @@ public class Bid
     public string? Id { get; set; }
     public string? BidderId { get; set; }
     public string? AuctionId { get; set; }
-    public double? Amount { get; set; }
+    public decimal? Amount { get; set; }
     
     public void Validate()
     {

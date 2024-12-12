@@ -8,7 +8,7 @@ public class Vehicle
     public string? Manufacturer { get; set; }
     public string? Model { get; set; }
     public int? Year { get; set; }
-    public double? StartingBid { get; set; }
+    public decimal? StartingBid { get; set; }
 
     public virtual void Validate()
     {

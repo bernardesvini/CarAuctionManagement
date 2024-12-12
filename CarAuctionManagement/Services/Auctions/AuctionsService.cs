@@ -1,7 +1,6 @@
 ﻿using CarAuctionManagement.ErrorHandling;
 using CarAuctionManagement.Models.Auctions;
 using CarAuctionManagement.Models.Vehicles;
-using CarAuctionManagement.Repository;
 using CarAuctionManagement.Repository.Auctions;
 using CarAuctionManagement.Repository.Vehicles;
 
@@ -50,7 +49,7 @@ public class AuctionsService : IAuctionsService
         if (activeAuctions == null || activeAuctions.All(a => a.Id != newBid.AuctionId))
             throw new CustomExceptions.AuctionNotFoundException(newBid.AuctionId);
         Auction auction = activeAuctions.First(a => a.Id == newBid.AuctionId);
-        if (newBid.Amount <= auction.HighestBid || newBid.Amount <= auction?.Vehicle?.StartingBid)
+        if (newBid.Amount <= auction.HighestBid || newBid.Amount <= auction.Vehicle?.StartingBid)
             throw new CustomExceptions.BidAmountTooLowException(newBid.Amount, auction.HighestBid);
     }
 
@@ -67,14 +66,10 @@ public class AuctionsService : IAuctionsService
     private void StartAuctionValidations(Auction? auction)
     {
         List<Auction> auctions = _auctionsRepository.GetAuctions();
-        if (auctions != null)
-        {
-            if (auctions.Any(a => a.Vehicle?.Id == auction?.Vehicle?.Id))
-                throw new CustomExceptions.AuctionAlreadyActiveException(auction?.Vehicle?.Id);
-            if (auctions.Any(a => a.Id == auction?.Id))
-                throw new CustomExceptions.AuctionSameIdException(auction?.Id);
-        }
-
+        if (auctions.Any(a => a.Vehicle?.Id == auction?.Vehicle?.Id))
+            throw new CustomExceptions.AuctionAlreadyActiveException(auction?.Vehicle?.Id);
+        if (auctions.Any(a => a.Id == auction?.Id))
+            throw new CustomExceptions.AuctionSameIdException(auction?.Id);
         List<Vehicle?> allVehicles = _vehiclesRepository.GetVehicles();
         if (allVehicles.All(v => v?.Id != auction?.Vehicle?.Id))
             throw new CustomExceptions.VehicleNotFoundException(auction?.Vehicle?.Id);
