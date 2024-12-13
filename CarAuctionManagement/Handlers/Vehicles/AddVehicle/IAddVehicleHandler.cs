@@ -1,9 +1,10 @@
-﻿using CarAuctionManagement.DTOs.Vehicles;
-using CarAuctionManagement.Models.Vehicles;
+﻿using CarAuctionManagement.DTOs.Vehicles.Requests;
+using CarAuctionManagement.DTOs.Vehicles.Responses;
 
 namespace CarAuctionManagement.Handlers.Vehicles.AddVehicle;
 
 public interface IAddVehicleHandler
 {
-    Vehicle AddVehicle(VehicleDto vehicleDto);
+    VehicleResponseDto AddVehicle(VehicleRequestDto vehicleRequestDto);
+    VehicleResponseDto UpdateVehicle(VehicleUpdateRequestDto vehicleUpdateRequestDto);
 }

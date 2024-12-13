@@ -13,12 +13,12 @@ public class VehiclesService : IVehiclesService
         _vehiclesRepository = vehiclesRepository;
     }
 
-    public Vehicle AddVehicle(Vehicle vehicle)
+    public Vehicle? AddVehicle(Vehicle? vehicle)
     {
-        vehicle.Validate();
+        vehicle?.Validate();
         List<Vehicle?> existingVehicles = _vehiclesRepository.GetVehicles();
         VehicleValidations(vehicle, existingVehicles);
-        var response =  _vehiclesRepository.AddVehicle(vehicle);
+        Vehicle? response =  _vehiclesRepository.AddVehicle(vehicle);
         return response;
     }
 
@@ -40,13 +40,14 @@ public class VehiclesService : IVehiclesService
         return ApplyFilterOptions(type, manufacturer, model, year);
     }
 
-    public void UpdateVehicle(Vehicle? vehicle)
+    public Vehicle? UpdateVehicle(Vehicle? vehicle)
     {
         vehicle?.Validate();
         List<Vehicle?> existingVehicles = _vehiclesRepository.GetVehicles();
         VehicleValidations(vehicle, existingVehicles, true);
         Vehicle? vehicleToUpdate = UpdateVehicleType(vehicle, existingVehicles);
-        _vehiclesRepository.UpdateVehicle(vehicleToUpdate);
+        Vehicle? response =_vehiclesRepository.UpdateVehicle(vehicleToUpdate);
+        return response;
     }
 
     public void RemoveVehicle(Guid? id)
@@ -78,6 +79,10 @@ public class VehiclesService : IVehiclesService
     private List<Vehicle?> ApplyFilterOptions(string? type = null, string? manufacturer = null, string? model = null, int? year = null)
     {
         List<Vehicle?> vehicles = _vehiclesRepository.GetVehicles();
+        
+        if (vehicles.Count == 0)
+            throw new CustomExceptions.NoVehiclesFoundException();
+        
         List<Vehicle?> filteredVehicles = vehicles
             .Where(vehicle =>
                 (type == null ||

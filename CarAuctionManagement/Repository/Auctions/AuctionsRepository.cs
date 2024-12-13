@@ -13,9 +13,10 @@ public class AuctionsRepository : IAuctionsRepository
         _database = database;
     }
     
-    public void StartAuction(Auction auction)
+    public Auction StartAuction(Auction auction)
     {
         _database.Auctions.Add(auction);
+        return auction;
     }
     
     public List<Auction> GetAuctions()
@@ -23,12 +24,12 @@ public class AuctionsRepository : IAuctionsRepository
         return _database.Auctions;
     }
 
-    public void EndAuction(Auction auction)
+    public void EndAuction(Guid auctionId)
     {
-        _database.Auctions.Where(activeAuction => activeAuction == auction).ToList().ForEach(auction1 => auction1.IsActive = false);
+        _database.Auctions.Where(activeAuction => activeAuction.Id == auctionId).ToList().ForEach(auction1 => auction1.IsActive = false);
     }
     
-    public void PlaceBid(Bid? bidAdd)
+    public Bid? PlaceBid(Bid? bidAdd)
     {
         _database.Auctions.Where(activeAuction => activeAuction.Id == bidAdd?.AuctionId).ToList().ForEach(auction1 =>
         {
@@ -36,6 +37,7 @@ public class AuctionsRepository : IAuctionsRepository
             auction1.HighestBidder = bidAdd?.BidderId;
             auction1.Bids?.Add(bidAdd);
         });
+        return bidAdd;
     }
 
     public List<Auction> GetClosedAuctions()

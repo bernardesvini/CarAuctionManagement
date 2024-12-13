@@ -12,7 +12,7 @@ public class VehiclesRepository : IVehiclesRepository
         _database = database;
     }
 
-    public Vehicle AddVehicle(Vehicle vehicle)
+    public Vehicle? AddVehicle(Vehicle? vehicle)
     {
         _database.Vehicles.Add(vehicle);
         return vehicle;
@@ -23,7 +23,7 @@ public class VehiclesRepository : IVehiclesRepository
         return _database.Vehicles;
     }
 
-    public void UpdateVehicle(Vehicle? vehicle)
+    public Vehicle? UpdateVehicle(Vehicle? vehicle)
     {
         _database.Vehicles.Where(existingVehicle => existingVehicle?.Id == vehicle?.Id)
             .ToList()
@@ -31,29 +31,12 @@ public class VehiclesRepository : IVehiclesRepository
                 {
                     if (existingVehicle != null)
                     {
-                        existingVehicle.Id = vehicle?.Id;
-                        existingVehicle.Manufacturer = vehicle?.Manufacturer;
-                        existingVehicle.Model = vehicle?.Model;
-                        existingVehicle.Year = vehicle?.Year;
-                        existingVehicle.StartingBid = vehicle?.StartingBid;
-                    }
-                    switch (existingVehicle)
-                    {
-                        case Sedan sedan when vehicle is Sedan updatedSedan:
-                            sedan.NumberOfDoors = updatedSedan.NumberOfDoors;
-                            break;
-                        case Hatchback hatchback when vehicle is Hatchback updatedHatchback:
-                            hatchback.NumberOfDoors = updatedHatchback.NumberOfDoors;
-                            break;
-                        case Suv suv when vehicle is Suv updatedSuv:
-                            suv.NumberOfSeats = updatedSuv.NumberOfSeats;
-                            break;
-                        case Truck suv when vehicle is Truck updatedTruck:
-                            suv.LoadCapacity = updatedTruck.LoadCapacity;
-                            break;
+                       var index = _database.Vehicles.IndexOf(existingVehicle);
+                          _database.Vehicles[index] = vehicle;
                     }
                 }
             );
+        return vehicle;
     }
 
     public void RemoveVehicle(Vehicle? vehicle)

@@ -4,10 +4,10 @@ namespace CarAuctionManagement.Services.Vehicles;
 
 public interface IVehiclesService
 {
-    Vehicle AddVehicle(Vehicle vehicle);
-    List<Vehicle?> GetVehicles();
+    Vehicle? AddVehicle(Vehicle? vehicle);
+    List<Vehicle?>? GetVehicles();
     List<Vehicle?>? GetVehicleSearch(string? type = null, string? manufacturer = null, string? model = null, int? year = null);
-    void UpdateVehicle(Vehicle? vehicle);
+    Vehicle? UpdateVehicle(Vehicle? vehicle);
     void RemoveVehicle(Guid? id);
     Vehicle? GetVehicleById(Guid? id);
 }

@@ -4,24 +4,24 @@ namespace CarAuctionManagement.Models.Auctions;
 
 public class Bid
 {
-    public string? Id { get; set; }
+    public Guid Id { get; set; }
     public string? BidderId { get; set; }
-    public string? AuctionId { get; set; }
+    public Guid AuctionId { get; set; }
     public decimal? Amount { get; set; }
     
     public void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Id))
+        if (Guid.Empty.Equals(Id))
         {
             throw new CustomExceptions.ValidationException("Id must be provided.");
         }
 
-        if (string.IsNullOrWhiteSpace(BidderId))
+        if (string.IsNullOrEmpty(BidderId))
         {
             throw new CustomExceptions.ValidationException("BidderId must be provided.");
         }
 
-        if (string.IsNullOrWhiteSpace(AuctionId))
+        if (Guid.Empty.Equals(AuctionId))
         {
             throw new CustomExceptions.ValidationException("AuctionId must be provided.");
         }
