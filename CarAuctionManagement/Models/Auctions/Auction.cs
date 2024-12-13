@@ -5,7 +5,7 @@ namespace CarAuctionManagement.Models.Auctions;
 
 public class Auction
 {
-    public string? Id { get; set; }
+    public Guid Id { get; set; }
     public Vehicle? Vehicle { get; set; }
     public bool IsActive { get; set; }
     public List<Bid?>? Bids { get; set; }
@@ -16,7 +16,7 @@ public class Auction
     {
         Vehicle?.Validate();
         
-        if (string.IsNullOrWhiteSpace(Id))
+        if (Guid.Empty.Equals(Id))
         {
             throw new CustomExceptions.ValidationException("Id must be provided.");
         }

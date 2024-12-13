@@ -12,17 +12,17 @@ public class Vehicle
 
     public virtual void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Id.ToString()))
+        if (Id == null || Guid.Empty.Equals(Id))
         {
             throw new CustomExceptions.ValidationException("Vehicle id must be provided.");
         }
 
-        if (string.IsNullOrWhiteSpace(Manufacturer))
+        if (string.IsNullOrEmpty(Manufacturer))
         {
             throw new CustomExceptions.ValidationException("Manufacturer must be provided.");
         }
 
-        if (string.IsNullOrWhiteSpace(Model))
+        if (string.IsNullOrEmpty(Model))
         {
             throw new CustomExceptions.ValidationException("Model must be provided.");
         }

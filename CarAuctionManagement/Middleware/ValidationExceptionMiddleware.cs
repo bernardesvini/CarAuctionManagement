@@ -79,6 +79,8 @@ public class ValidationExceptionMiddleware
 
             case CustomExceptions.NoAuctionsFoundException:
             case CustomExceptions.AuctionNotFoundException:
+            case CustomExceptions.NoClosedAuctionsFoundException:
+            case CustomExceptions.NoActiveAuctionsFoundException:
                 statusCode = StatusCodes.Status404NotFound;
                 message = exception.Message;
                 break;

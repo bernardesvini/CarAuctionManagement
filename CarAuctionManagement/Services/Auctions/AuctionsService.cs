@@ -17,75 +17,82 @@ public class AuctionsService : IAuctionsService
         _vehiclesRepository = vehiclesRepository;
     }
 
-    public void StartAuction(Auction auction)
+    public Auction? StartAuction(Auction? auction)
     {
-        auction.Validate();
+        auction?.Validate();
         StartAuctionValidations(auction);
-        _auctionsRepository.StartAuction(auction);
+        return _auctionsRepository.StartAuction(auction);
     }
 
-    public List<Auction> GetAuctions()
+    public List<Auction?>? GetAuctions()
     {
-        var auctions = GetAuctionValidations();
+        List<Auction?>? auctions = GetAuctionValidations();
         return auctions;
     }
 
-    public void EndAuction(Auction auction)
+    public void EndAuction(Guid auctionId)
     {
-        EndAuctionValidations(auction);
-        _auctionsRepository.EndAuction(auction);
+        EndAuctionValidations(auctionId);
+        _auctionsRepository.EndAuction(auctionId);
     }
 
-    public void PlaceBid(Bid newBid)
+    public Bid? PlaceBid(Bid? newBid)
     {
-        newBid.Validate();
+        newBid?.Validate();
         PlaceBidValidations(newBid);
-        _auctionsRepository.PlaceBid(newBid);
+        Bid? addedBid = _auctionsRepository.PlaceBid(newBid);
+        return addedBid;
     }
 
-    private void PlaceBidValidations(Bid newBid)
+    private void PlaceBidValidations(Bid? newBid)
     {
-        List<Auction>? activeAuctions = GetActiveAuctions();
-        if (activeAuctions == null || activeAuctions.All(a => a.Id != newBid.AuctionId))
-            throw new CustomExceptions.AuctionNotFoundException(newBid.AuctionId);
-        Auction auction = activeAuctions.First(a => a.Id == newBid.AuctionId);
-        if (newBid.Amount <= auction.HighestBid || newBid.Amount <= auction.Vehicle?.StartingBid)
+        List<Auction?>? activeAuctions = GetActiveAuctions();
+        if (activeAuctions == null || activeAuctions.All(a => a?.Id != newBid?.AuctionId))
+            throw new CustomExceptions.AuctionNotFoundException(newBid?.AuctionId);
+        Auction? auction = activeAuctions.First(a => a?.Id == newBid?.AuctionId);
+        if (newBid?.Amount <= auction?.HighestBid || newBid?.Amount <= auction?.Vehicle?.StartingBid)
             throw new CustomExceptions.BidAmountTooLowException(newBid.Amount, auction.HighestBid);
     }
 
-    public List<Auction>? GetActiveAuctions()
+    public List<Auction?> GetActiveAuctions()
     {
-        return _auctionsRepository.GetActiveAuctions();
+        List<Auction?>? activeAuctions = _auctionsRepository.GetActiveAuctions();
+        if (activeAuctions == null || activeAuctions.Count == 0)
+            throw new CustomExceptions.NoActiveAuctionsFoundException();
+        return activeAuctions;
     }
 
-    public List<Auction>? GetClosedAuctions()
+    public List<Auction?> GetClosedAuctions()
     {
-        return _auctionsRepository.GetClosedAuctions();
+        List<Auction?>? closedAuctions = _auctionsRepository.GetClosedAuctions();
+        if (closedAuctions == null || closedAuctions.Count == 0)
+            throw new CustomExceptions.NoClosedAuctionsFoundException();
+        return closedAuctions;
     }
 
     private void StartAuctionValidations(Auction? auction)
     {
-        List<Auction> auctions = _auctionsRepository.GetAuctions();
-        if (auctions.Any(actualAuction => actualAuction.Vehicle?.Id == auction?.Vehicle?.Id))
+        List<Auction?>? auctions = _auctionsRepository.GetAuctions();
+        if (auctions != null && auctions.Any(actualAuction => actualAuction?.Vehicle?.Id == auction?.Vehicle?.Id))
             throw new CustomExceptions.AuctionAlreadyActiveException(auction?.Vehicle?.Id);
-        if (auctions.Any(actualAuction => actualAuction.Id == auction?.Id))
+        if (auctions != null && auctions.Any(actualAuction => actualAuction?.Id == auction?.Id))
             throw new CustomExceptions.AuctionSameIdException(auction?.Id);
         List<Vehicle?> allVehicles = _vehiclesRepository.GetVehicles();
         if (allVehicles.All(vehicle => vehicle?.Id != auction?.Vehicle?.Id))
             throw new CustomExceptions.VehicleNotFoundException(auction?.Vehicle?.Id);
     }
 
-    private void EndAuctionValidations(Auction auction)
+    private void EndAuctionValidations(Guid auctionId)
     {
-        List<Auction>? activeAuctions = GetActiveAuctions();
-        if (activeAuctions == null || activeAuctions.All(a => a.Id != auction.Id))
-            throw new CustomExceptions.AuctionNotFoundException(auction.Id);
+        List<Auction?>? activeAuctions = GetActiveAuctions();
+        if (activeAuctions == null || activeAuctions.All(a => a?.Id != auctionId))
+            throw new CustomExceptions.AuctionNotFoundException(auctionId);
     }
 
-    private List<Auction> GetAuctionValidations()
+    private List<Auction?>? GetAuctionValidations()
     {
-        List<Auction> auctions = _auctionsRepository.GetAuctions();
-        if (auctions.Count == 0)
+        List<Auction?>? auctions = _auctionsRepository.GetAuctions();
+        if (auctions?.Count == 0)
             throw new CustomExceptions.NoAuctionsFoundException();
         return auctions;
     }

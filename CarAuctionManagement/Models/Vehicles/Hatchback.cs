@@ -4,7 +4,7 @@ namespace CarAuctionManagement.Models.Vehicles;
 
 public class Hatchback : Vehicle
 {
-    public int NumberOfDoors { get; set; }
+    public int? NumberOfDoors { get; set; }
     
     public override void Validate()
     {
