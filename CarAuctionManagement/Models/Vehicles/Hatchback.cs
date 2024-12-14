@@ -24,9 +24,7 @@ public sealed class Hatchback : Vehicle
             Year = GetYear(),
             StartingBid = GetStartingBid(),
             Type = DTOs.Enums.VehicleType.Hatchback,
-            NumberOfDoors = NumberOfDoors,
-            NumberOfSeats = 0,
-            LoadCapacity = 0
+            NumberOfDoors = NumberOfDoors
         };
     }
     

@@ -23,10 +23,8 @@ public sealed class Sedan : Vehicle
             Model = GetModel(),
             Year = GetYear(),
             StartingBid = GetStartingBid(),
-            Type = DTOs.Enums.VehicleType.Hatchback,
-            NumberOfDoors = NumberOfDoors,
-            NumberOfSeats = 0,
-            LoadCapacity = 0
+            Type = DTOs.Enums.VehicleType.Sedan,
+            NumberOfDoors = NumberOfDoors
         };
     }
     

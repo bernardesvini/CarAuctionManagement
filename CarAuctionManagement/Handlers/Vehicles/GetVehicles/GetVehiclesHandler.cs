@@ -53,23 +53,23 @@ public class GetVehiclesHandler : IGetVehiclesHandler
     private static GetVehiclesResponseDto GenerateResponseByType(List<Vehicle?>? vehicles)
     {
         GetVehiclesResponseDto response = new GetVehiclesResponseDto();
-        response.GetVehicles = new List<VehicleResponseDto?>();
+        response.VehiclesList = new List<VehicleResponseDto?>();
         if (vehicles != null)
             foreach (var vehicle in vehicles)
             {
                 switch (vehicle)
                 {
                     case Hatchback hatchback:
-                        response.GetVehicles.Add(hatchback.ToResponseDto());
+                        response.VehiclesList.Add(hatchback.ToResponseDto());
                         break;
                     case Sedan sedan:
-                        response.GetVehicles.Add(sedan.ToResponseDto());
+                        response.VehiclesList.Add(sedan.ToResponseDto());
                         break;
                     case Suv suv:
-                        response.GetVehicles.Add(suv.ToResponseDto());
+                        response.VehiclesList.Add(suv.ToResponseDto());
                         break;
                     case Truck truck:
-                        response.GetVehicles.Add(truck.ToResponseDto());
+                        response.VehiclesList.Add(truck.ToResponseDto());
                         break;
                 }
             }

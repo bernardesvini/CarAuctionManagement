@@ -2,5 +2,5 @@
 
 public class GetVehiclesResponseDto
 {
-    public List<VehicleResponseDto?>? GetVehicles { get; set; }
+    public List<VehicleResponseDto?>? VehiclesList { get; set; }
 }
