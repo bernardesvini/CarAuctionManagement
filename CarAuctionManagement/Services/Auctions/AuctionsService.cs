@@ -47,7 +47,7 @@ public class AuctionsService : IAuctionsService
     private void PlaceBidValidations(Bid? newBid)
     {
         List<Auction?>? activeAuctions = GetActiveAuctions();
-        if (activeAuctions == null || activeAuctions.All(a => a?.GetId() != newBid?.GetAuctionId()))
+        if (activeAuctions.All(a => a?.GetId() != newBid?.GetAuctionId()))
             throw new CustomExceptions.AuctionNotFoundException(newBid?.GetAuctionId());
         Auction? auction = activeAuctions.First(a => a?.GetId() == newBid?.GetAuctionId());
         if (newBid?.GetAmount() <= auction?.GetHighestBid() || newBid?.GetAmount() <= auction?.GetVehicle()?.GetStartingBid())
