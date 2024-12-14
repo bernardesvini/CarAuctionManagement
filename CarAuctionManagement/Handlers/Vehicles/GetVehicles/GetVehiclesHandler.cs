@@ -15,13 +15,6 @@ public class GetVehiclesHandler : IGetVehiclesHandler
     {
         _vehiclesService = vehiclesService;
     }
-    
-    public GetVehiclesResponseDto GetVehicles()
-    {
-        List<Vehicle?>? vehicles = _vehiclesService.GetVehicles();
-        var response = GenerateResponseByType(vehicles);
-        return response;
-    }
 
     public GetVehiclesResponseDto GetVehiclesWithFilters(int? yearFilter, VehicleType? typeFilter, string? manufacturerFilter, string? modelFilter)
     {

@@ -68,13 +68,7 @@ app.MapPost("/vehicles/AddVehicle", ([FromBody]VehicleRequestDto vehicle, IAddVe
     return result;
 });
 
-app.MapGet("/vehicles/GetAllVehicles", (IGetVehiclesHandler vehiclesHandler) =>
-{
-    var result = vehiclesHandler.GetVehicles();
-    return result;
-});
-
-app.MapGet("/vehicles/GetVehiclesWithFilters", (int? year, [SwaggerParameter(Description = "Vehicle type", Required = false)] VehicleType? type, string? manufacturer, string? model, IGetVehiclesHandler vehiclesHandler) =>
+app.MapGet("/vehicles/GetVehicles", (int? year, [SwaggerParameter(Description = "Vehicle type", Required = false)] VehicleType? type, string? manufacturer, string? model, IGetVehiclesHandler vehiclesHandler) =>
 {
     var result = vehiclesHandler.GetVehiclesWithFilters(year, type, manufacturer, model);
     return result;
