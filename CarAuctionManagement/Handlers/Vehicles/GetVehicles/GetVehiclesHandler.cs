@@ -1,4 +1,5 @@
-﻿using CarAuctionManagement.DTOs.Vehicles.Requests;
+﻿using CarAuctionManagement.DTOs.Enums;
+using CarAuctionManagement.DTOs.Vehicles.Requests;
 using CarAuctionManagement.DTOs.Vehicles.Responses;
 using CarAuctionManagement.Models.Vehicles;
 using CarAuctionManagement.Services.Vehicles;
@@ -22,12 +23,12 @@ public class GetVehiclesHandler : IGetVehiclesHandler
         return response;
     }
 
-    public GetVehiclesResponseDto GetVehiclesWithFilters(int? yearFilter, string? typeFilter, string? manufacturerFilter, string? modelFilter)
+    public GetVehiclesResponseDto GetVehiclesWithFilters(int? yearFilter, VehicleType? typeFilter, string? manufacturerFilter, string? modelFilter)
     {
         var filters = new VehicleSearchRequestDto
         {
             Year = yearFilter,
-            Type = typeFilter,
+            Type = typeFilter.ToString(),
             Manufacturer = manufacturerFilter,
             Model = modelFilter
         };

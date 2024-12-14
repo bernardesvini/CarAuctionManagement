@@ -6,5 +6,5 @@ namespace CarAuctionManagement.Handlers.Vehicles.AddVehicle;
 public interface IAddVehicleHandler
 {
     VehicleResponseDto? AddVehicle(VehicleRequestDto vehicleRequestDto);
-    VehicleResponseDto? UpdateVehicle(VehicleUpdateRequestDto vehicleUpdateRequestDto);
+    VehicleResponseDto? UpdateVehicle(Guid id ,VehicleUpdateRequestDto vehicleUpdateRequestDto);
 }

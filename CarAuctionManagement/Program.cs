@@ -1,4 +1,5 @@
 ﻿using CarAuctionManagement.DTOs.Auctions.Requests;
+using CarAuctionManagement.DTOs.Enums;
 using CarAuctionManagement.DTOs.Vehicles.Requests;
 using CarAuctionManagement.Handlers.Auctions.EndAuction;
 using CarAuctionManagement.Handlers.Auctions.GetAuctions;
@@ -19,6 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Annotations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +49,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Auction API", Version = "v1" });
+    c.EnableAnnotations();
+  
 });
 
 var app = builder.Build();
@@ -70,15 +74,15 @@ app.MapGet("/vehicles/GetAllVehicles", (IGetVehiclesHandler vehiclesHandler) =>
     return result;
 });
 
-app.MapGet("/vehicles/GetVehiclesWithFilters", (int? year, string? type, string? manufacturer, string? model, IGetVehiclesHandler vehiclesHandler) =>
+app.MapGet("/vehicles/GetVehiclesWithFilters", (int? year, [SwaggerParameter(Description = "Vehicle type", Required = false)] VehicleType? type, string? manufacturer, string? model, IGetVehiclesHandler vehiclesHandler) =>
 {
     var result = vehiclesHandler.GetVehiclesWithFilters(year, type, manufacturer, model);
     return result;
 });
 
-app.MapPut("/vehicles/UpdateVehicle", ([FromBody]VehicleUpdateRequestDto vehicle, IAddVehicleHandler vehiclesHandler) =>
+app.MapPut("/vehicles/UpdateVehicle", (Guid id,[FromBody]VehicleUpdateRequestDto vehicle, IAddVehicleHandler vehiclesHandler) =>
 {
-    var result = vehiclesHandler.UpdateVehicle(vehicle);
+    var result = vehiclesHandler.UpdateVehicle(id, vehicle);
     return result;
 });
 
