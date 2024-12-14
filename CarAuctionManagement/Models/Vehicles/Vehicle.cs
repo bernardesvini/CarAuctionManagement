@@ -1,15 +1,44 @@
-﻿using CarAuctionManagement.ErrorHandling;
+﻿using CarAuctionManagement.DTOs.Vehicles.Responses;
+using CarAuctionManagement.ErrorHandling;
 
 namespace CarAuctionManagement.Models.Vehicles;
 
 public class Vehicle
 {
-    public Guid? Id { get; set; }
-    public string? Manufacturer { get; set; }
-    public string? Model { get; set; }
-    public int? Year { get; set; }
-    public decimal? StartingBid { get; set; }
-
+    private Guid? Id { get; set; }
+    private string? Manufacturer { get; set; }
+    private string? Model { get; set; }
+    private int? Year { get; set; }
+    private decimal? StartingBid { get; set; }
+    
+    public Vehicle(Guid? id, string? manufacturer, string? model, int? year, decimal? startingBid)
+    {
+        Id = id;
+        Manufacturer = manufacturer;
+        Model = model;
+        Year = year;
+        StartingBid = startingBid;
+    }
+    
+    public virtual VehicleResponseDto ToResponseDto()
+    {
+        return new VehicleResponseDto
+        {
+            Id = GetId(),
+            Manufacturer = GetManufacturer(),
+            Model = GetModel(),
+            Year = GetYear(),
+            StartingBid = GetStartingBid(),
+            Type = DTOs.Enums.VehicleType.Hatchback,
+        };
+    }
+    
+    public Guid? GetId() => Id;
+    public string? GetManufacturer() => Manufacturer;
+    public string? GetModel() => Model;
+    public int? GetYear() => Year;
+    public decimal? GetStartingBid() => StartingBid;
+    
     public virtual void Validate()
     {
         if (Id == null || Guid.Empty.Equals(Id))

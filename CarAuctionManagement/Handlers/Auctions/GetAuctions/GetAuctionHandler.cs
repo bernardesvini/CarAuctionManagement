@@ -1,4 +1,5 @@
-﻿using CarAuctionManagement.Models.Auctions;
+﻿using CarAuctionManagement.DTOs.Auctions.Responses;
+using CarAuctionManagement.Models.Auctions;
 using CarAuctionManagement.Services.Auctions;
 
 namespace CarAuctionManagement.Handlers.Auctions.GetAuctions;
@@ -12,18 +13,21 @@ public class GetAuctionHandler : IGetAuctionHandler
         _auctionsService = auctionsService;
     }
     
-    public List<Auction?>? GetAuctions()
+    public List<GetAuctionResponseDto?>? GetAuctions()
     {
-        return _auctionsService.GetAuctions();
+        List<GetAuctionResponseDto?>? auctions = _auctionsService.GetAuctions()?.Select(auction => auction?.ToGetResponseDto()).ToList();
+        return auctions;
     }
     
-    public List<Auction?>? GetActiveAuctions()
+    public List<GetAuctionResponseDto?>? GetActiveAuctions()
     {
-        return _auctionsService.GetActiveAuctions();
+        List<GetAuctionResponseDto?>? auctions = _auctionsService.GetActiveAuctions()?.Select(auction => auction?.ToGetResponseDto()).ToList();
+        return auctions;
     }
     
-    public List<Auction?>? GetClosedAuctions()
+    public List<GetAuctionResponseDto?>? GetClosedAuctions()
     {
-        return _auctionsService.GetClosedAuctions();
+        List<GetAuctionResponseDto?>? auctions = _auctionsService.GetClosedAuctions()?.Select(auction => auction?.ToGetResponseDto()).ToList();
+        return auctions;
     }
 }

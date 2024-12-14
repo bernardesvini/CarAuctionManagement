@@ -1,13 +1,39 @@
-﻿using CarAuctionManagement.ErrorHandling;
+﻿using CarAuctionManagement.DTOs.Auctions.Responses;
+using CarAuctionManagement.ErrorHandling;
 
 namespace CarAuctionManagement.Models.Auctions;
 
 public class Bid
 {
-    public Guid? Id { get; set; }
-    public string? BidderId { get; set; }
-    public Guid? AuctionId { get; set; }
-    public decimal? Amount { get; set; }
+    private Guid? Id { get; set; }
+    private string? BidderId { get; set; }
+    private Guid? AuctionId { get; set; }
+    private decimal? Amount { get; set; }
+    
+    public Bid(Guid? id, string? bidderId, Guid? auctionId, decimal? amount)
+    {
+        Id = id;
+        BidderId = bidderId;
+        AuctionId = auctionId;
+        Amount = amount;
+        Validate();
+    }
+    
+    public Guid? GetId() => Id;
+    public string? GetBidderId() => BidderId;  
+    public Guid? GetAuctionId() => AuctionId;
+    public decimal? GetAmount() => Amount;
+    
+    public PlaceBidResponseDto ToResponseDto()
+    {
+        return new PlaceBidResponseDto
+        {
+            Id = GetId(),
+            BidderId = GetBidderId(),
+            AuctionId = GetAuctionId(),
+            Amount = GetAmount()
+        };
+    }
     
     public void Validate()
     {

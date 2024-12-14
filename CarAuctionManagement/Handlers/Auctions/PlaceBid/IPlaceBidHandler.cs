@@ -5,5 +5,5 @@ namespace CarAuctionManagement.Handlers.Auctions.PlaceBid;
 
 public interface IPlaceBidHandler
 {
-    PlaceBidResponseDto PlaceBid(PlaceBidRequestDto bid);
+    PlaceBidResponseDto? PlaceBid(PlaceBidRequestDto bid);
 }
