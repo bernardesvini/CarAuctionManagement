@@ -15,14 +15,14 @@ public class GetVehiclesHandler : IGetVehiclesHandler
         _vehiclesService = vehiclesService;
     }
     
-    public GetVehicleshResponseDto GetVehicles()
+    public GetVehiclesResponseDto GetVehicles()
     {
-        List<Vehicle?> vehicles = _vehiclesService.GetVehicles();
+        List<Vehicle?>? vehicles = _vehiclesService.GetVehicles();
         var response = GenerateResponseByType(vehicles);
         return response;
     }
 
-    public GetVehicleshResponseDto GetVehiclesWithFilters(int? yearFilter, string? typeFilter, string? manufacturerFilter, string? modelFilter)
+    public GetVehiclesResponseDto GetVehiclesWithFilters(int? yearFilter, string? typeFilter, string? manufacturerFilter, string? modelFilter)
     {
         var filters = new VehicleSearchRequestDto
         {
@@ -50,10 +50,10 @@ public class GetVehiclesHandler : IGetVehiclesHandler
         return response;
     }
     
-    private static GetVehicleshResponseDto GenerateResponseByType(List<Vehicle?>? vehicles)
+    private static GetVehiclesResponseDto GenerateResponseByType(List<Vehicle?>? vehicles)
     {
-        GetVehicleshResponseDto response = new GetVehicleshResponseDto();
-        response.GetVehicles = new List<VehicleResponseDto>();
+        GetVehiclesResponseDto response = new GetVehiclesResponseDto();
+        response.GetVehicles = new List<VehicleResponseDto?>();
         if (vehicles != null)
             foreach (var vehicle in vehicles)
             {

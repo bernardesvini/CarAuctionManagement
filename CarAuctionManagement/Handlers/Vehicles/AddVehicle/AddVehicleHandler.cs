@@ -36,16 +36,19 @@ public class AddVehicleHandler : IAddVehicleHandler
                     StartingBid = vehicleRequestDto.StartingBid,
                     NumberOfDoors = vehicleRequestDto.NumberOfDoors
                 };
-                Vehicle responseHatchback = _vehiclesService.AddVehicle(hatchback);
+                Vehicle? responseHatchback = _vehiclesService.AddVehicle(hatchback);
+                
+                int? numberOfDoors = responseHatchback != null ? ((Hatchback)responseHatchback).NumberOfDoors : 0;
+                
                 VehicleResponseDto responseHatchDto = new VehicleResponseDto
                 {
-                    Id = responseHatchback.Id,
-                    Manufacturer = responseHatchback.Manufacturer,
-                    Model = responseHatchback.Model,
-                    Year = responseHatchback.Year,
-                    StartingBid = responseHatchback.StartingBid,
+                    Id = responseHatchback?.Id,
+                    Manufacturer = responseHatchback?.Manufacturer,
+                    Model = responseHatchback?.Model,
+                    Year = responseHatchback?.Year,
+                    StartingBid = responseHatchback?.StartingBid,
                     Type = DTOs.Enums.VehicleType.Hatchback,
-                    NumberOfDoors = ((Hatchback)responseHatchback).NumberOfDoors,
+                    NumberOfDoors = numberOfDoors,
                     NumberOfSeats = 0,
                     LoadCapacity = 0
                 };
@@ -61,16 +64,18 @@ public class AddVehicleHandler : IAddVehicleHandler
                     StartingBid = vehicleRequestDto.StartingBid,
                     NumberOfDoors = vehicleRequestDto.NumberOfDoors
                 };
-                Vehicle responseSedan = _vehiclesService.AddVehicle(sedan);
+                Vehicle? responseSedan = _vehiclesService.AddVehicle(sedan);
+                
+                int? numberOfDoorsSedan = responseSedan != null ? ((Sedan)responseSedan).NumberOfDoors : 0;
                 VehicleResponseDto responseSedanDto = new VehicleResponseDto
                 {
-                    Id = responseSedan.Id,
-                    Manufacturer = responseSedan.Manufacturer,
-                    Model = responseSedan.Model,
-                    Year = responseSedan.Year,
-                    StartingBid = responseSedan.StartingBid,
+                    Id = responseSedan?.Id,
+                    Manufacturer = responseSedan?.Manufacturer,
+                    Model = responseSedan?.Model,
+                    Year = responseSedan?.Year,
+                    StartingBid = responseSedan?.StartingBid,
                     Type = DTOs.Enums.VehicleType.Sedan,
-                    NumberOfDoors = ((Sedan)responseSedan).NumberOfDoors,
+                    NumberOfDoors = numberOfDoorsSedan,
                     NumberOfSeats = 0,
                     LoadCapacity = 0
                 };
@@ -86,16 +91,18 @@ public class AddVehicleHandler : IAddVehicleHandler
                     StartingBid = vehicleRequestDto.StartingBid,
                     NumberOfSeats = vehicleRequestDto.NumberOfSeats
                 };
-                Vehicle responseSuv = _vehiclesService.AddVehicle(suv);
+                Vehicle? responseSuv = _vehiclesService.AddVehicle(suv);
+                
+                int? numberOfSeats = responseSuv != null ? ((Suv)responseSuv).NumberOfSeats : 0;
                 VehicleResponseDto responseSuvDto = new VehicleResponseDto
                 {
-                    Id = responseSuv.Id,
-                    Manufacturer = responseSuv.Manufacturer,
-                    Model = responseSuv.Model,
-                    Year = responseSuv.Year,
-                    StartingBid = responseSuv.StartingBid,
+                    Id = responseSuv?.Id,
+                    Manufacturer = responseSuv?.Manufacturer,
+                    Model = responseSuv?.Model,
+                    Year = responseSuv?.Year,
+                    StartingBid = responseSuv?.StartingBid,
                     Type = DTOs.Enums.VehicleType.Suv,
-                    NumberOfSeats = ((Suv)responseSuv).NumberOfSeats,
+                    NumberOfSeats = numberOfSeats,
                     NumberOfDoors = 0,
                     LoadCapacity = 0
                 };
@@ -111,16 +118,18 @@ public class AddVehicleHandler : IAddVehicleHandler
                     StartingBid = vehicleRequestDto.StartingBid,
                     LoadCapacity = vehicleRequestDto.LoadCapacity
                 };
-                Vehicle responseTruck = _vehiclesService.AddVehicle(truck);
+                Vehicle? responseTruck = _vehiclesService.AddVehicle(truck);
+                
+                decimal? loadCapacity = responseTruck != null ? ((Truck)responseTruck).LoadCapacity : 0;
                 VehicleResponseDto responseTruckDto = new VehicleResponseDto
                 {
-                    Id = responseTruck.Id,
-                    Manufacturer = responseTruck.Manufacturer,
-                    Model = responseTruck.Model,
-                    Year = responseTruck.Year,
-                    StartingBid = responseTruck.StartingBid,
+                    Id = responseTruck?.Id,
+                    Manufacturer = responseTruck?.Manufacturer,
+                    Model = responseTruck?.Model,
+                    Year = responseTruck?.Year,
+                    StartingBid = responseTruck?.StartingBid,
                     Type = DTOs.Enums.VehicleType.Truck,
-                    LoadCapacity = ((Truck)responseTruck).LoadCapacity,
+                    LoadCapacity = loadCapacity,
                     NumberOfDoors = 0,
                     NumberOfSeats = 0
                 };
@@ -152,16 +161,17 @@ public class AddVehicleHandler : IAddVehicleHandler
                     StartingBid = vehicleUpdateRequestDto.StartingBid,
                     NumberOfDoors = vehicleUpdateRequestDto.NumberOfDoors
                 };
-                Vehicle responseHatchback = _vehiclesService.UpdateVehicle(hatchback);
+                Vehicle? responseHatchback = _vehiclesService.UpdateVehicle(hatchback);
+                int? numberOfDoors = responseHatchback != null ? ((Hatchback)responseHatchback).NumberOfDoors : 0;
                 VehicleResponseDto responseHatchDto = new VehicleResponseDto
                 {
-                    Id = responseHatchback.Id,
-                    Manufacturer = responseHatchback.Manufacturer,
-                    Model = responseHatchback.Model,
-                    Year = responseHatchback.Year,
-                    StartingBid = responseHatchback.StartingBid,
+                    Id = responseHatchback?.Id,
+                    Manufacturer = responseHatchback?.Manufacturer,
+                    Model = responseHatchback?.Model,
+                    Year = responseHatchback?.Year,
+                    StartingBid = responseHatchback?.StartingBid,
                     Type = DTOs.Enums.VehicleType.Hatchback,
-                    NumberOfDoors = ((Hatchback)responseHatchback).NumberOfDoors,
+                    NumberOfDoors = numberOfDoors,
                     NumberOfSeats = 0,
                     LoadCapacity = 0
                 };
@@ -177,16 +187,18 @@ public class AddVehicleHandler : IAddVehicleHandler
                     StartingBid = vehicleUpdateRequestDto.StartingBid,
                     NumberOfDoors = vehicleUpdateRequestDto.NumberOfDoors
                 };
-                Vehicle responseSedan = _vehiclesService.UpdateVehicle(sedan);
+                Vehicle? responseSedan = _vehiclesService.UpdateVehicle(sedan);
+                
+                int? numberOfDoorsSedan = responseSedan != null ? ((Sedan)responseSedan).NumberOfDoors : 0;
                 VehicleResponseDto responseSedanDto = new VehicleResponseDto
                 {
-                    Id = responseSedan.Id,
-                    Manufacturer = responseSedan.Manufacturer,
-                    Model = responseSedan.Model,
-                    Year = responseSedan.Year,
-                    StartingBid = responseSedan.StartingBid,
+                    Id = responseSedan?.Id,
+                    Manufacturer = responseSedan?.Manufacturer,
+                    Model = responseSedan?.Model,
+                    Year = responseSedan?.Year,
+                    StartingBid = responseSedan?.StartingBid,
                     Type = DTOs.Enums.VehicleType.Sedan,
-                    NumberOfDoors = ((Sedan)responseSedan).NumberOfDoors,
+                    NumberOfDoors = numberOfDoorsSedan,
                     NumberOfSeats = 0,
                     LoadCapacity = 0
                 };
@@ -202,16 +214,18 @@ public class AddVehicleHandler : IAddVehicleHandler
                     StartingBid = vehicleUpdateRequestDto.StartingBid,
                     NumberOfSeats = vehicleUpdateRequestDto.NumberOfSeats
                 };
-                Vehicle responseSuv = _vehiclesService.UpdateVehicle(suv);
+                Vehicle? responseSuv = _vehiclesService.UpdateVehicle(suv);
+                
+                int? numberOfSeats = responseSuv != null ? ((Suv)responseSuv).NumberOfSeats : 0;
                 VehicleResponseDto responseSuvDto = new VehicleResponseDto
                 {
-                    Id = responseSuv.Id,
-                    Manufacturer = responseSuv.Manufacturer,
-                    Model = responseSuv.Model,
-                    Year = responseSuv.Year,
-                    StartingBid = responseSuv.StartingBid,
+                    Id = responseSuv?.Id,
+                    Manufacturer = responseSuv?.Manufacturer,
+                    Model = responseSuv?.Model,
+                    Year = responseSuv?.Year,
+                    StartingBid = responseSuv?.StartingBid,
                     Type = DTOs.Enums.VehicleType.Suv,
-                    NumberOfSeats = ((Suv)responseSuv).NumberOfSeats,
+                    NumberOfSeats = numberOfSeats,
                     NumberOfDoors = 0,
                     LoadCapacity = 0
                 };
@@ -227,16 +241,18 @@ public class AddVehicleHandler : IAddVehicleHandler
                     StartingBid = vehicleUpdateRequestDto.StartingBid,
                     LoadCapacity = vehicleUpdateRequestDto.LoadCapacity
                 };
-                Vehicle responseTruck = _vehiclesService.UpdateVehicle(truck);
+                Vehicle? responseTruck = _vehiclesService.UpdateVehicle(truck);
+                
+                decimal? loadCapacity = responseTruck != null ? ((Truck)responseTruck).LoadCapacity : 0;
                 VehicleResponseDto responseTruckDto = new VehicleResponseDto
                 {
-                    Id = responseTruck.Id,
-                    Manufacturer = responseTruck.Manufacturer,
-                    Model = responseTruck.Model,
-                    Year = responseTruck.Year,
-                    StartingBid = responseTruck.StartingBid,
+                    Id = responseTruck?.Id,
+                    Manufacturer = responseTruck?.Manufacturer,
+                    Model = responseTruck?.Model,
+                    Year = responseTruck?.Year,
+                    StartingBid = responseTruck?.StartingBid,
                     Type = DTOs.Enums.VehicleType.Truck,
-                    LoadCapacity = ((Truck)responseTruck).LoadCapacity,
+                    LoadCapacity = loadCapacity,
                     NumberOfDoors = 0,
                     NumberOfSeats = 0
                 };

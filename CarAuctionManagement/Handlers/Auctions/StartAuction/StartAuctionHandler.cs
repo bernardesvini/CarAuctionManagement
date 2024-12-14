@@ -38,13 +38,13 @@ public class StartAuctionHandler : IStartAuctionHandler
             HighestBid = vehicle?.StartingBid,
             HighestBidder = string.Empty
         };
-        Auction addedAuction = _auctionsService.StartAuction(auction);
+        Auction? addedAuction = _auctionsService.StartAuction(auction);
 
         StartAuctionResponseDto response = new StartAuctionResponseDto
         {
-            Id = addedAuction.Id,
-            Vehicle = addedAuction.Vehicle,
-            HighestBid = addedAuction.HighestBid
+            Id = addedAuction?.Id,
+            Vehicle = addedAuction?.Vehicle,
+            HighestBid = addedAuction?.HighestBid
         };
         
         return response;
