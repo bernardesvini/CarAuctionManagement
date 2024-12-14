@@ -23,9 +23,7 @@ public sealed class Truck : Vehicle
             Model = GetModel(),
             Year = GetYear(),
             StartingBid = GetStartingBid(),
-            Type = DTOs.Enums.VehicleType.Hatchback,
-            NumberOfDoors = 0,
-            NumberOfSeats = 0,
+            Type = DTOs.Enums.VehicleType.Truck,
             LoadCapacity = LoadCapacity
         };
     }

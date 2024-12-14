@@ -23,10 +23,8 @@ public sealed class Suv : Vehicle
             Model = GetModel(),
             Year = GetYear(),
             StartingBid = GetStartingBid(),
-            Type = DTOs.Enums.VehicleType.Hatchback,
-            NumberOfDoors = 0,
-            NumberOfSeats = NumberOfSeats,
-            LoadCapacity = 0
+            Type = DTOs.Enums.VehicleType.Suv,
+            NumberOfSeats = NumberOfSeats
         };
     }
     

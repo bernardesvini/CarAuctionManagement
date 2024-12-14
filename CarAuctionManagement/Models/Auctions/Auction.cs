@@ -52,7 +52,7 @@ public class Auction
             Id = GetId(),
             Vehicle = Vehicle?.ToResponseDto(),
             IsActive = GetIsActive(),
-            Bids = GetBids()?.Select(b => b?.ToResponseDto()).ToList(),
+            Bids = GetBids()?.Select(b => b?.ToResponseDto()).OrderBy(bid => bid?.Amount).ToList(),
             HighestBid = GetHighestBid(),
             HighestBidder = GetHighestBidder()
         };
