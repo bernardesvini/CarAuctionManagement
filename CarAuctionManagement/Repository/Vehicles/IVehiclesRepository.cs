@@ -7,5 +7,5 @@ public interface IVehiclesRepository
     Vehicle? AddVehicle(Vehicle? vehicle);
     List<Vehicle?> GetVehicles();
     Vehicle? UpdateVehicle(Vehicle? vehicle);
-    void RemoveVehicle(Vehicle? vehicle);
+    void RemoveVehicle(Guid? vehicleId);
 }
