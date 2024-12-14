@@ -53,7 +53,7 @@ public class VehiclesService : IVehiclesService
     public void RemoveVehicle(Guid? id)
     {
         Vehicle vehicleToRemoved = GetVehicleByIdValidation(id);
-        _vehiclesRepository.RemoveVehicle(vehicleToRemoved);
+        _vehiclesRepository.RemoveVehicle(vehicleToRemoved.GetId());
     }
 
     private void GetVehiclesValidation(List<Vehicle?>? vehicles)

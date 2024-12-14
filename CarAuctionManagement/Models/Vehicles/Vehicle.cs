@@ -10,6 +10,7 @@ public class Vehicle
     private string? Model { get; set; }
     private int? Year { get; set; }
     private decimal? StartingBid { get; set; }
+    private bool IsDeleted { get; set; }
     
     public Vehicle(Guid? id, string? manufacturer, string? model, int? year, decimal? startingBid)
     {
@@ -18,6 +19,7 @@ public class Vehicle
         Model = model;
         Year = year;
         StartingBid = startingBid;
+        IsDeleted = false;
     }
     
     public virtual VehicleResponseDto ToResponseDto()
@@ -38,6 +40,8 @@ public class Vehicle
     public string? GetModel() => Model;
     public int? GetYear() => Year;
     public decimal? GetStartingBid() => StartingBid;
+    public bool GetIsDeleted() => IsDeleted;
+    public void SetIsDeleted(bool isDeleted) => IsDeleted = isDeleted;
     
     public virtual void Validate()
     {

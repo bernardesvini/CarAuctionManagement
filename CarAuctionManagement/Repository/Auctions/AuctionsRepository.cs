@@ -28,7 +28,7 @@ public class AuctionsRepository : IAuctionsRepository
     {
         _database.Auctions?.Where(activeAuction => activeAuction?.GetId() == auctionId).ToList().ForEach(auction1 =>
         {
-            if (auction1 != null) auction1.SetIsActive(false);
+            auction1?.SetIsActive(false);
         });
     }
     
@@ -36,8 +36,8 @@ public class AuctionsRepository : IAuctionsRepository
     {
         _database.Auctions?.Where(activeAuction => activeAuction?.GetId() == bidAdd?.GetAuctionId()).ToList().ForEach(auction1 =>
         {
-            if (auction1 != null) auction1.SetHighestBid(bidAdd?.GetAmount());
-            if (auction1 != null) auction1.SetHighestBidder(bidAdd?.GetBidderId());
+            auction1?.SetHighestBid(bidAdd?.GetAmount());
+            auction1?.SetHighestBidder(bidAdd?.GetBidderId());
             auction1?.GetBids()?.Add(bidAdd);
         });
         return bidAdd;

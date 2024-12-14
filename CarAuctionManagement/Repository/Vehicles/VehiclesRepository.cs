@@ -20,7 +20,7 @@ public class VehiclesRepository : IVehiclesRepository
 
     public List<Vehicle?> GetVehicles()
     {
-        return _database.Vehicles;
+        return _database.Vehicles.Where(vehicle => vehicle != null && !vehicle.GetIsDeleted()).ToList();
     }
 
     public Vehicle? UpdateVehicle(Vehicle? vehicle)
@@ -39,8 +39,11 @@ public class VehiclesRepository : IVehiclesRepository
         return vehicle;
     }
 
-    public void RemoveVehicle(Vehicle? vehicle)
+    public void RemoveVehicle(Guid? vehicleId)
     {
-        _database.Vehicles.Remove(vehicle);
+        _database.Vehicles.Where(vehicle => vehicle?.GetId() == vehicleId).ToList()?.ForEach(vehicle =>
+        {
+            vehicle?.SetIsDeleted(true);
+        });
     }
 }
