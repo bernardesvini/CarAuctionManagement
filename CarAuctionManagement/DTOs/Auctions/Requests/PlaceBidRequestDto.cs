@@ -5,7 +5,7 @@ namespace CarAuctionManagement.DTOs.Auctions.Requests;
 public class PlaceBidRequestDto
 {
     public string? BidderId { get; set; }
-    public Guid AuctionId { get; set; }
+    public Guid? AuctionId { get; set; }
     public decimal? Amount { get; set; }
     
     public class PlaceBidRequestDtoValidator : AbstractValidator<PlaceBidRequestDto>

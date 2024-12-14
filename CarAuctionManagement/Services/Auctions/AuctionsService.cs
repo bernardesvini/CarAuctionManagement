@@ -30,7 +30,7 @@ public class AuctionsService : IAuctionsService
         return auctions;
     }
 
-    public void EndAuction(Guid auctionId)
+    public void EndAuction(Guid? auctionId)
     {
         EndAuctionValidations(auctionId);
         _auctionsRepository.EndAuction(auctionId);
@@ -82,7 +82,7 @@ public class AuctionsService : IAuctionsService
             throw new CustomExceptions.VehicleNotFoundException(auction?.Vehicle?.Id);
     }
 
-    private void EndAuctionValidations(Guid auctionId)
+    private void EndAuctionValidations(Guid? auctionId)
     {
         List<Auction?>? activeAuctions = GetActiveAuctions();
         if (activeAuctions == null || activeAuctions.All(a => a?.Id != auctionId))

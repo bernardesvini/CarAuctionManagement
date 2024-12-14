@@ -34,14 +34,14 @@ public class PlaceBidHandler : IPlaceBidHandler
             BidderId = bid.BidderId
         };
         
-        Bid addedBid = _auctionsService.PlaceBid(newBid);
+        Bid? addedBid = _auctionsService.PlaceBid(newBid);
 
         PlaceBidResponseDto response = new PlaceBidResponseDto
         {
-            Id = addedBid.Id,
-            AuctionId = addedBid.AuctionId,
-            Amount = addedBid.Amount,
-            BidderId = addedBid.BidderId
+            Id = addedBid?.Id,
+            AuctionId = addedBid?.AuctionId,
+            Amount = addedBid?.Amount,
+            BidderId = addedBid?.BidderId
         };
         
         return response;

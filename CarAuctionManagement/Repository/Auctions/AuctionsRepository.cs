@@ -13,40 +13,43 @@ public class AuctionsRepository : IAuctionsRepository
         _database = database;
     }
     
-    public Auction StartAuction(Auction auction)
+    public Auction? StartAuction(Auction? auction)
     {
-        _database.Auctions.Add(auction);
+        _database.Auctions?.Add(auction);
         return auction;
     }
     
-    public List<Auction> GetAuctions()
+    public List<Auction?>? GetAuctions()
     {
         return _database.Auctions;
     }
 
-    public void EndAuction(Guid auctionId)
+    public void EndAuction(Guid? auctionId)
     {
-        _database.Auctions.Where(activeAuction => activeAuction.Id == auctionId).ToList().ForEach(auction1 => auction1.IsActive = false);
+        _database.Auctions?.Where(activeAuction => activeAuction?.Id == auctionId).ToList().ForEach(auction1 =>
+        {
+            if (auction1 != null) auction1.IsActive = false;
+        });
     }
     
     public Bid? PlaceBid(Bid? bidAdd)
     {
-        _database.Auctions.Where(activeAuction => activeAuction.Id == bidAdd?.AuctionId).ToList().ForEach(auction1 =>
+        _database.Auctions?.Where(activeAuction => activeAuction?.Id == bidAdd?.AuctionId).ToList().ForEach(auction1 =>
         {
-            auction1.HighestBid = bidAdd?.Amount;
-            auction1.HighestBidder = bidAdd?.BidderId;
-            auction1.Bids?.Add(bidAdd);
+            if (auction1 != null) auction1.HighestBid = bidAdd?.Amount;
+            if (auction1 != null) auction1.HighestBidder = bidAdd?.BidderId;
+            auction1?.Bids?.Add(bidAdd);
         });
         return bidAdd;
     }
 
-    public List<Auction> GetClosedAuctions()
+    public List<Auction?>? GetClosedAuctions()
     {
-        return _database.Auctions.Where(auction => auction.IsActive == false).ToList();
+        return _database.Auctions?.Where(auction => auction?.IsActive == false).ToList();
     }
 
-    public List<Auction> GetActiveAuctions()
+    public List<Auction?>? GetActiveAuctions()
     {
-        return _database.Auctions.Where(auction => auction.IsActive).ToList();
+        return _database.Auctions?.Where(auction => auction != null && auction.IsActive).ToList();
     }
 }

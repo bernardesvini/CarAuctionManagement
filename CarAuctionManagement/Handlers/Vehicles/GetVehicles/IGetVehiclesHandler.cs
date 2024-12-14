@@ -4,6 +4,6 @@ namespace CarAuctionManagement.Handlers.Vehicles.GetVehicles;
 
 public interface IGetVehiclesHandler
 {
-    GetVehicleshResponseDto GetVehicles();
-    GetVehicleshResponseDto GetVehiclesWithFilters(int? yearFilter, string? typeFilter, string? manufacturerFilter, string? modelFilter);
+    GetVehiclesResponseDto GetVehicles();
+    GetVehiclesResponseDto GetVehiclesWithFilters(int? yearFilter, string? typeFilter, string? manufacturerFilter, string? modelFilter);
 }

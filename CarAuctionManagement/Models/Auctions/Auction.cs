@@ -5,7 +5,7 @@ namespace CarAuctionManagement.Models.Auctions;
 
 public class Auction
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public Vehicle? Vehicle { get; set; }
     public bool IsActive { get; set; }
     public List<Bid?>? Bids { get; set; }

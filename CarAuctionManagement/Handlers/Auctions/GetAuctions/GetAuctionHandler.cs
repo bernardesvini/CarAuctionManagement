@@ -12,17 +12,17 @@ public class GetAuctionHandler : IGetAuctionHandler
         _auctionsService = auctionsService;
     }
     
-    public List<Auction> GetAuctions()
+    public List<Auction?>? GetAuctions()
     {
         return _auctionsService.GetAuctions();
     }
     
-    public List<Auction>? GetActiveAuctions()
+    public List<Auction?>? GetActiveAuctions()
     {
         return _auctionsService.GetActiveAuctions();
     }
     
-    public List<Auction>? GetClosedAuctions()
+    public List<Auction?>? GetClosedAuctions()
     {
         return _auctionsService.GetClosedAuctions();
     }

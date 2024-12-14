@@ -1876,10 +1876,7 @@
         },
         "runtime": {
           "bin/placeholder/CarAuctionManagement.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
+        }
       }
     }
   },

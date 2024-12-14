@@ -6,7 +6,7 @@ public interface IAuctionsRepository
 {
     Auction? StartAuction(Auction? auction);
     List<Auction?>? GetAuctions();
-    void EndAuction(Guid auctionId);
+    void EndAuction(Guid? auctionId);
     Bid? PlaceBid(Bid? bidAdd);
     List<Auction?>? GetClosedAuctions();
     List<Auction?>? GetActiveAuctions();

@@ -5,7 +5,7 @@ namespace CarAuctionManagement.DTOs.Auctions.Responses;
 
 public class StartAuctionResponseDto
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public Vehicle? Vehicle { get; set; }
     public decimal? HighestBid { get; set; }
 }

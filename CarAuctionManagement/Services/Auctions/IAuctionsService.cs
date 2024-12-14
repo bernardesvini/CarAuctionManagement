@@ -6,7 +6,7 @@ public interface IAuctionsService
 {
     Auction? StartAuction(Auction? auction);
     List<Auction?>? GetAuctions();
-    void EndAuction(Guid auctionId);
+    void EndAuction(Guid? auctionId);
     Bid? PlaceBid(Bid? newBid);
     List<Auction?>? GetActiveAuctions();
     List<Auction?>? GetClosedAuctions();
