@@ -1,10 +1,11 @@
-﻿using CarAuctionManagement.Models.Auctions;
+﻿using CarAuctionManagement.DTOs.Auctions.Responses;
+using CarAuctionManagement.Models.Auctions;
 
 namespace CarAuctionManagement.Handlers.Auctions.GetAuctions;
 
 public interface IGetAuctionHandler
 {
-    List<Auction?>? GetAuctions();
-    List<Auction?>? GetActiveAuctions();
-    List<Auction?>? GetClosedAuctions();
+    List<GetAuctionResponseDto?>? GetAuctions();
+    List<GetAuctionResponseDto?>? GetActiveAuctions();
+    List<GetAuctionResponseDto?>? GetClosedAuctions();
 }

@@ -1,4 +1,5 @@
-﻿using CarAuctionManagement.Models.Auctions;
+﻿using CarAuctionManagement.DTOs.Auctions.Responses;
+using CarAuctionManagement.Models.Auctions;
 
 namespace CarAuctionManagement.Services.Auctions;
 

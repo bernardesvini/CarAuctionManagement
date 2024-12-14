@@ -1,10 +1,36 @@
-﻿using CarAuctionManagement.ErrorHandling;
+﻿using CarAuctionManagement.DTOs.Vehicles.Responses;
+using CarAuctionManagement.ErrorHandling;
 
 namespace CarAuctionManagement.Models.Vehicles;
 
-public class Sedan : Vehicle
+public sealed class Sedan : Vehicle
 {
-    public int? NumberOfDoors { get; set; }
+    private int? NumberOfDoors { get; set; }
+    
+    public Sedan(Guid? id, string? manufacturer, string? model, int? year, decimal? startingBid, int? numberOfDoors)
+        : base(id, manufacturer, model, year, startingBid)
+    {
+        NumberOfDoors = numberOfDoors;
+        Validate();
+    }
+    
+    public override VehicleResponseDto ToResponseDto()
+    {
+        return new VehicleResponseDto
+        {
+            Id = GetId(),
+            Manufacturer = GetManufacturer(),
+            Model = GetModel(),
+            Year = GetYear(),
+            StartingBid = GetStartingBid(),
+            Type = DTOs.Enums.VehicleType.Hatchback,
+            NumberOfDoors = NumberOfDoors,
+            NumberOfSeats = 0,
+            LoadCapacity = 0
+        };
+    }
+    
+    public int? GetNumberOfDoors() => NumberOfDoors;
     
     public override void Validate()
     {

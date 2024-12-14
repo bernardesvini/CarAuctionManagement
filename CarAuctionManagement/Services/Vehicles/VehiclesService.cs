@@ -18,7 +18,7 @@ public class VehiclesService : IVehiclesService
         vehicle?.Validate();
         List<Vehicle?> existingVehicles = _vehiclesRepository.GetVehicles();
         VehicleValidations(vehicle, existingVehicles);
-        Vehicle? response =  _vehiclesRepository.AddVehicle(vehicle);
+        Vehicle? response = _vehiclesRepository.AddVehicle(vehicle);
         return response;
     }
 
@@ -46,7 +46,7 @@ public class VehiclesService : IVehiclesService
         List<Vehicle?> existingVehicles = _vehiclesRepository.GetVehicles();
         VehicleValidations(vehicle, existingVehicles, true);
         Vehicle? vehicleToUpdate = UpdateVehicleType(vehicle, existingVehicles);
-        Vehicle? response =_vehiclesRepository.UpdateVehicle(vehicleToUpdate);
+        Vehicle? response = _vehiclesRepository.UpdateVehicle(vehicleToUpdate);
         return response;
     }
 
@@ -68,7 +68,7 @@ public class VehiclesService : IVehiclesService
         if (allVehicles.Count == 0)
             throw new CustomExceptions.NoVehiclesFoundException();
 
-        Vehicle? vehicle = allVehicles.FirstOrDefault(vehicle => vehicle?.Id == id);
+        Vehicle? vehicle = allVehicles.FirstOrDefault(vehicle => vehicle?.GetId() == id);
 
         if (vehicle == null)
             throw new CustomExceptions.VehicleNotFoundException(id);
@@ -79,10 +79,10 @@ public class VehiclesService : IVehiclesService
     private List<Vehicle?> ApplyFilterOptions(string? type = null, string? manufacturer = null, string? model = null, int? year = null)
     {
         List<Vehicle?> vehicles = _vehiclesRepository.GetVehicles();
-        
+
         if (vehicles.Count == 0)
             throw new CustomExceptions.NoVehiclesFoundException();
-        
+
         List<Vehicle?> filteredVehicles = vehicles
             .Where(vehicle =>
                 (type == null ||
@@ -90,9 +90,9 @@ public class VehiclesService : IVehiclesService
                  (type.Equals("Hatchback", StringComparison.OrdinalIgnoreCase) && vehicle is Hatchback) ||
                  (type.Equals("SUV", StringComparison.OrdinalIgnoreCase) && vehicle is Suv) ||
                  (type.Equals("Truck", StringComparison.OrdinalIgnoreCase) && vehicle is Truck)) &&
-                (manufacturer == null || vehicle?.Manufacturer?.Equals(manufacturer, StringComparison.OrdinalIgnoreCase) == true) &&
-                (model == null || vehicle?.Model?.Equals(model, StringComparison.OrdinalIgnoreCase) == true) &&
-                (year == null || vehicle?.Year == year)
+                (manufacturer == null || vehicle?.GetManufacturer()?.Equals(manufacturer, StringComparison.OrdinalIgnoreCase) == true) &&
+                (model == null || vehicle?.GetModel()?.Equals(model, StringComparison.OrdinalIgnoreCase) == true) &&
+                (year == null || vehicle?.GetYear() == year)
             ).ToList();
 
         if (filteredVehicles.Count == 0)
@@ -106,49 +106,55 @@ public class VehiclesService : IVehiclesService
         if (vehicle == null)
             throw new CustomExceptions.VehicleDataNullException();
 
-        if (existingVehicles != null && existingVehicles.Any(existingVehicle => existingVehicle?.Id == vehicle.Id) && !isUpdate)
-            throw new CustomExceptions.VehicleAlreadyExistsException(vehicle.Id);
+        if (existingVehicles != null && existingVehicles.Any(existingVehicle => existingVehicle?.GetId() == vehicle.GetId()) && !isUpdate)
+            throw new CustomExceptions.VehicleAlreadyExistsException(vehicle.GetId());
 
-        if (existingVehicles != null && existingVehicles.All(existingVehicle => existingVehicle?.Id != vehicle.Id) && isUpdate)
-            throw new CustomExceptions.VehicleNotFoundException(vehicle.Id);
+        if (existingVehicles != null && existingVehicles.All(existingVehicle => existingVehicle?.GetId() != vehicle.GetId()) && isUpdate)
+            throw new CustomExceptions.VehicleNotFoundException(vehicle.GetId());
     }
 
     private static Vehicle? UpdateVehicleType(Vehicle? vehicle, List<Vehicle?> existingVehicles)
     {
-        var existingVehicle = existingVehicles.FirstOrDefault(v => v?.Id == vehicle?.Id);
+        var existingVehicle = existingVehicles.FirstOrDefault(v => v?.GetId() == vehicle?.GetId());
         if (existingVehicle?.GetType() == vehicle?.GetType())
             return vehicle;
 
         Vehicle newVehicle = vehicle switch
         {
-            Sedan => new Sedan(),
-            Hatchback => new Hatchback(),
-            Suv => new Suv(),
-            Truck => new Truck(),
+            Sedan => new Sedan(
+                vehicle.GetId(),
+                vehicle.GetManufacturer(),
+                vehicle.GetModel(),
+                vehicle.GetYear(),
+                vehicle.GetStartingBid(),
+                vehicle is Sedan updatedSedan ? updatedSedan.GetNumberOfDoors() : 0),
+            
+            Hatchback => new Hatchback(vehicle.GetId(),
+                vehicle.GetManufacturer(),
+                vehicle.GetModel(),
+                vehicle.GetYear(),
+                vehicle.GetStartingBid(),
+                vehicle is Hatchback updatedHatchback ? updatedHatchback.GetNumberOfDoors() : 0),
+            
+            Suv => new Suv(
+                vehicle.GetId(),
+                vehicle.GetManufacturer(),
+                vehicle.GetModel(),
+                vehicle.GetYear(),
+                vehicle.GetStartingBid(),
+                vehicle is Suv updatedSuv ? updatedSuv.GetNumberOfSeats() : 0),
+            
+            Truck => new Truck(
+                vehicle.GetId(),
+                vehicle.GetManufacturer(),
+                vehicle.GetModel(),
+                vehicle.GetYear(),
+                vehicle.GetStartingBid(),
+                vehicle is Truck updatedTruck ? updatedTruck.GetLoadCapacity() : 0),
+            
             _ => throw new CustomExceptions.InvalidVehicleTypeException()
         };
 
-        newVehicle.Id = vehicle.Id;
-        newVehicle.Manufacturer = vehicle.Manufacturer;
-        newVehicle.Model = vehicle.Model;
-        newVehicle.Year = vehicle.Year;
-        newVehicle.StartingBid = vehicle.StartingBid;
-
-        switch (newVehicle)
-        {
-            case Hatchback newHatchback when vehicle is Hatchback updatedHatchback:
-                newHatchback.NumberOfDoors = updatedHatchback.NumberOfDoors;
-                break;
-            case Sedan newSedan when vehicle is Sedan updatedSedan:
-                newSedan.NumberOfDoors = updatedSedan.NumberOfDoors;
-                break;
-            case Suv newSuv when vehicle is Suv updatedSuv:
-                newSuv.NumberOfSeats = updatedSuv.NumberOfSeats;
-                break;
-            case Truck newTruck when vehicle is Truck updatedTruck:
-                newTruck.LoadCapacity = updatedTruck.LoadCapacity;
-                break;
-        }
 
         return newVehicle;
     }

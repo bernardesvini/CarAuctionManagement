@@ -6,5 +6,5 @@ namespace CarAuctionManagement.Handlers.Auctions.StartAuction;
 
 public interface IStartAuctionHandler
 {
-    StartAuctionResponseDto StartAuction(StartAuctionRequestDto auctionRequest);
+    StartAuctionResponseDto? StartAuction(StartAuctionRequestDto auctionRequest);
 }

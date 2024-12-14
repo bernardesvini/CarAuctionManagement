@@ -1,10 +1,36 @@
-﻿using CarAuctionManagement.ErrorHandling;
+﻿using CarAuctionManagement.DTOs.Vehicles.Responses;
+using CarAuctionManagement.ErrorHandling;
 
 namespace CarAuctionManagement.Models.Vehicles;
 
-public class Truck : Vehicle
+public sealed class Truck : Vehicle
 {
-    public decimal? LoadCapacity { get; set; }
+    private decimal? LoadCapacity { get; set; }
+    
+    public Truck(Guid? id, string? manufacturer, string? model, int? year, decimal? startingBid, decimal? loadCapacity)
+        : base(id, manufacturer, model, year, startingBid)
+    {
+        LoadCapacity = loadCapacity;
+        Validate();
+    }
+    
+    public override VehicleResponseDto ToResponseDto()
+    {
+        return new VehicleResponseDto
+        {
+            Id = GetId(),
+            Manufacturer = GetManufacturer(),
+            Model = GetModel(),
+            Year = GetYear(),
+            StartingBid = GetStartingBid(),
+            Type = DTOs.Enums.VehicleType.Hatchback,
+            NumberOfDoors = 0,
+            NumberOfSeats = 0,
+            LoadCapacity = LoadCapacity
+        };
+    }
+    
+    public decimal? GetLoadCapacity() => LoadCapacity;
     
     public override void Validate()
     {

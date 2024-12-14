@@ -19,7 +19,7 @@ public class StartAuctionHandler : IStartAuctionHandler
         _vehiclesService = vehiclesService;
     }
     
-    public StartAuctionResponseDto StartAuction(StartAuctionRequestDto auctionRequest)
+    public StartAuctionResponseDto? StartAuction(StartAuctionRequestDto auctionRequest)
     {
         var validator = new StartAuctionRequestDto.StartAuctionRequestDtoValidator();
         var validationResult = validator.Validate(auctionRequest);
@@ -30,22 +30,17 @@ public class StartAuctionHandler : IStartAuctionHandler
         Vehicle? vehicle = _vehiclesService.GetVehicleById(auctionRequest.VehicleId);
         
         var auction = new Auction
-        {
-            Id = Guid.NewGuid(),
-            Vehicle = vehicle,
-            Bids = new List<Bid?>(),
-            IsActive = true,
-            HighestBid = vehicle?.StartingBid,
-            HighestBidder = string.Empty
-        };
+        (
+            Guid.NewGuid(),
+            vehicle,
+            true,
+            new List<Bid?>(),
+            0,
+            string.Empty
+        );
         Auction? addedAuction = _auctionsService.StartAuction(auction);
 
-        StartAuctionResponseDto response = new StartAuctionResponseDto
-        {
-            Id = addedAuction?.Id,
-            Vehicle = addedAuction?.Vehicle,
-            HighestBid = addedAuction?.HighestBid
-        };
+        StartAuctionResponseDto? response = addedAuction?.ToResponseDto();
         
         return response;
     }

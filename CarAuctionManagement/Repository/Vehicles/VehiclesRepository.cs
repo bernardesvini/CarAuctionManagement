@@ -25,7 +25,7 @@ public class VehiclesRepository : IVehiclesRepository
 
     public Vehicle? UpdateVehicle(Vehicle? vehicle)
     {
-        _database.Vehicles.Where(existingVehicle => existingVehicle?.Id == vehicle?.Id)
+        _database.Vehicles.Where(existingVehicle => existingVehicle?.GetId() == vehicle?.GetId())
             .ToList()
             .ForEach(existingVehicle =>
                 {

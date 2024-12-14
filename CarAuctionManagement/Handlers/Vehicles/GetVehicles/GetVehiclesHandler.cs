@@ -60,52 +60,16 @@ public class GetVehiclesHandler : IGetVehiclesHandler
                 switch (vehicle)
                 {
                     case Hatchback hatchback:
-                        response.GetVehicles.Add(new VehicleResponseDto()
-                        {
-                            Id = hatchback.Id,
-                            Manufacturer = hatchback.Manufacturer,
-                            Model = hatchback.Model,
-                            Year = hatchback.Year,
-                            Type = DTOs.Enums.VehicleType.Hatchback,
-                            StartingBid = hatchback.StartingBid,
-                            NumberOfDoors = hatchback.NumberOfDoors
-                        });
+                        response.GetVehicles.Add(hatchback.ToResponseDto());
                         break;
                     case Sedan sedan:
-                        response.GetVehicles.Add(new VehicleResponseDto()
-                        {
-                            Id = sedan.Id,
-                            Manufacturer = sedan.Manufacturer,
-                            Model = sedan.Model,
-                            Year = sedan.Year,
-                            Type = DTOs.Enums.VehicleType.Sedan,
-                            StartingBid = sedan.StartingBid,
-                            NumberOfDoors = sedan.NumberOfDoors
-                        });
+                        response.GetVehicles.Add(sedan.ToResponseDto());
                         break;
                     case Suv suv:
-                        response.GetVehicles.Add(new VehicleResponseDto()
-                        {
-                            Id = suv.Id,
-                            Manufacturer = suv.Manufacturer,
-                            Model = suv.Model,
-                            Year = suv.Year,
-                            Type = DTOs.Enums.VehicleType.Suv,
-                            StartingBid = suv.StartingBid,
-                            NumberOfSeats = suv.NumberOfSeats
-                        });
+                        response.GetVehicles.Add(suv.ToResponseDto());
                         break;
                     case Truck truck:
-                        response.GetVehicles.Add(new VehicleResponseDto()
-                        {
-                            Id = truck.Id,
-                            Manufacturer = truck.Manufacturer,
-                            Model = truck.Model,
-                            Year = truck.Year,
-                            Type = DTOs.Enums.VehicleType.Truck,
-                            StartingBid = truck.StartingBid,
-                            LoadCapacity = truck.LoadCapacity
-                        });
+                        response.GetVehicles.Add(truck.ToResponseDto());
                         break;
                 }
             }
