@@ -47,8 +47,9 @@ public class GetAuctionHandler : IGetAuctionHandler
     public BidderResponseDto? GetHighestBidder(Guid? auctionId)
     {
         Bidder? highestBidder = _auctionsService.GetHighestBidder(auctionId);
+        Auction? auction = _auctionsService.GetAuctionById(auctionId);
         BidderResponseDto? response = highestBidder?.ToResponseDto();
-        return response;
+        return response != null ? response with {Amount = auction?.GetHighestBid()} : response;
     }
     
     private static GetAuctionResponseDto CreatePaginatedResponse(int page, int pageSize, List<AuctionResponseDto?>? auctions)

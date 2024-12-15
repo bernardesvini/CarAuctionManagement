@@ -4,6 +4,9 @@ namespace CarAuctionManagement.Handlers.Bidders.GetBidders;
 
 public interface IGetBiddersHandler
 {
-    GetBiddersResponseDto? GetBidders(int page, int pageSize); 
+    GetBiddersResponseDto? GetBidders(int page, int pageSize);
+    GetBiddersResponseDto? GetActivesBidders(int page, int pageSize);
+    GetBiddersResponseDto? GetInactivesBidders(int page, int pageSize);
+    
     BidderResponseDto? GetBidderById(Guid? bidderId);
 }

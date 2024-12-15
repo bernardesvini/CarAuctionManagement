@@ -18,6 +18,38 @@ public class GetBiddersHandler : IGetBiddersHandler
     {
         List<Bidder?>? bidders = _biddersService.GetBidders();
         
+        var response = GetBiddersPaginated(page, pageSize, bidders);
+
+        return response;
+    }
+    
+    public GetBiddersResponseDto? GetActivesBidders(int page, int pageSize)
+    {
+        List<Bidder?>? bidders = _biddersService.GetActivesBidders();
+        List<BidderResponseDto?>? allBidders = bidders?.Select(bidder => bidder?.ToResponseDto()).ToList();
+        var response = GetBiddersPaginated(page, pageSize, bidders);
+        
+        return response;
+    }
+
+    public GetBiddersResponseDto? GetInactivesBidders(int page, int pageSize)
+    {
+        List<Bidder?>? bidders = _biddersService.GetInactivesBidders();
+        
+        var response = GetBiddersPaginated(page, pageSize, bidders);
+        
+        return response;
+    }
+
+    public BidderResponseDto? GetBidderById(Guid? bidderId)
+    {
+        Bidder? bidder = _biddersService.GetBidderById(bidderId);
+        BidderResponseDto? response = bidder?.ToResponseDto();
+        return response;
+    }
+    
+    private static GetBiddersResponseDto GetBiddersPaginated(int page, int pageSize, List<Bidder?>? bidders)
+    {
         List<BidderResponseDto?>? allBidders = bidders?.Select(bidder => bidder?.ToResponseDto()).ToList();
         if(allBidders?.Count == 0)
             throw new CustomExceptions.BidderNotFoundException();
@@ -34,14 +66,7 @@ public class GetBiddersHandler : IGetBiddersHandler
             PageSize = pageSize,
             BiddersList = paginatedResponse
         };
-        
         return response;
     }
-    
-    public BidderResponseDto? GetBidderById(Guid? bidderId)
-    {
-        Bidder? bidder = _biddersService.GetBidderById(bidderId);
-        BidderResponseDto? response = bidder?.ToResponseDto();
-        return response;
-    }
+
 }

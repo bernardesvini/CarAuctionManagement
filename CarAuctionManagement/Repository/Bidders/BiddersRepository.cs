@@ -23,6 +23,16 @@ public class BiddersRepository : IBiddersRepository
         return _database.Bidders?.Where(bidder => bidder != null && !bidder.GetIsDeleted()).ToList();
     }
 
+    public List<Bidder?>? GetActivesBidders()
+    {
+        return _database.Bidders?.Where(bidder => bidder != null && !bidder.GetIsDeleted()).ToList();
+    }
+
+    public List<Bidder?>? GetInactivesBidders()
+    {
+        return _database.Bidders?.Where(bidder => bidder != null && bidder.GetIsDeleted()).ToList();
+    }
+
     public Bidder? GetBidderById(Guid? bidderId)
     {
         return _database.Bidders?.FirstOrDefault(bidder => bidder?.GetId() == bidderId) ?? null;

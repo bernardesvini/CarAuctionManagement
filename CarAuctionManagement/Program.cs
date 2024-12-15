@@ -157,15 +157,29 @@ app.MapGet("/bidders/GetBidders",
         return result;
     });
 
+app.MapGet("/bidders/GetActiveBidders",
+    (IGetBiddersHandler bidderHandler, [SwaggerParameter(Description = "Page number (default: 1)")] int page = 1, [SwaggerParameter(Description = "Page Size (default: 10)")] int pageSize = 10) =>
+    {
+        var result = bidderHandler.GetActivesBidders(page, pageSize);
+        return result;
+    });
+
+app.MapGet("/bidders/GetInactiveBidders",
+    (IGetBiddersHandler bidderHandler, [SwaggerParameter(Description = "Page number (default: 1)")] int page = 1, [SwaggerParameter(Description = "Page Size (default: 10)")] int pageSize = 10) =>
+    {
+        var result = bidderHandler.GetInactivesBidders(page, pageSize);
+        return result;
+    });
+
 app.MapGet("/bidders/GetBidderById", (Guid bidderId, IGetBiddersHandler bidderHandler) =>
 {
     var result = bidderHandler.GetBidderById(bidderId);
     return result;
 });
 
-app.MapPut("/bidders/UpdateBid", ([FromBody] UpdateBidderRequestDto bidder, ICreateBidderHandler bidderHandler) =>
+app.MapPut("/bidders/UpdateBidder", (Guid id, [FromBody] UpdateBidderRequestDto bidder, ICreateBidderHandler bidderHandler) =>
 {
-    var result = bidderHandler.UpdateBidder(bidder);
+    var result = bidderHandler.UpdateBidder(bidder, id);
     return result;
 });
 

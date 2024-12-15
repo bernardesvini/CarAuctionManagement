@@ -38,12 +38,19 @@ public class CreateBidderHandler : ICreateBidderHandler
         return response;
     }
     
-    public BidderResponseDto? UpdateBidder(UpdateBidderRequestDto bidder)
+    public BidderResponseDto? UpdateBidder(UpdateBidderRequestDto bidder, Guid id)
     {
-        Bidder? existingBidder = _biddersService.GetBidderById(bidder.Id);
+        var validator = new UpdateBidderRequestDto.UpdateBidderRequestDtoValidator();
+        var validationResult = validator.Validate(bidder);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+        
+        Bidder? existingBidder = _biddersService.GetBidderById(id);
         Bidder updatedBidder = new Bidder
         (
-            bidder.Id,
+            id,
             string.IsNullOrEmpty(bidder.Name)? existingBidder?.GetName() : bidder.Name,
             string.IsNullOrEmpty(bidder.Email)? existingBidder?.GetEmail() : bidder.Email
         );

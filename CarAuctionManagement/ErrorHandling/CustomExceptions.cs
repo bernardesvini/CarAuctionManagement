@@ -20,5 +20,6 @@ public abstract class CustomExceptions
     public class BidderNotFoundByIdException(Guid? id) : Exception($"A bidder with the ID {id} was not found.");
     public class BidderNotFoundException() : Exception("No bidders found.");
     public class NoHighestBidderException(Guid? auctionId) : Exception($"No bidder found for auction with ID {auctionId}.");
- 
+    public class VehicleHaveActiveAuctionException(Guid? vehicleId, Guid? auctionId) : Exception ($"Vehicle with ID {vehicleId} have an active auction with ID {auctionId}, so cannot be updated.");
+    
 }

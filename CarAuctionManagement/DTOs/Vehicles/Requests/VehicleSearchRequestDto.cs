@@ -28,8 +28,8 @@ public class VehicleSearchRequestDto
                 .Must((endYear, startYear) => startYear == null || endYear.EndYear == null || startYear <= endYear.EndYear)
                 .WithMessage("Start year must be less than or equal to end year.");
             
-            RuleFor(x => x.StartYear)
-                .Must((endYear, startYear) => startYear == null || endYear.EndYear == null || endYear.EndYear <= startYear)
+            RuleFor(x => x.EndYear)
+                .Must((endYear, startYear) => startYear == null || endYear.EndYear == null || endYear.EndYear >= startYear)
                 .WithMessage("End year must be greater than or equal to start year.");
 
             RuleFor(x => x.Type)
