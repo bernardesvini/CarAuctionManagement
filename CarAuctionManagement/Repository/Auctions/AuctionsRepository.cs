@@ -24,6 +24,11 @@ public class AuctionsRepository : IAuctionsRepository
         return _database.Auctions;
     }
 
+    public Auction? GetAuctionById(Guid? id)
+    {
+        Auction? auction = _database.Auctions?.FirstOrDefault(auction => auction?.GetId() == id) ?? null;
+        return auction;
+    }
     public void EndAuction(Guid? auctionId)
     {
         _database.Auctions?.Where(activeAuction => activeAuction?.GetId() == auctionId).ToList().ForEach(auction1 =>

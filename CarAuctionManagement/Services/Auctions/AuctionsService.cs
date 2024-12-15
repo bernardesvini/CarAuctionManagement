@@ -31,6 +31,14 @@ public class AuctionsService : IAuctionsService
         return auctions;
     }
 
+    public Auction? GetAuctionById(Guid? id)
+    {
+        Auction? auction = _auctionsRepository.GetAuctionById(id);
+        if (auction == null)
+            throw new CustomExceptions.AuctionNotFoundException(id);
+        return auction;
+    }
+
     public void EndAuction(Guid? auctionId)
     {
         EndAuctionValidations(auctionId);
