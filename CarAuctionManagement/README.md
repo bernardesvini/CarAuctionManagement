@@ -2,8 +2,8 @@
 
 ## Description
 
-This project is a code challenge for BCA. The project is a car auction management system. The system allows users to 
-create, update, delete, and view cars in the inventory and open, close, and view active and inactive auctions. 
+This project is a code challenge for BCA. The project is a car auction management system. The system allows users to
+create, update, delete, and view cars in the inventory and open, close, and view active and inactive auctions.
 The system also allows users to bid on car auctions.
 
 ## Technologies
@@ -37,7 +37,7 @@ The system also allows users to bid on car auctions.
 
 ### Vehicles
 
-- **POST /api/vehicles/AddVehicle** - Add a vehicle
+- **POST /vehicles/AddVehicle** - Add a vehicle
     - **Request:**
       ```json
       {
@@ -46,9 +46,9 @@ The system also allows users to bid on car auctions.
           "year": 2020,
           "startingBid": 1000.12,
           "type": "Suv",
-          "numberOfDoors": 0,
-          "numberOfSeats": 4,
-          "loadCapacity": 0
+          "numberOfDoors": 4,
+          "numberOfSeats": 5,
+          "loadCapacity": 500
       }
       ```
     - **Response:**
@@ -60,47 +60,47 @@ The system also allows users to bid on car auctions.
           "year": 2020,
           "startingBid": 1000.12,
           "type": "Suv",
-          "numberOfDoors": 0,
-          "numberOfSeats": 4,
-          "loadCapacity": 0
+          "numberOfDoors": 4,
+          "numberOfSeats": 5,
+          "loadCapacity": 500
       }
       ```
 
-- **PUT /api/vehicles/UpdateVehicle** - Update a vehicle
+- **PUT /vehicles/UpdateVehicle** - Update a vehicle
     - **Request:**
       ```json
       {
-          "id": "ff1e51c-774a-4a41-b371-374df919a2c3",
+          "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
           "manufacturer": "Hyundai",
           "model": "CR-40",
           "year": 2019,
           "startingBid": 5555.84,
           "type": "Hatchback",
           "numberOfDoors": 5,
-          "numberOfSeats": 0,
-          "loadCapacity": 0
+          "numberOfSeats": 4,
+          "loadCapacity": 300
       }
       ```
     - **Response:**
       ```json
       {
-          "id": "ff1e51c-774a-4a41-b371-374df919a2c3",
+          "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
           "manufacturer": "Hyundai",
           "model": "CR-40",
           "year": 2019,
           "startingBid": 5555.84,
           "type": "Hatchback",
           "numberOfDoors": 5,
-          "numberOfSeats": 0,
-          "loadCapacity": 0
+          "numberOfSeats": 4,
+          "loadCapacity": 300
       }
       ```
 
-- **GET /api/vehicles/GetAllVehicles** - Get all vehicles
+- **GET /vehicles/GetVehicles** - Get all vehicles
     - **Response:**
       ```json
       {
-          "getVehicles": [
+          "vehicles": [
              {
                "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
                "manufacturer": "Toyota",
@@ -108,39 +108,39 @@ The system also allows users to bid on car auctions.
                "year": 2020,
                "startingBid": 1000.12,
                "type": "Suv",
-               "numberOfDoors": null,
-               "numberOfSeats": 4,
-               "loadCapacity": null
+               "numberOfDoors": 4,
+               "numberOfSeats": 5,
+               "loadCapacity": 500
              }
           ]
       }
       ```
 
-- **GET /api/vehicles/GetVehiclesWithFilters/{year}/{type}/{manufacturer}/{model}** - Get vehicles with filters(All filters are optional)
+- **GET /vehicles/GetVehiclesWithFilters** - Get vehicles with filters (All filters are optional)
     - **Request:**
       ```
-      url: /api/vehicles/GetVehiclesWithFilters/2020/Suv/Toyota/RAV4
+      url: /vehicles/GetVehiclesWithFilters?year=2020&type=Suv&manufacturer=Toyota&model=RAV4
       ```
     - **Response:**
       ```json
       {
-          "getVehicles": [
+          "vehicles": [
              {
                "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
-               "manufacturer": "Hyundai",
-               "model": "CR-40",
-               "year": 2019,
-               "startingBid": 5555.84,
-               "type": "Hatchback",
-               "numberOfDoors": 5,
-               "numberOfSeats": null,
-               "loadCapacity": null
+               "manufacturer": "Toyota",
+               "model": "RAV4",
+               "year": 2020,
+               "startingBid": 1000.12,
+               "type": "Suv",
+               "numberOfDoors": 4,
+               "numberOfSeats": 5,
+               "loadCapacity": 500
              }
           ]
       }
       ```
 
-- **DELETE /api/vehicles/RemoveVehicle/{id}** - Delete a vehicle
+- **DELETE /vehicles/RemoveVehicle** - Delete a vehicle
     - **Request:**
       ```json
       {
@@ -154,7 +154,7 @@ The system also allows users to bid on car auctions.
 
 ### Auctions
 
-- **POST /api/auctions/StartAuction** - Start an auction
+- **POST /auctions/StartAuction** - Start an auction
     - **Request:**
       ```json
       {
@@ -167,16 +167,16 @@ The system also allows users to bid on car auctions.
           "id": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
           "vehicle": {
              "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
-             "manufacturer": "Hyundai",
-             "model": "CR-40",
-             "year": 2019,
-             "startingBid": 5555.84
+             "manufacturer": "Toyota",
+             "model": "RAV4",
+             "year": 2020,
+             "startingBid": 1000.12
           },
-          "highestBid": 5555.84
+          "highestBid": 1000.12
       }
       ```
 
-- **POST /api/auctions/PlaceBid** - Place a bid
+- **POST /auctions/PlaceBid** - Place a bid
     - **Request:**
       ```json
       {
@@ -194,19 +194,19 @@ The system also allows users to bid on car auctions.
       }
       ```
 
-- **GET /api/auctions/GetAuctions** - Get all auctions
+- **GET /auctions/GetAuctions** - Get all auctions
     - **Response:**
       ```json
       {
-          "getAuctions": [
+          "auctions": [
              {
                "id": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
                "vehicle": {
                   "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
-                  "manufacturer": "Hyundai",
-                  "model": "CR-40",
-                  "year": 2019,
-                  "startingBid": 5555.84
+                  "manufacturer": "Toyota",
+                  "model": "RAV4",
+                  "year": 2020,
+                  "startingBid": 1000.12
                },
                "isActive": true,
                "bids": [
@@ -214,29 +214,29 @@ The system also allows users to bid on car auctions.
                       "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
                       "bidderId": "1",
                       "auctionId": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
-                      "amount": 8000
+                      "amount": 8000.00
                   }
                ],
-               "highestBid": 5555.84,
-               "highestBidder": ""
+               "highestBid": 8000.00,
+               "highestBidder": "1"
              }
           ]
       }
       ```
 
-- **GET /api/auctions/GetActiveAuctions** - Get all active auctions
+- **GET /auctions/GetActiveAuctions** - Get all active auctions
     - **Response:**
       ```json
       {
-          "getAuctions": [
+          "auctions": [
              {
                "id": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
                "vehicle": {
                   "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
-                  "manufacturer": "Hyundai",
-                  "model": "CR-40",
-                  "year": 2019,
-                  "startingBid": 5555.84
+                  "manufacturer": "Toyota",
+                  "model": "RAV4",
+                  "year": 2020,
+                  "startingBid": 1000.12
                },
                "isActive": true,
                "bids": [
@@ -244,17 +244,47 @@ The system also allows users to bid on car auctions.
                       "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
                       "bidderId": "1",
                       "auctionId": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
-                      "amount": 8000
+                      "amount": 8000.00
                   }
                ],
-               "highestBid": 5555.84,
-               "highestBidder": ""
+               "highestBid": 8000.00,
+               "highestBidder": "1"
              }
           ]
       }
       ```
 
-- **POST /api/auctions/EndAuction** - Close an auction
+- **GET /auctions/GetClosedAuctions** - Get all closed auctions
+    - **Response:**
+      ```json
+      {
+          "auctions": [
+             {
+               "id": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
+               "vehicle": {
+                  "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
+                  "manufacturer": "Toyota",
+                  "model": "RAV4",
+                  "year": 2020,
+                  "startingBid": 1000.12
+               },
+               "isActive": false,
+               "bids": [
+                  {
+                      "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
+                      "bidderId": "1",
+                      "auctionId": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
+                      "amount": 8000.00
+                  }
+               ],
+               "highestBid": 8000.00,
+               "highestBidder": "1"
+             }
+          ]
+      }
+      ```
+
+- **POST /auctions/EndAuction** - Close an auction
     - **Request:**
       ```json
       {
@@ -266,32 +296,137 @@ The system also allows users to bid on car auctions.
       200 OK
       ```
 
-- **GET /api/auctions/GetClosedAuctions** - Get all closed auctions
+- **GET /auctions/GetAuctionById** - Get auction by ID
+    - **Request:**
+      ```
+      url: /auctions/GetAuctionById?id=222b7630-ca22-4ec0-8be0-cf1e34d1f8d2
+      ```
     - **Response:**
       ```json
       {
-          "getAuctions": [
+          "id": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
+          "vehicle": {
+             "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
+             "manufacturer": "Toyota",
+             "model": "RAV4",
+             "year": 2020,
+             "startingBid": 1000.12
+          },
+          "isActive": true,
+          "bids": [
+             {
+                 "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
+                 "bidderId": "1",
+                 "auctionId": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
+                 "amount": 8000.00
+             }
+          ],
+          "highestBid": 8000.00,
+          "highestBidder": "1"
+      }
+      ```
+
+### Bidders
+
+- **POST /bidders/CreateBidder** - Create a bidder
+    - **Request:**
+      ```json
+      {
+          "name": "John Doe",
+          "email": "john.doe@example.com"
+      }
+      ```
+    - **Response:**
+      ```json
+      {
+          "id": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
+          "name": "John Doe",
+          "email": "john.doe@example.com"
+      }
+      ```
+
+- **GET /bidders/GetBidders** - Get all bidders
+    - **Response:**
+      ```json
+      {
+          "bidders": [
              {
                "id": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
-               "vehicle": {
-                  "id": "fff1e51c-774a-4a41-b371-374df919a2c3",
-                  "manufacturer": "Hyundai",
-                  "model": "CR-40",
-                  "year": 2019,
-                  "startingBid": 5555.84
-               },
-               "isActive": false,
-               "bids": [
-                  {
-                      "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
-                      "bidderId": "1",
-                      "auctionId": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
-                      "amount": 8000
-                  }
-               ],
-               "highestBid": 8000,
-               "highestBidder": "1"
+               "name": "John Doe",
+               "email": "john.doe@example.com"
              }
           ]
       }
+      ```
+
+- **GET /bidders/GetActiveBidders** - Get all active bidders
+    - **Response:**
+      ```json
+      {
+          "bidders": [
+             {
+               "id": "222b7630-ca22-4ec0-8be0-cf1e34d1f8d2",
+               "name": "John Doe",
+               "email": "john.doe@example.com"
+             }
+          ]
+      }
+      ```
+
+- **GET /bidders/GetInactiveBidders** - Get all inactive bidders
+    - **Response:**
+      ```json
+      {
+          "bidders": [
+             {
+               "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
+               "name": "Jane Doe",
+               "email": "jane.doe@example.com"
+             }
+          ]
+      }
+      ```
+
+- **GET /bidders/GetBidderById** - Get bidder by ID
+    - **Request:**
+      ```
+      url: /bidders/GetBidderById?bidderId=1
+      ```
+    - **Response:**
+      ```json
+      {
+          "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
+          "name": "John Doe",
+          "email": "john.doe@example.com"
+      }
+      ```
+
+- **PUT /bidders/UpdateBidder** - Update a bidder
+    - **Request:**
+      ```json
+      {
+          "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
+          "name": "John Smith",
+          "email": "john.smith@example.com"
+      }
+      ```
+    - **Response:**
+      ```json
+      {
+          "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849",
+          "name": "John Smith",
+          "email": "john.smith@example.com"
+      }
+      ```
+
+- **DELETE /bidders/RemoveBidder** - Delete a bidder
+    - **Request:**
+      ```json
+      {
+          "id": "b06ae131-dfb7-4105-bd4f-ba9b2d471849"
+      }
+      ```
+    - **Response:**
+      ```
+      200 OK
       ```
