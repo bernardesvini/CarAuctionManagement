@@ -16,5 +16,8 @@ public abstract class CustomExceptions
     public class ValidationException(string? message) : Exception(message);
     public class AuctionSameIdException(Guid? auctionId) : Exception($"An auction with the ID {auctionId} already exists.");
     public class InvalidVehicleTypeException() : Exception("This type of vehicle is unknown.");
-
+    public class BidderAlreadyExistsException(string? getEmail, string? getName) : Exception($"An bidder with the email {getEmail} and name {getName} already exists.");
+    public class BidderNotFoundByIdException(Guid? id) : Exception($"An bidder with the ID {id} was not found.");
+    public class BidderNotFoundException() : Exception("No bidders found.");
+    
 }

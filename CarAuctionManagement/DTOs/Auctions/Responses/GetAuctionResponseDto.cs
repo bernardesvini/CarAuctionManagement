@@ -9,5 +9,5 @@ public class GetAuctionResponseDto
     public bool? IsActive { get; set; }
     public List<PlaceBidResponseDto?>? Bids { get; set; }
     public decimal? HighestBid { get; set; }
-    public string? HighestBidder { get; set; }
+    public Guid? HighestBidder { get; set; }
 }

@@ -6,11 +6,11 @@ namespace CarAuctionManagement.Models.Auctions;
 public class Bid
 {
     private Guid? Id { get; set; }
-    private string? BidderId { get; set; }
+    private Guid? BidderId { get; set; }
     private Guid? AuctionId { get; set; }
     private decimal? Amount { get; set; }
     
-    public Bid(Guid? id, string? bidderId, Guid? auctionId, decimal? amount)
+    public Bid(Guid? id, Guid? bidderId, Guid? auctionId, decimal? amount)
     {
         Id = id;
         BidderId = bidderId;
@@ -20,7 +20,7 @@ public class Bid
     }
     
     public Guid? GetId() => Id;
-    public string? GetBidderId() => BidderId;  
+    public Guid? GetBidderId() => BidderId;  
     public Guid? GetAuctionId() => AuctionId;
     public decimal? GetAmount() => Amount;
     
@@ -42,7 +42,7 @@ public class Bid
             throw new CustomExceptions.ValidationException("Id must be provided.");
         }
 
-        if (string.IsNullOrEmpty(BidderId))
+        if (Guid.Empty.Equals(BidderId))
         {
             throw new CustomExceptions.ValidationException("BidderId must be provided.");
         }

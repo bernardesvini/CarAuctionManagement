@@ -34,9 +34,7 @@ public class StartAuctionHandler : IStartAuctionHandler
             Guid.NewGuid(),
             vehicle,
             true,
-            new List<Bid?>(),
-            0,
-            string.Empty
+            new List<Bid?>()
         );
         Auction? addedAuction = _auctionsService.StartAuction(auction);
 

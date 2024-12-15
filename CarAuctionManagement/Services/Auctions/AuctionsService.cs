@@ -73,7 +73,7 @@ public class AuctionsService : IAuctionsService
     private void StartAuctionValidations(Auction? auction)
     {
         List<Auction?>? auctions = _auctionsRepository.GetAuctions();
-        if (auctions != null && auctions.Any(actualAuction => actualAuction?.GetVehicle()?.GetId() == auction?.GetVehicle()?.GetId() && actualAuction.GetIsActive()))
+        if (auctions != null && auctions.Any(actualAuction => actualAuction?.GetVehicle()?.GetId() == auction?.GetVehicle()?.GetId() && actualAuction != null && actualAuction.GetIsActive()))
             throw new CustomExceptions.AuctionAlreadyActiveException(auction?.GetVehicle()?.GetId());
         if (auctions != null && auctions.Any(actualAuction => actualAuction?.GetId() == auction?.GetId()))
             throw new CustomExceptions.AuctionSameIdException(auction?.GetId());
