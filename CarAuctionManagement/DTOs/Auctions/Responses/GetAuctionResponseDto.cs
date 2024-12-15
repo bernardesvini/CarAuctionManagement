@@ -1,13 +1,10 @@
-﻿using CarAuctionManagement.DTOs.Vehicles.Responses;
-
-namespace CarAuctionManagement.DTOs.Auctions.Responses;
+﻿namespace CarAuctionManagement.DTOs.Auctions.Responses;
 
 public class GetAuctionResponseDto
 {
-    public Guid? Id { get; set; }
-    public VehicleResponseDto? Vehicle { get; set; }
-    public bool? IsActive { get; set; }
-    public List<PlaceBidResponseDto?>? Bids { get; set; }
-    public decimal? HighestBid { get; set; }
-    public Guid? HighestBidder { get; set; }
+    public int? TotalCount { get; set; }
+    public int Page { get; set; }
+    public int PageSize { get; set; }
+    public List<AuctionResponseDto?>? AuctionsList { get; set; }
 }
+
