@@ -6,9 +6,9 @@ namespace CarAuctionManagement.Handlers.Auctions.GetAuctions;
 
 public interface IGetAuctionHandler
 {
-    List<GetAuctionResponseDto?>? GetAuctions();
-    GetAuctionResponseDto? GetAuctionById(Guid? auctionId);
-    List<GetAuctionResponseDto?>? GetActiveAuctions();
-    List<GetAuctionResponseDto?>? GetClosedAuctions();
+    GetAuctionResponseDto? GetAuctions(int page, int pageSize);
+    AuctionResponseDto? GetAuctionById(Guid? auctionId);
+    GetAuctionResponseDto? GetActiveAuctions(int page, int pageSize);
+    GetAuctionResponseDto? GetClosedAuctions(int page, int pageSize);
     BidderResponseDto? GetHighestBidder(Guid? auctionId);
 }

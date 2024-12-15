@@ -16,7 +16,7 @@ public class GetVehiclesHandler : IGetVehiclesHandler
         _vehiclesService = vehiclesService;
     }
 
-    public GetVehiclesResponseDto GetVehiclesWithFilters(int? startYearFilter, int? endYearFilter, Guid? idFilter, VehicleType? typeFilter, string? manufacturerFilter, string? modelFilter)
+    public GetVehiclesResponseDto GetVehiclesWithFilters(int? startYearFilter, int? endYearFilter, Guid? idFilter, VehicleType? typeFilter, string? manufacturerFilter, string? modelFilter, int page, int pageSize)
     {
         var filters = new VehicleSearchRequestDto
         {
@@ -44,7 +44,21 @@ public class GetVehiclesHandler : IGetVehiclesHandler
         
         
         List<Vehicle?>? vehicles = _vehiclesService.GetVehicleSearch(type, manufacturer, model, startYear, endYear, id);
-        var response = GenerateResponseByType(vehicles);
+        var responseByType = GenerateResponseByType(vehicles);
+        
+        var paginatedResponse = responseByType?.VehiclesList?
+            .Skip((page - 1) * pageSize) 
+            .Take(pageSize)             
+            .ToList();
+
+        
+        var response = new GetVehiclesResponseDto
+        {
+            TotalCount = vehicles?.Count,
+            Page = page,
+            PageSize = pageSize,
+            VehiclesList = paginatedResponse
+        };
         return response;
     }
     

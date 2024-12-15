@@ -33,10 +33,7 @@ using Swashbuckle.AspNetCore.Annotations;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenLocalhost(5001); 
-});
+builder.WebHost.ConfigureKestrel(options => { options.ListenLocalhost(5001); });
 
 builder.Services.AddSingleton<IAuctionsService, AuctionsService>();
 builder.Services.AddSingleton<IVehiclesService, VehiclesService>();
@@ -62,11 +59,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Auction API", Version = "v1" });
     c.EnableAnnotations();
-  
 });
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
 var app = builder.Build();
 
@@ -77,66 +70,69 @@ app.UseMiddleware<ValidationExceptionMiddleware>();
 app.UseHttpsRedirection();
 
 // Define endpoints
-app.MapPost("/vehicles/AddVehicle", ([FromBody]VehicleRequestDto vehicle, IAddVehicleHandler vehiclesHandler) =>
+app.MapPost("/vehicles/AddVehicle", ([FromBody] VehicleRequestDto vehicle, IAddVehicleHandler vehiclesHandler) =>
 {
     var result = vehiclesHandler.AddVehicle(vehicle);
     return result;
 });
 
-app.MapGet("/vehicles/GetVehicles", (int? startYear, int? endYear, Guid? id, [SwaggerParameter(Description = "Vehicle type", Required = false)] VehicleType? type, string? manufacturer, string? model, IGetVehiclesHandler vehiclesHandler) =>
+app.MapGet("/vehicles/GetVehicles", (int? startYear, int? endYear, Guid? id, [SwaggerParameter(Description = "Vehicle type", Required = false)] VehicleType? type,
+    string? manufacturer, string? model,
+    IGetVehiclesHandler vehiclesHandler, [SwaggerParameter(Description = "Page number (default: 1)")] int page = 1, [SwaggerParameter(Description = "Page Size (default: 10)")] int pageSize = 10) =>
 {
-    var result = vehiclesHandler.GetVehiclesWithFilters(startYear, endYear, id, type, manufacturer, model);
+    var result = vehiclesHandler.GetVehiclesWithFilters(startYear, endYear, id, type, manufacturer, model, page, pageSize);
     return result;
 });
 
-app.MapPut("/vehicles/UpdateVehicle", (Guid id,[FromBody]VehicleUpdateRequestDto vehicle, IAddVehicleHandler vehiclesHandler) =>
+app.MapPut("/vehicles/UpdateVehicle", (Guid id, [FromBody] VehicleUpdateRequestDto vehicle, IAddVehicleHandler vehiclesHandler) =>
 {
     var result = vehiclesHandler.UpdateVehicle(id, vehicle);
     return result;
 });
 
-app.MapDelete("/vehicles/RemoveVehicle", ([FromBody]VehicleRemoveRequestDto vehicle, IRemoveVehicleHandler vehiclesHandler) =>
-{
-    vehiclesHandler.RemoveVehicle(vehicle);
-});
+app.MapDelete("/vehicles/RemoveVehicle", ([FromBody] VehicleRemoveRequestDto vehicle, IRemoveVehicleHandler vehiclesHandler) => { vehiclesHandler.RemoveVehicle(vehicle); });
 
-app.MapPost("/auctions/StartAuction", ([FromBody]StartAuctionRequestDto auction, IStartAuctionHandler auctionHandler) =>
+app.MapPost("/auctions/StartAuction", ([FromBody] StartAuctionRequestDto auction, IStartAuctionHandler auctionHandler) =>
 {
     var result = auctionHandler.StartAuction(auction);
     return result;
 });
 
-app.MapGet("/auctions/GetAuctions", ( IGetAuctionHandler auctionsHandler) =>
+app.MapGet("/auctions/GetAuctions", (IGetAuctionHandler auctionsHandler, [SwaggerParameter(Description = "Page number (default: 1)")] int page = 1,
+    [SwaggerParameter(Description = "Page Size (default: 10)")]
+    int pageSize = 10) =>
 {
-    var result = auctionsHandler.GetAuctions();
+    var result = auctionsHandler.GetAuctions(page, pageSize);
     return result;
 });
 
-app.MapGet("/auctions/GetAuctionsById", ( Guid id, IGetAuctionHandler auctionsHandler) =>
+app.MapGet("/auctions/GetAuctionsById", (Guid id, IGetAuctionHandler auctionsHandler) =>
 {
     var result = auctionsHandler.GetAuctionById(id);
     return result;
 });
 
-app.MapGet("/auctions/GetActiveAuctions", (IGetAuctionHandler auctionsHandler) =>
-{
-    var result = auctionsHandler.GetActiveAuctions();
-    return result;
-});
+app.MapGet("/auctions/GetActiveAuctions",
+    (IGetAuctionHandler auctionsHandler, [SwaggerParameter(Description = "Page number (default: 1)")] int page = 1, [SwaggerParameter(Description = "Page Size (default: 10)")] int pageSize = 10) =>
+    {
+        var result = auctionsHandler.GetActiveAuctions(page, pageSize);
+        return result;
+    });
 
-app.MapGet("/auctions/GetClosedAuctions", (IGetAuctionHandler auctionsHandler) =>
-{
-    var result = auctionsHandler.GetClosedAuctions();
-    return result;
-});
+app.MapGet("/auctions/GetClosedAuctions",
+    (IGetAuctionHandler auctionsHandler, [SwaggerParameter(Description = "Page number (default: 1)")] int page = 1, [SwaggerParameter(Description = "Page Size (default: 10)")] int pageSize = 10) =>
+    {
+        var result = auctionsHandler.GetClosedAuctions(page, pageSize);
+        return result;
+    });
 
-app.MapPost("/auctions/EndAuction", ([FromBody]EndAuctionRequestDto auction, IEndAuctionHandler auctionHandler) =>
+app.MapPost("/auctions/EndAuction", ([FromBody] EndAuctionRequestDto auction, IEndAuctionHandler auctionHandler) =>
 {
     auctionHandler.EndAuction(auction);
     return Results.Ok();
 });
 
-app.MapPost("/auctions/PlaceBid", ([FromBody]PlaceBidRequestDto bid, IPlaceBidHandler bidHandler) =>
+app.MapPost("/auctions/PlaceBid", ([FromBody] PlaceBidRequestDto bid, IPlaceBidHandler bidHandler) =>
 {
     var result = bidHandler.PlaceBid(bid);
     return result;
@@ -148,17 +144,18 @@ app.MapPost("/auctions/GetAuctionHighestBidder", (Guid auctionId, IGetAuctionHan
     return result;
 });
 
-app.MapPost("/bidders/CreateBidder", ([FromBody]CreateBidderRequestDto bidder, ICreateBidderHandler bidderHandler) =>
+app.MapPost("/bidders/CreateBidder", ([FromBody] CreateBidderRequestDto bidder, ICreateBidderHandler bidderHandler) =>
 {
     var result = bidderHandler.CreateBidder(bidder);
     return result;
 });
 
-app.MapGet("/bidders/GetBidders", (IGetBiddersHandler bidderHandler) =>
-{
-    var result = bidderHandler.GetBidders();
-    return result;
-});
+app.MapGet("/bidders/GetBidders",
+    (IGetBiddersHandler bidderHandler, [SwaggerParameter(Description = "Page number (default: 1)")] int page = 1, [SwaggerParameter(Description = "Page Size (default: 10)")] int pageSize = 10) =>
+    {
+        var result = bidderHandler.GetBidders(page, pageSize);
+        return result;
+    });
 
 app.MapGet("/bidders/GetBidderById", (Guid bidderId, IGetBiddersHandler bidderHandler) =>
 {
@@ -166,15 +163,12 @@ app.MapGet("/bidders/GetBidderById", (Guid bidderId, IGetBiddersHandler bidderHa
     return result;
 });
 
-app.MapPut("/bidders/UpdateBid", ([FromBody]UpdateBidderRequestDto bidder, ICreateBidderHandler bidderHandler) =>
+app.MapPut("/bidders/UpdateBid", ([FromBody] UpdateBidderRequestDto bidder, ICreateBidderHandler bidderHandler) =>
 {
     var result = bidderHandler.UpdateBidder(bidder);
     return result;
 });
 
-app.MapDelete("/bidders/RemoveBidder", ([FromBody]RemoveBidderRequestDto bidder, IRemoveBidderHandler bidderHandler) =>
-{
-    bidderHandler.RemoveBidder(bidder.Id);
-});
+app.MapDelete("/bidders/RemoveBidder", ([FromBody] RemoveBidderRequestDto bidder, IRemoveBidderHandler bidderHandler) => { bidderHandler.RemoveBidder(bidder.Id); });
 
 app.Run();

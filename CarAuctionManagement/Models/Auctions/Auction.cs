@@ -45,9 +45,9 @@ public class Auction
         };
     }
     
-    public GetAuctionResponseDto ToGetResponseDto()
+    public AuctionResponseDto ToGetResponseDto()
     {
-        return new GetAuctionResponseDto
+        return new AuctionResponseDto
         {
             Id = GetId(),
             Vehicle = Vehicle?.ToResponseDto(),

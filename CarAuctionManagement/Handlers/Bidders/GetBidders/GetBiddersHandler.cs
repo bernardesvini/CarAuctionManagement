@@ -14,14 +14,27 @@ public class GetBiddersHandler : IGetBiddersHandler
         _biddersService = biddersService;
     }
     
-    public GetBiddersResponseDto? GetBidders()
+    public GetBiddersResponseDto? GetBidders(int page, int pageSize)
     {
         List<Bidder?>? bidders = _biddersService.GetBidders();
         
         List<BidderResponseDto?>? allBidders = bidders?.Select(bidder => bidder?.ToResponseDto()).ToList();
         if(allBidders?.Count == 0)
             throw new CustomExceptions.BidderNotFoundException();
-        GetBiddersResponseDto? response = new GetBiddersResponseDto{BiddersList = allBidders};
+        
+        var paginatedResponse = allBidders?
+            .Skip((page - 1) * pageSize) 
+            .Take(pageSize)             
+            .ToList();
+       
+        var response = new GetBiddersResponseDto()
+        {
+            TotalCount = allBidders?.Count,
+            Page = page,
+            PageSize = pageSize,
+            BiddersList = paginatedResponse
+        };
+        
         return response;
     }
     
