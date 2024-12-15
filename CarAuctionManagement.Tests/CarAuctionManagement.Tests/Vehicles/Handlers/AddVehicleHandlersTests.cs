@@ -5,75 +5,139 @@ using CarAuctionManagement.Services.Vehicles;
 using FluentValidation;
 using Moq;
 
-namespace CarAuctionManagement.Tests.Vehicles.Handlers;
-
-public class AddVehicleHandlerTests
+namespace CarAuctionManagement.Tests.Vehicles.Handlers
 {
-    // private readonly Mock<IVehiclesService> _vehiclesServiceMock;
-    // private readonly AddVehicleHandler _handler;
-    //
-    // public AddVehicleHandlerTests()
-    // {
-    //     _vehiclesServiceMock = new Mock<IVehiclesService>();
-    //     _handler = new AddVehicleHandler(_vehiclesServiceMock.Object);
-    // }
-    //
-    // [Theory]
-    // [InlineData(null, "Model", 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, null, null)]
-    // [InlineData("Manufacturer", null, 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, null, null)]
-    // [InlineData("Manufacturer", "Model", 1800, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, null, null)]
-    // public void AddVehicle_ShouldThrowValidationException_WhenRequestIsInvalid(
-    //     string manufacturer, string model, int year, decimal startingBid, DTOs.Enums.VehicleType type, int? numberOfDoors, int? numberOfSeats, decimal? loadCapacity)
-    // {
-    //     var request = new VehicleRequestDto
-    //     {
-    //         Manufacturer = manufacturer,
-    //         Model = model,
-    //         Year = year,
-    //         StartingBid = startingBid,
-    //         Type = type,
-    //         NumberOfDoors = numberOfDoors,
-    //         NumberOfSeats = numberOfSeats,
-    //         LoadCapacity = loadCapacity
-    //     };
-    //
-    //     Assert.Throws<ValidationException>(() => _handler.AddVehicle(request));
-    // }
-    //
-    // [Fact]
-    // public void AddVehicle_ShouldReturnResponse_WhenRequestIsValid()
-    // {
-    //     var request = new VehicleRequestDto
-    //     {
-    //         Manufacturer = "Toyota",
-    //         Model = "Corolla",
-    //         Year = 2020,
-    //         StartingBid = 1000.00m,
-    //         Type = DTOs.Enums.VehicleType.Sedan,
-    //         NumberOfDoors = 4
-    //     };
-    //
-    //     var vehicle = new Sedan
-    //     {
-    //         Id = Guid.NewGuid(),
-    //         Manufacturer = request.Manufacturer,
-    //         Model = request.Model,
-    //         Year = request.Year,
-    //         StartingBid = request.StartingBid,
-    //         NumberOfDoors = request.NumberOfDoors
-    //     };
-    //
-    //     _vehiclesServiceMock.Setup(v => v.AddVehicle(It.IsAny<Vehicle>())).Returns(vehicle);
-    //
-    //     var response = _handler.AddVehicle(request);
-    //
-    //     Assert.NotNull(response);
-    //     Assert.Equal(vehicle.Id, response.Id);
-    //     Assert.Equal(vehicle.Manufacturer, response.Manufacturer);
-    //     Assert.Equal(vehicle.Model, response.Model);
-    //     Assert.Equal(vehicle.Year, response.Year);
-    //     Assert.Equal(vehicle.StartingBid, response.StartingBid);
-    //     Assert.Equal(DTOs.Enums.VehicleType.Sedan, response.Type);
-    //     Assert.Equal(vehicle.NumberOfDoors, response.NumberOfDoors);
-    // }
+    public class AddVehicleHandlerTests
+    {
+        private readonly Mock<IVehiclesService> _vehiclesServiceMock;
+        private readonly AddVehicleHandler _handler;
+
+        public AddVehicleHandlerTests()
+        {
+            _vehiclesServiceMock = new Mock<IVehiclesService>();
+            _handler = new AddVehicleHandler(_vehiclesServiceMock.Object);
+        }
+
+        [Theory]
+        [InlineData("Toyota", "Corolla", 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
+        [InlineData("Ford", "F-150", 2021, 2000.00, DTOs.Enums.VehicleType.Truck, default, default, 5000.0)]
+        public void AddVehicle_ShouldReturnResponse_WhenRequestIsValid(
+            string manufacturer, string model, int year, double? startingBid, DTOs.Enums.VehicleType? type, int? numberOfDoors, int? numberOfSeats, double? loadCapacity)
+        {
+            var request = new VehicleRequestDto
+            {
+                Manufacturer = manufacturer,
+                Model = model,
+                Year = year,
+                StartingBid = startingBid.HasValue ? (decimal)startingBid : null,
+                Type = type,
+                NumberOfDoors = numberOfDoors,
+                NumberOfSeats = numberOfSeats,
+                LoadCapacity = loadCapacity.HasValue ? (decimal)loadCapacity : null
+            };
+
+            var vehicle = new Vehicle
+            (
+                Guid.NewGuid(),
+                request.Manufacturer,
+                request.Model,
+                request.Year,
+                request.StartingBid
+            );
+
+            _vehiclesServiceMock.Setup(v => v.AddVehicle(It.IsAny<Vehicle>())).Returns(vehicle);
+
+            var response = _handler.AddVehicle(request);
+
+            Assert.NotNull(response);
+            Assert.Equal(vehicle.GetId(), response.Id);
+            Assert.Equal(vehicle.GetManufacturer(), response.Manufacturer);
+            Assert.Equal(vehicle.GetModel(), response.Model);
+            Assert.Equal(vehicle.GetYear(), response.Year);
+            Assert.Equal(vehicle.GetStartingBid(), response.StartingBid);
+        }
+
+        [Theory]
+        [InlineData(null, "Model", 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
+        [InlineData("Manufacturer", null, 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
+        [InlineData("Manufacturer", "Model", 1800, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
+        public void AddVehicle_ShouldThrowValidationException_WhenRequestIsInvalid(
+            string manufacturer, string model, int year, double? startingBid, DTOs.Enums.VehicleType? type, int? numberOfDoors, int? numberOfSeats, double? loadCapacity)
+        {
+            var request = new VehicleRequestDto
+            {
+                Manufacturer = manufacturer,
+                Model = model,
+                Year = year,
+                StartingBid = startingBid.HasValue ? (decimal)startingBid : null,
+                Type = type,
+                NumberOfDoors = numberOfDoors,
+                NumberOfSeats = numberOfSeats,
+                LoadCapacity = loadCapacity.HasValue ? (decimal)loadCapacity : null
+            };
+
+            Assert.Throws<ValidationException>(() => _handler.AddVehicle(request));
+        }
+
+        [Fact]
+        public void UpdateVehicle_ShouldReturnResponse_WhenRequestIsValid()
+        {
+            var id = Guid.NewGuid();
+            var request = new VehicleUpdateRequestDto
+            {
+                Manufacturer = "Toyota",
+                Model = "Corolla",
+                Year = 2020,
+                StartingBid = 1000.00m,
+                Type = DTOs.Enums.VehicleType.Sedan,
+                NumberOfDoors = 4
+            };
+
+            var existingVehicle = new Sedan
+            (
+                id,
+                "Toyota",
+                "Corolla",
+                2019,
+                900.00m,
+                4
+            );
+
+            _vehiclesServiceMock.Setup(v => v.GetVehicleById(id)).Returns(existingVehicle);
+            _vehiclesServiceMock.Setup(v => v.UpdateVehicle(It.IsAny<Vehicle>())).Returns(existingVehicle);
+
+            var response = _handler.UpdateVehicle(id, request);
+
+            Assert.NotNull(response);
+            Assert.Equal(existingVehicle.GetId(), response.Id);
+            Assert.Equal(existingVehicle.GetManufacturer(), response.Manufacturer);
+            Assert.Equal(existingVehicle.GetModel(), response.Model);
+            Assert.Equal(existingVehicle.GetYear(), response.Year);
+            Assert.Equal(existingVehicle.GetStartingBid(), response.StartingBid);
+            Assert.Equal(existingVehicle.GetNumberOfDoors(), response.NumberOfDoors);
+        }
+
+        [Theory]
+        [InlineData(null, "Model", 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
+        [InlineData("Manufacturer", null, 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
+        [InlineData("Manufacturer", "Model", 1800, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
+        public void UpdateVehicle_ShouldThrowValidationException_WhenRequestIsInvalid(
+            string manufacturer, string model, int year, double? startingBid, DTOs.Enums.VehicleType type, int? numberOfDoors, int? numberOfSeats, double? loadCapacity)
+        {
+            var id = Guid.NewGuid();
+            var request = new VehicleUpdateRequestDto
+            {
+                Manufacturer = manufacturer,
+                Model = model,
+                Year = year,
+                StartingBid = startingBid.HasValue ? (decimal)startingBid : null,
+                Type = type,
+                NumberOfDoors = numberOfDoors,
+                NumberOfSeats = numberOfSeats,
+                LoadCapacity = loadCapacity.HasValue ? (decimal)loadCapacity : null
+            };
+
+            Assert.Throws<ValidationException>(() => _handler.UpdateVehicle(id, request));
+        }
+    }
 }

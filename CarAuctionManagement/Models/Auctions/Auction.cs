@@ -24,6 +24,17 @@ public class Auction
         Validate();
     }
     
+    public Auction(Guid? id, Vehicle? vehicle, bool isActive, List<Bid?>? bids, decimal? highestBid, Guid? highestBidder)
+    {
+        Id = id;
+        Vehicle = vehicle;
+        IsActive = isActive;
+        Bids = bids;
+        HighestBid = highestBid;
+        HighestBidder = highestBidder;
+        Validate();
+    }
+    
     public Guid? GetId() => Id;
     public Vehicle? GetVehicle() => Vehicle;
     public bool GetIsActive() => IsActive;

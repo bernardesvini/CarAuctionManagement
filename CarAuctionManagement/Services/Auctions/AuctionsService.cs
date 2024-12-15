@@ -106,7 +106,7 @@ public class AuctionsService : IAuctionsService
         if (auctions != null && auctions.Any(actualAuction => actualAuction?.GetId() == auction?.GetId()))
             throw new CustomExceptions.AuctionSameIdException(auction?.GetId());
         List<Vehicle?> allVehicles = _vehiclesRepository.GetVehicles();
-        if (allVehicles.All(vehicle => vehicle?.GetId() != auction?.GetVehicle()?.GetId()))
+        if (allVehicles != null && allVehicles.All(vehicle => vehicle?.GetId() != auction?.GetVehicle()?.GetId()))
             throw new CustomExceptions.VehicleNotFoundException(auction?.GetVehicle()?.GetId());
     }
 
