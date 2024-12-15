@@ -1,7 +1,7 @@
 using CarAuctionManagement.DTOs.Vehicles.Requests;
 using FluentValidation.TestHelper;
 
-namespace CarAuctionManagement.Tests.Vehicles.Validations
+namespace CarAuctionManagement.Tests.Vehicles
 {
     public class VehicleSearchRequestDtoValidatorTests
     {

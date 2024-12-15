@@ -6,10 +6,10 @@ namespace CarAuctionManagement.Models.Auctions;
 
 public class Auction
 {
-    private Guid? Id { get; set; }
-    private Vehicle? Vehicle { get; set; }
+    private Guid? Id { get; }
+    private Vehicle? Vehicle { get; }
     private bool IsActive { get; set; }
-    private List<Bid?>? Bids { get; set; }
+    private List<Bid?>? Bids { get; }
     private decimal? HighestBid { get; set; }
     private Guid? HighestBidder { get; set; }
 
@@ -69,7 +69,7 @@ public class Auction
         };
     }
 
-    public void Validate()
+    private void Validate()
     {
         Vehicle?.Validate();
         

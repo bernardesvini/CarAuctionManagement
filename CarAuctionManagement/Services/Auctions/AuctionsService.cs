@@ -62,8 +62,10 @@ public class AuctionsService : IAuctionsService
         if (activeAuctions.All(a => a?.GetId() != newBid?.GetAuctionId()))
             throw new CustomExceptions.AuctionNotFoundException(newBid?.GetAuctionId());
         Auction? auction = activeAuctions.First(a => a?.GetId() == newBid?.GetAuctionId());
-        if (newBid?.GetAmount() <= auction?.GetHighestBid() || newBid?.GetAmount() <= auction?.GetVehicle()?.GetStartingBid())
+        if (newBid?.GetAmount() <= auction?.GetHighestBid())
             throw new CustomExceptions.BidAmountTooLowException(newBid.GetAmount(), auction.GetHighestBid());
+        if( newBid?.GetAmount() <= auction?.GetVehicle()?.GetStartingBid())
+            throw new CustomExceptions.BidAmountTooLowException(newBid.GetAmount(), auction?.GetVehicle()?.GetStartingBid());
     }
 
     public List<Auction?> GetActiveAuctions()

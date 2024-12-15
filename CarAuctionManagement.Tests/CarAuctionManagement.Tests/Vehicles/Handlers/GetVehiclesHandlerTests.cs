@@ -35,8 +35,8 @@ namespace CarAuctionManagement.Tests.Vehicles.Handlers
         }
 
         [Theory]
-        [InlineData(1800, "InvalidType", "Toyota", "Corolla")]
-        public void GetVehiclesWithFilters_ShouldThrowValidationException_WhenFiltersAreInvalid(int? year, string? type, string? manufacturer, string? model)
+        [InlineData(1800, "Toyota", "Corolla")]
+        public void GetVehiclesWithFilters_ShouldThrowValidationException_WhenFiltersAreInvalid(int? year,  string? manufacturer, string? model)
         {
             Assert.Throws<ValidationException>(() => _handler.GetVehiclesWithFilters(year, null, null, null, manufacturer, model, 1, 10));
         }

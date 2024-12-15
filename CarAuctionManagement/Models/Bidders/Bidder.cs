@@ -5,9 +5,9 @@ namespace CarAuctionManagement.Models.Bidders;
 
 public class Bidder
 {
-    private Guid? Id { get; set; }
-    private string? Name { get; set; }
-    private string? Email { get; set; }
+    private Guid? Id { get; }
+    private string? Name { get; }
+    private string? Email { get; }
     private bool IsDeleted { get; set; }
     
     
@@ -35,8 +35,8 @@ public class Bidder
             Email = GetEmail()
         };
     }
-    
-    public void Validate()
+
+    private void Validate()
     {
         if (Guid.Empty.Equals(Id))
         {

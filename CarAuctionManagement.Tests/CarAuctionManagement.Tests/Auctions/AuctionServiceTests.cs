@@ -13,18 +13,17 @@ namespace CarAuctionManagement.Tests.Auctions
     public class AuctionsServiceTests
     {
         private readonly Mock<IAuctionsRepository> _mockAuctionsRepository;
-        private readonly Mock<IVehiclesRepository> _mockVehiclesRepository;
         private readonly Mock<IBiddersRepository> _mockBiddersRepository;
         private readonly AuctionsService _auctionsService;
 
         public AuctionsServiceTests()
         {
             _mockAuctionsRepository = new Mock<IAuctionsRepository>();
-            _mockVehiclesRepository = new Mock<IVehiclesRepository>();
+            Mock<IVehiclesRepository> mockVehiclesRepository = new();
             _mockBiddersRepository = new Mock<IBiddersRepository>();
             _auctionsService = new AuctionsService(
                 _mockAuctionsRepository.Object,
-                _mockVehiclesRepository.Object,
+                mockVehiclesRepository.Object,
                 _mockBiddersRepository.Object);
         }
 
@@ -57,7 +56,7 @@ namespace CarAuctionManagement.Tests.Auctions
         public void GetAuctionById_AuctionNotFound_ThrowsAuctionNotFoundException()
         {
             var auctionId = Guid.NewGuid();
-            _mockAuctionsRepository.Setup(r => r.GetAuctionById(auctionId)).Returns((Auction)null);
+            _mockAuctionsRepository.Setup(r => r.GetAuctionById(auctionId)).Returns((Auction?)null);
 
             var exception = Assert.Throws<CustomExceptions.AuctionNotFoundException>(() => _auctionsService.GetAuctionById(auctionId));
             Assert.Equal($"Auction with ID {auctionId} not found or isn't active.", exception.Message);
@@ -95,7 +94,7 @@ namespace CarAuctionManagement.Tests.Auctions
         {
             _mockAuctionsRepository.Setup(r => r.GetActiveAuctions()).Returns(new List<Auction?>());
 
-            var exception = Assert.Throws<CustomExceptions.NoActiveAuctionsFoundException>(() => _auctionsService.GetActiveAuctions());
+            Assert.Throws<CustomExceptions.NoActiveAuctionsFoundException>(() => _auctionsService.GetActiveAuctions());
         }
 
         [Fact]

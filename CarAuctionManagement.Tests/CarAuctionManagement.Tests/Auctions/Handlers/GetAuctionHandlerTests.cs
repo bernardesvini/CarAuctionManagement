@@ -24,7 +24,7 @@ public class GetAuctionHandlerTests
     [Fact]
 public void GetAuctions_ShouldReturnPaginatedListOfAuctions()
 {
-    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), new Hatchback( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), false, null) };
+    var auctions = new List<Auction?> { new Auction(Guid.NewGuid(), new Hatchback( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), false, null) };
     _auctionsServiceMock.Setup(a => a.GetAuctions()).Returns(auctions);
 
     var result = _handler.GetAuctions(1, 10);
@@ -53,7 +53,7 @@ public void GetAuctionById_ShouldReturnAuction_WhenAuctionExists()
 public void GetAuctionById_ShouldReturnNull_WhenAuctionDoesNotExist()
 {
     var auctionId = Guid.NewGuid();
-    _auctionsServiceMock.Setup(a => a.GetAuctionById(auctionId)).Returns((Auction)null);
+    _auctionsServiceMock.Setup(a => a.GetAuctionById(auctionId)).Returns((Auction?)null);
 
     var result = _handler.GetAuctionById(auctionId);
 
@@ -63,7 +63,7 @@ public void GetAuctionById_ShouldReturnNull_WhenAuctionDoesNotExist()
 [Fact]
 public void GetActiveAuctions_ShouldReturnPaginatedListOfActiveAuctions()
 {
-    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), new Hatchback( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), true, null) };
+    var auctions = new List<Auction?> { new Auction(Guid.NewGuid(), new Hatchback( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), true, null) };
     _auctionsServiceMock.Setup(a => a.GetActiveAuctions()).Returns(auctions);
 
     var result = _handler.GetActiveAuctions(1, 10);
@@ -78,7 +78,7 @@ public void GetActiveAuctions_ShouldReturnPaginatedListOfActiveAuctions()
 [Fact]
 public void GetClosedAuctions_ShouldReturnPaginatedListOfClosedAuctions()
 {
-    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), new Suv( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), false, null) };
+    var auctions = new List<Auction?> { new Auction(Guid.NewGuid(), new Suv( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), false, null) };
     _auctionsServiceMock.Setup(a => a.GetClosedAuctions()).Returns(auctions);
 
     var result = _handler.GetClosedAuctions(1, 10);
@@ -112,7 +112,7 @@ public void GetHighestBidder_ShouldReturnHighestBidderWithAmount_WhenBidderExist
 public void GetHighestBidder_ShouldReturnNull_WhenBidderDoesNotExist()
 {
     var auctionId = Guid.NewGuid();
-    _auctionsServiceMock.Setup(a => a.GetHighestBidder(auctionId)).Returns((Bidder)null);
+    _auctionsServiceMock.Setup(a => a.GetHighestBidder(auctionId)).Returns((Bidder?)null);
 
     var result = _handler.GetHighestBidder(auctionId);
 

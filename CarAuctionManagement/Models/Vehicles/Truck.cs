@@ -5,7 +5,7 @@ namespace CarAuctionManagement.Models.Vehicles;
 
 public sealed class Truck : Vehicle
 {
-    private decimal? LoadCapacity { get; set; }
+    private decimal? LoadCapacity { get; }
     
     public Truck(Guid? id, string? manufacturer, string? model, int? year, decimal? startingBid, decimal? loadCapacity)
         : base(id, manufacturer, model, year, startingBid)
