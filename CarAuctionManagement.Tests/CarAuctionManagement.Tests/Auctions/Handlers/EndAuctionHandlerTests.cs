@@ -22,6 +22,8 @@ public class EndAuctionHandlerTests
     {
         var request = new EndAuctionRequestDto { AuctionId = Guid.Empty };
 
+        _auctionsServiceMock.Setup(a => a.EndAuction(request.AuctionId)).Throws(new ValidationException("Invalid request"));
+
         Assert.Throws<ValidationException>(() => _handler.EndAuction(request));
     }
 

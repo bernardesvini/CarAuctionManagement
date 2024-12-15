@@ -10,7 +10,7 @@ public class EndAuctionRequestDto
     {
         public EndAuctionRequestDtoValidator()
         {
-            RuleFor(x => x.AuctionId).NotNull().NotEmpty().WithMessage("Auction ID must be provided to end a auction.");
+            RuleFor(x => x.AuctionId).NotEmpty().NotNull().WithMessage("Auction ID must be provided to end a auction.");
         }
     }
 }

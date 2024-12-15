@@ -111,3 +111,4 @@ C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tes
 C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tests\CarAuctionManagement.Tests\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tests\CarAuctionManagement.Tests\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tests\CarAuctionManagement.Tests\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\vinicius.bernardes\source\CarAuctionManagement\CarAuctionManagement.Tests\CarAuctionManagement.Tests\bin\Debug\net8.0\Swashbuckle.AspNetCore.Annotations.dll
