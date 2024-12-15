@@ -1,10 +1,12 @@
-﻿using CarAuctionManagement.Models.Vehicles;
-using CarAuctionManagement.Repository.Vehicles;
+﻿using CarAuctionManagement.ErrorHandling;
+using CarAuctionManagement.Models.Vehicles;
 using CarAuctionManagement.Repository.Auctions;
+using CarAuctionManagement.Repository.Vehicles;
 using CarAuctionManagement.Services.Vehicles;
+using FluentValidation;
 using Moq;
 
-namespace CarAuctionManagement.Tests.Services
+namespace CarAuctionManagement.Tests.Vehicles
 {
     public class VehiclesServiceTests
     {
@@ -44,6 +46,15 @@ namespace CarAuctionManagement.Tests.Services
 
             Assert.NotNull(result);
             Assert.Equal(vehicleId, result.GetId());
+        }
+
+        [Fact]
+        public void GetVehicleById_ShouldThrowNotFoundException_WhenVehicleDoesNotExist()
+        {
+            var vehicleId = Guid.NewGuid();
+            _vehiclesRepositoryMock.Setup(r => r.GetVehicles()).Returns(new List<Vehicle?>());
+
+            Assert.Throws<CustomExceptions.NoVehiclesFoundException>(() => _service.GetVehicleById(vehicleId));
         }
 
         [Fact]
@@ -87,6 +98,15 @@ namespace CarAuctionManagement.Tests.Services
         }
 
         [Fact]
+        public void RemoveVehicle_ShouldThrowNotFoundException_WhenVehicleDoesNotExist()
+        {
+            var vehicleId = Guid.NewGuid();
+            _vehiclesRepositoryMock.Setup(r => r.GetVehicles()).Returns(new List<Vehicle?>());
+
+            Assert.Throws<CustomExceptions.NoVehiclesFoundException>(() => _service.RemoveVehicle(vehicleId));
+        }
+
+        [Fact]
         public void GetVehicleSearch_ShouldReturnFilteredVehicles()
         {
             var vehicles = new List<Vehicle?> { new Sedan ( Guid.NewGuid(), "Toyota", "Camry", 2020, 1000.00m,  4 ) };
@@ -97,5 +117,6 @@ namespace CarAuctionManagement.Tests.Services
             Assert.NotNull(result);
             Assert.Single(result);
         }
+        
     }
 }

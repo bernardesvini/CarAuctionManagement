@@ -23,7 +23,7 @@ namespace CarAuctionManagement.Tests.Bidders
         [Theory]
         [InlineData(null, "Bidder name must be provided.")]
         [InlineData("", "Bidder name must be provided.")]
-        public void CreateBidder_Should_Have_Error_When_Name_Is_Invalid(string name, string expectedErrorMessage)
+        public void CreateBidder_ShouldHaveError_WhenNameIsInvalid(string name, string expectedErrorMessage)
         {
             var model = new CreateBidderRequestDto { Name = name };
             var result = _createValidator.TestValidate(model);
@@ -33,7 +33,7 @@ namespace CarAuctionManagement.Tests.Bidders
         [Theory]
         [InlineData("", "A valid email must be provided.")]
         [InlineData("invalid-email", "A valid email must be provided.")]
-        public void CreateBidder_Should_Have_Error_When_Email_Is_Invalid(string email, string expectedErrorMessage)
+        public void CreateBidder_ShouldHaveError_WhenEmailIsInvalid(string email, string expectedErrorMessage)
         {
             var model = new CreateBidderRequestDto { Email = email };
             var result = _createValidator.TestValidate(model);
@@ -42,7 +42,7 @@ namespace CarAuctionManagement.Tests.Bidders
 
         [Theory]
         [InlineData("invalid-email", "A valid email must be provided.")]
-        public void UpdateBidder_Should_Have_Error_When_Email_Is_Invalid(string email, string expectedErrorMessage)
+        public void UpdateBidder_ShouldHaveError_WhenEmailIsInvalid(string email, string expectedErrorMessage)
         {
             var model = new UpdateBidderRequestDto { Email = email };
             var result = _updateValidator.TestValidate(model);
@@ -50,7 +50,7 @@ namespace CarAuctionManagement.Tests.Bidders
         }
 
         [Fact]
-        public void RemoveBidder_Should_Have_Error_When_Id_Is_Null()
+        public void RemoveBidder_ShouldHaveError_WhenIdIsNull()
         {
             var model = new RemoveBidderRequestDto { Id = null };
             var result = _removeValidator.TestValidate(model);
@@ -58,7 +58,7 @@ namespace CarAuctionManagement.Tests.Bidders
         }
 
         [Fact]
-        public void RemoveBidder_Should_Not_Have_Error_When_Id_Is_Valid()
+        public void RemoveBidder_ShouldNotHaveError_WhenIdIsValid()
         {
             var model = new RemoveBidderRequestDto { Id = Guid.NewGuid() };
             var result = _removeValidator.TestValidate(model);
