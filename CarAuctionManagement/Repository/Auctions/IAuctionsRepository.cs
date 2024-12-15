@@ -11,4 +11,5 @@ public interface IAuctionsRepository
     Bid? PlaceBid(Bid? bidAdd);
     List<Auction?>? GetClosedAuctions();
     List<Auction?>? GetActiveAuctions();
+    Auction? GetHighestBidderId(Guid? auctionId);
 }

@@ -57,4 +57,10 @@ public class AuctionsRepository : IAuctionsRepository
     {
         return _database.Auctions?.Where(auction => auction != null && auction.GetIsActive()).ToList();
     }
+
+    public Auction? GetHighestBidderId(Guid? auctionId)
+    {
+        Auction? auction = _database.Auctions?.FirstOrDefault(auction => auction?.GetId() == auctionId);
+        return auction;
+    }
 }
