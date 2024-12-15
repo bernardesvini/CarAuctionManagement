@@ -1,6 +1,5 @@
 ﻿using CarAuctionManagement.DTOs.Auctions.Responses;
 using CarAuctionManagement.DTOs.Bidder.Responses;
-using CarAuctionManagement.Models.Auctions;
 
 namespace CarAuctionManagement.Handlers.Auctions.GetAuctions;
 
