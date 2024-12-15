@@ -1,7 +1,6 @@
 ﻿using CarAuctionManagement.ErrorHandling;
 using CarAuctionManagement.Models.Auctions;
 using CarAuctionManagement.Models.Vehicles;
-using Moq;
 
 namespace CarAuctionManagement.Tests.Auctions;
 
