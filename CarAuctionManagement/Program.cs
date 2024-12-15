@@ -112,6 +112,12 @@ app.MapGet("/auctions/GetAuctions", ( IGetAuctionHandler auctionsHandler) =>
     return result;
 });
 
+app.MapGet("/auctions/GetAuctionsById", ( Guid id, IGetAuctionHandler auctionsHandler) =>
+{
+    var result = auctionsHandler.GetAuctionById(id);
+    return result;
+});
+
 app.MapGet("/auctions/GetActiveAuctions", (IGetAuctionHandler auctionsHandler) =>
 {
     var result = auctionsHandler.GetActiveAuctions();

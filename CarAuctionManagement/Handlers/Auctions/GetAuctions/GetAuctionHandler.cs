@@ -11,14 +11,21 @@ public class GetAuctionHandler : IGetAuctionHandler
     public GetAuctionHandler(IAuctionsService auctionsService)
     {
         _auctionsService = auctionsService;
-    }
+    }   
     
     public List<GetAuctionResponseDto?>? GetAuctions()
     {
         List<GetAuctionResponseDto?>? auctions = _auctionsService.GetAuctions()?.Select(auction => auction?.ToGetResponseDto()).ToList();
         return auctions;
     }
-    
+
+    public GetAuctionResponseDto? GetAuctionById(Guid? auctionId)
+    {
+        Auction? auction = _auctionsService.GetAuctionById(auctionId);
+        GetAuctionResponseDto? response = auction?.ToGetResponseDto();
+        return response;
+    }
+
     public List<GetAuctionResponseDto?>? GetActiveAuctions()
     {
         List<GetAuctionResponseDto?>? auctions = _auctionsService.GetActiveAuctions()?.Select(auction => auction?.ToGetResponseDto()).ToList();
