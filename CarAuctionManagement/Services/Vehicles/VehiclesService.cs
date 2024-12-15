@@ -35,9 +35,9 @@ public class VehiclesService : IVehiclesService
         return vehicles;
     }
 
-    public List<Vehicle?> GetVehicleSearch(string? type = null, string? manufacturer = null, string? model = null, int? year = null)
+    public List<Vehicle?> GetVehicleSearch(string? type = null, string? manufacturer = null, string? model = null, int? startYear = null, int? endYear = null, Guid? id = null)
     {
-        return ApplyFilterOptions(type, manufacturer, model, year);
+        return ApplyFilterOptions(type, manufacturer, model, startYear, endYear, id);
     }
 
     public Vehicle? UpdateVehicle(Vehicle? vehicle)
@@ -75,7 +75,7 @@ public class VehiclesService : IVehiclesService
         return vehicle;
     }
 
-    private List<Vehicle?> ApplyFilterOptions(string? type = null, string? manufacturer = null, string? model = null, int? year = null)
+    private List<Vehicle?> ApplyFilterOptions(string? type = null, string? manufacturer = null, string? model = null, int? startYear = null, int? endYear = null, Guid? id = null)
     {
         List<Vehicle?> vehicles = _vehiclesRepository.GetVehicles();
 
@@ -91,7 +91,9 @@ public class VehiclesService : IVehiclesService
                  (type.Equals("Truck", StringComparison.OrdinalIgnoreCase) && vehicle is Truck)) &&
                 (manufacturer == null || vehicle?.GetManufacturer()?.Equals(manufacturer, StringComparison.OrdinalIgnoreCase) == true) &&
                 (model == null || vehicle?.GetModel()?.Equals(model, StringComparison.OrdinalIgnoreCase) == true) &&
-                (year == null || vehicle?.GetYear() == year)
+                (startYear == null || vehicle?.GetYear() >= startYear) &&
+                (endYear == null || vehicle?.GetYear() <= endYear) &&
+                (id == null || vehicle?.GetId() == id)
             ).ToList();
 
         if (filteredVehicles.Count == 0)

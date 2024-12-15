@@ -16,11 +16,13 @@ public class GetVehiclesHandler : IGetVehiclesHandler
         _vehiclesService = vehiclesService;
     }
 
-    public GetVehiclesResponseDto GetVehiclesWithFilters(int? yearFilter, VehicleType? typeFilter, string? manufacturerFilter, string? modelFilter)
+    public GetVehiclesResponseDto GetVehiclesWithFilters(int? startYearFilter, int? endYearFilter, Guid? idFilter, VehicleType? typeFilter, string? manufacturerFilter, string? modelFilter)
     {
         var filters = new VehicleSearchRequestDto
         {
-            Year = yearFilter,
+            StartYear = startYearFilter,
+            EndYear = endYearFilter,
+            Id = idFilter,
             Type = typeFilter.ToString(),
             Manufacturer = manufacturerFilter,
             Model = modelFilter
@@ -36,10 +38,12 @@ public class GetVehiclesHandler : IGetVehiclesHandler
         string? type = !string.IsNullOrEmpty(filters.Type) ? filters.Type : null;
         string? manufacturer = !string.IsNullOrEmpty(filters.Manufacturer) ? filters.Manufacturer : null;
         string? model = !string.IsNullOrEmpty(filters.Model) ? filters.Model : null;
-        int? year = filters.Year == 0 ? null : filters.Year;
+        int? startYear = filters.StartYear == 0 ? null : filters.StartYear;
+        int? endYear = filters.EndYear == 0 ? null : filters.EndYear;
+        Guid? id = filters.Id == Guid.Empty ? null : filters.Id;
         
         
-        List<Vehicle?>? vehicles = _vehiclesService.GetVehicleSearch(type, manufacturer, model, year);
+        List<Vehicle?>? vehicles = _vehiclesService.GetVehicleSearch(type, manufacturer, model, startYear, endYear, id);
         var response = GenerateResponseByType(vehicles);
         return response;
     }
