@@ -1,5 +1,7 @@
 ﻿using CarAuctionManagement.ErrorHandling;
+using CarAuctionManagement.Models.Auctions;
 using CarAuctionManagement.Models.Vehicles;
+using CarAuctionManagement.Repository.Auctions;
 using CarAuctionManagement.Repository.Vehicles;
 
 namespace CarAuctionManagement.Services.Vehicles;
@@ -7,10 +9,12 @@ namespace CarAuctionManagement.Services.Vehicles;
 public class VehiclesService : IVehiclesService
 {
     private readonly IVehiclesRepository _vehiclesRepository;
+    private readonly IAuctionsRepository _auctionsRepository;
 
-    public VehiclesService(IVehiclesRepository vehiclesRepository)
+    public VehiclesService(IVehiclesRepository vehiclesRepository, IAuctionsRepository auctionsRepository)
     {
         _vehiclesRepository = vehiclesRepository;
+        _auctionsRepository = auctionsRepository;
     }
 
     public Vehicle? AddVehicle(Vehicle? vehicle)
@@ -110,8 +114,16 @@ public class VehiclesService : IVehiclesService
         if (existingVehicles != null && existingVehicles.Any(existingVehicle => existingVehicle?.GetId() == vehicle.GetId()) && !isUpdate)
             throw new CustomExceptions.VehicleAlreadyExistsException(vehicle.GetId());
 
-        if (existingVehicles != null && existingVehicles.All(existingVehicle => existingVehicle?.GetId() != vehicle.GetId()) && isUpdate)
-            throw new CustomExceptions.VehicleNotFoundException(vehicle.GetId());
+        if (isUpdate)
+        {
+            List<Auction?>? activeAuctions = _auctionsRepository.GetActiveAuctions();
+            Auction? auction = activeAuctions?.FirstOrDefault(auction => auction?.GetVehicle()?.GetId() == vehicle.GetId());
+            if (activeAuctions != null && auction != null)
+                throw new CustomExceptions.VehicleHaveActiveAuctionException(vehicle.GetId(), auction.GetId());
+            
+            if (existingVehicles != null && existingVehicles.All(existingVehicle => existingVehicle?.GetId() != vehicle.GetId()))
+                throw new CustomExceptions.VehicleNotFoundException(vehicle.GetId());
+        }
     }
 
     private static Vehicle? UpdateVehicleType(Vehicle? vehicle, List<Vehicle?> existingVehicles)
@@ -129,14 +141,14 @@ public class VehiclesService : IVehiclesService
                 vehicle.GetYear(),
                 vehicle.GetStartingBid(),
                 vehicle is Sedan updatedSedan ? updatedSedan.GetNumberOfDoors() : 0),
-            
+
             Hatchback => new Hatchback(vehicle.GetId(),
                 vehicle.GetManufacturer(),
                 vehicle.GetModel(),
                 vehicle.GetYear(),
                 vehicle.GetStartingBid(),
                 vehicle is Hatchback updatedHatchback ? updatedHatchback.GetNumberOfDoors() : 0),
-            
+
             Suv => new Suv(
                 vehicle.GetId(),
                 vehicle.GetManufacturer(),
@@ -144,7 +156,7 @@ public class VehiclesService : IVehiclesService
                 vehicle.GetYear(),
                 vehicle.GetStartingBid(),
                 vehicle is Suv updatedSuv ? updatedSuv.GetNumberOfSeats() : 0),
-            
+
             Truck => new Truck(
                 vehicle.GetId(),
                 vehicle.GetManufacturer(),
@@ -152,7 +164,7 @@ public class VehiclesService : IVehiclesService
                 vehicle.GetYear(),
                 vehicle.GetStartingBid(),
                 vehicle is Truck updatedTruck ? updatedTruck.GetLoadCapacity() : 0),
-            
+
             _ => throw new CustomExceptions.InvalidVehicleTypeException()
         };
 

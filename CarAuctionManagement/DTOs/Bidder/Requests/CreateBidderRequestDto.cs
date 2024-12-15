@@ -12,7 +12,7 @@ public class CreateBidderRequestDto
         public CreateBidderRequestDtoValidator()
         {
             RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Bidder name must be provided.");
-            RuleFor(x => x.Email).NotNull().NotEmpty().WithMessage("Bidder e-mail must be provided.");
+            RuleFor(x => x.Email).NotNull().NotEmpty().EmailAddress().WithMessage("A valid email must be provided.");
         }
     }
 }

@@ -57,6 +57,14 @@ public class AddVehicleHandler : IAddVehicleHandler
 
     public VehicleResponseDto? UpdateVehicle(Guid id, VehicleUpdateRequestDto vehicleUpdateRequestDto)
     {
+
+        var validator = new VehicleUpdateRequestDto.VehicleUpdateRequestDtoValidator();
+        var validationResult = validator.Validate(vehicleUpdateRequestDto);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+        
         Vehicle? existingVehicle = _vehiclesService.GetVehicleById(id);
 
         switch (vehicleUpdateRequestDto.Type)

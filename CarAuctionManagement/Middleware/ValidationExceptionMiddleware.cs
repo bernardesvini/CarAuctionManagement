@@ -57,6 +57,7 @@ public class ValidationExceptionMiddleware
                 break;
 
             case CustomExceptions.VehicleAlreadyExistsException:
+            case CustomExceptions.VehicleHaveActiveAuctionException:
                 statusCode = StatusCodes.Status409Conflict;
                 message = exception.Message;
                 break;
@@ -83,6 +84,7 @@ public class ValidationExceptionMiddleware
             case CustomExceptions.NoActiveAuctionsFoundException:
             case CustomExceptions.BidderNotFoundException:
             case CustomExceptions.BidderNotFoundByIdException:
+            case CustomExceptions.NoHighestBidderException:
                 statusCode = StatusCodes.Status404NotFound;
                 message = exception.Message;
                 break;

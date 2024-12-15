@@ -34,7 +34,7 @@ public sealed class Suv : Vehicle
     {
         base.Validate();
         
-        if (NumberOfSeats < 4)
-            throw new CustomExceptions.ValidationException("SUV number of seats must be greater than 4.");
+        if (NumberOfSeats == 0 || NumberOfSeats > 10)
+            throw new CustomExceptions.ValidationException("Number of seats must be between 1 and 10 for SUV.");
     }
 }
