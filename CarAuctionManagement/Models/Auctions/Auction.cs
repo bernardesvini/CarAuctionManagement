@@ -11,16 +11,16 @@ public class Auction
     private bool IsActive { get; set; }
     private List<Bid?>? Bids { get; set; }
     private decimal? HighestBid { get; set; }
-    private string? HighestBidder { get; set; }
+    private Guid? HighestBidder { get; set; }
 
-    public Auction(Guid? id, Vehicle? vehicle, bool isActive, List<Bid?>? bids, decimal? highestBid, string? highestBidder)
+    public Auction(Guid? id, Vehicle? vehicle, bool isActive, List<Bid?>? bids)
     {
         Id = id;
         Vehicle = vehicle;
         IsActive = isActive;
         Bids = bids;
-        HighestBid = highestBid;
-        HighestBidder = highestBidder;
+        HighestBid = 0;
+        HighestBidder = null;
         Validate();
     }
     
@@ -29,10 +29,10 @@ public class Auction
     public bool GetIsActive() => IsActive;
     public List<Bid?>? GetBids() => Bids;
     public decimal? GetHighestBid() => HighestBid;
-    public string? GetHighestBidder() => HighestBidder;
+    public Guid? GetHighestBidder() => HighestBidder;
     public void SetIsActive(bool isActive) => IsActive = isActive;
     public void SetHighestBid(decimal? highestBid) => HighestBid = highestBid;
-    public void SetHighestBidder(string? highestBidder) => HighestBidder = highestBidder;
+    public void SetHighestBidder(Guid? highestBidder) => HighestBidder = highestBidder;
     
     
     public StartAuctionResponseDto ToResponseDto()

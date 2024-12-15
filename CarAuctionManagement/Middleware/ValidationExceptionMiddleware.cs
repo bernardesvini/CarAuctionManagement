@@ -81,6 +81,8 @@ public class ValidationExceptionMiddleware
             case CustomExceptions.AuctionNotFoundException:
             case CustomExceptions.NoClosedAuctionsFoundException:
             case CustomExceptions.NoActiveAuctionsFoundException:
+            case CustomExceptions.BidderNotFoundException:
+            case CustomExceptions.BidderNotFoundByIdException:
                 statusCode = StatusCodes.Status404NotFound;
                 message = exception.Message;
                 break;
@@ -96,6 +98,7 @@ public class ValidationExceptionMiddleware
                 break;
 
             case CustomExceptions.AuctionSameIdException:
+            case CustomExceptions.BidderAlreadyExistsException:
                 statusCode = StatusCodes.Status409Conflict;
                 message = exception.Message;
                 break;

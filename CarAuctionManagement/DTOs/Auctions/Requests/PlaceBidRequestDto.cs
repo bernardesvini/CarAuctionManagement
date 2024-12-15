@@ -4,7 +4,7 @@ namespace CarAuctionManagement.DTOs.Auctions.Requests;
 
 public class PlaceBidRequestDto
 {
-    public string? BidderId { get; set; }
+    public Guid? BidderId { get; set; }
     public Guid? AuctionId { get; set; }
     public decimal? Amount { get; set; }
     

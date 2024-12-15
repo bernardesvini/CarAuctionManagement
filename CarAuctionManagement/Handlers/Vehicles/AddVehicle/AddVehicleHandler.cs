@@ -27,60 +27,27 @@ public class AddVehicleHandler : IAddVehicleHandler
         switch (vehicleRequestDto.Type)
         {
             case DTOs.Enums.VehicleType.Hatchback:
-                Hatchback hatchback = new Hatchback(
-                    Guid.NewGuid(),
-                    vehicleRequestDto.Manufacturer,
-                    vehicleRequestDto.Model,
-                    vehicleRequestDto.Year,
-                    vehicleRequestDto.StartingBid,
-                    vehicleRequestDto.NumberOfDoors
-                );
-
+                var hatchback = CreateHatchback(vehicleRequestDto);
                 Vehicle? responseHatchback = _vehiclesService.AddVehicle(hatchback);
-
                 VehicleResponseDto? responseHatchDto = responseHatchback?.ToResponseDto();
                 return responseHatchDto;
 
             case DTOs.Enums.VehicleType.Sedan:
-                Sedan sedan = new Sedan(
-                    Guid.NewGuid(),
-                    vehicleRequestDto.Manufacturer,
-                    vehicleRequestDto.Model,
-                    vehicleRequestDto.Year,
-                    vehicleRequestDto.StartingBid,
-                    vehicleRequestDto.NumberOfDoors
-                );
+                var sedan = CreateSedan(vehicleRequestDto);
                 Vehicle? responseSedan = _vehiclesService.AddVehicle(sedan);
                 VehicleResponseDto? responseSedanDto = responseSedan?.ToResponseDto();
-
                 return responseSedanDto;
 
             case DTOs.Enums.VehicleType.Suv:
-                Suv suv = new Suv(
-                    Guid.NewGuid(),
-                    vehicleRequestDto.Manufacturer,
-                    vehicleRequestDto.Model,
-                    vehicleRequestDto.Year,
-                    vehicleRequestDto.StartingBid,
-                    vehicleRequestDto.NumberOfSeats
-                );
+                var suv = CreateSuv(vehicleRequestDto);
                 Vehicle? responseSuv = _vehiclesService.AddVehicle(suv);
                 VehicleResponseDto? responseSuvDto = responseSuv?.ToResponseDto();
-
                 return responseSuvDto;
 
             case DTOs.Enums.VehicleType.Truck:
-                Truck truck = new Truck(
-                    Guid.NewGuid(),
-                    vehicleRequestDto.Manufacturer,
-                    vehicleRequestDto.Model,
-                    vehicleRequestDto.Year,
-                    vehicleRequestDto.StartingBid,
-                    vehicleRequestDto.LoadCapacity
-                );
+                var truck = CreateTruck(vehicleRequestDto);
                 Vehicle? responseTruck = _vehiclesService.AddVehicle(truck);
                 VehicleResponseDto? responseTruckDto = responseTruck?.ToResponseDto();
-
                 return responseTruckDto;
 
             default:
@@ -95,65 +62,25 @@ public class AddVehicleHandler : IAddVehicleHandler
         switch (vehicleUpdateRequestDto.Type)
         {
             case DTOs.Enums.VehicleType.Hatchback:
-                Hatchback hatchback = new Hatchback(
-                    id,
-                    string.IsNullOrEmpty(vehicleUpdateRequestDto.Manufacturer) ? existingVehicle?.GetManufacturer() : vehicleUpdateRequestDto.Manufacturer,
-                    string.IsNullOrEmpty(vehicleUpdateRequestDto.Model) ? existingVehicle?.GetModel() : vehicleUpdateRequestDto.Model,
-                    vehicleUpdateRequestDto.Year == null || !IsValidYear(vehicleUpdateRequestDto.Year) ? existingVehicle?.GetYear() : vehicleUpdateRequestDto.Year,
-                    vehicleUpdateRequestDto.StartingBid == 0 || vehicleUpdateRequestDto.StartingBid == null ? existingVehicle?.GetStartingBid() : vehicleUpdateRequestDto.StartingBid,
-                    vehicleUpdateRequestDto.NumberOfDoors == null || vehicleUpdateRequestDto.NumberOfDoors < 2 || vehicleUpdateRequestDto.NumberOfDoors > 5
-                        ? existingVehicle is Hatchback ? ((Hatchback)existingVehicle).GetNumberOfDoors() : 0
-                        : vehicleUpdateRequestDto.NumberOfDoors
-                );
-
+                var hatchback = UpdateHatchback(id, vehicleUpdateRequestDto, existingVehicle);
                 Vehicle? responseHatchback = _vehiclesService.UpdateVehicle(hatchback);
-
                 VehicleResponseDto? responseHatchDto = responseHatchback?.ToResponseDto();
                 return responseHatchDto;
 
             case DTOs.Enums.VehicleType.Sedan:
-                Sedan sedan = new Sedan(
-                    id,
-                    string.IsNullOrEmpty(vehicleUpdateRequestDto.Manufacturer) ? existingVehicle?.GetManufacturer() : vehicleUpdateRequestDto.Manufacturer,
-                    string.IsNullOrEmpty(vehicleUpdateRequestDto.Model) ? existingVehicle?.GetModel() : vehicleUpdateRequestDto.Model,
-                    vehicleUpdateRequestDto.Year == null || !IsValidYear(vehicleUpdateRequestDto.Year) ? existingVehicle?.GetYear() : vehicleUpdateRequestDto.Year,
-                    vehicleUpdateRequestDto.StartingBid == 0 || vehicleUpdateRequestDto.StartingBid == null ? existingVehicle?.GetStartingBid() : vehicleUpdateRequestDto.StartingBid,
-                    vehicleUpdateRequestDto.NumberOfDoors == null || vehicleUpdateRequestDto.NumberOfDoors < 2 || vehicleUpdateRequestDto.NumberOfDoors > 5
-                        ? existingVehicle is Sedan ? ((Sedan)existingVehicle).GetNumberOfDoors() : 0
-                        : vehicleUpdateRequestDto.NumberOfDoors
-                );
+                var sedan = UpdateSedan(id, vehicleUpdateRequestDto, existingVehicle);
                 Vehicle? responseSedan = _vehiclesService.UpdateVehicle(sedan);
                 VehicleResponseDto? responseSedanDto = responseSedan?.ToResponseDto();
-
                 return responseSedanDto;
 
             case DTOs.Enums.VehicleType.Suv:
-                Suv suv = new Suv(
-                    id,
-                    string.IsNullOrEmpty(vehicleUpdateRequestDto.Manufacturer) ? existingVehicle?.GetManufacturer() : vehicleUpdateRequestDto.Manufacturer,
-                    string.IsNullOrEmpty(vehicleUpdateRequestDto.Model) ? existingVehicle?.GetModel() : vehicleUpdateRequestDto.Model,
-                    vehicleUpdateRequestDto.Year == null || !IsValidYear(vehicleUpdateRequestDto.Year) ? existingVehicle?.GetYear() : vehicleUpdateRequestDto.Year,
-                    vehicleUpdateRequestDto.StartingBid == 0 || vehicleUpdateRequestDto.StartingBid == null ? existingVehicle?.GetStartingBid() : vehicleUpdateRequestDto.StartingBid,
-                    vehicleUpdateRequestDto.NumberOfSeats == null || vehicleUpdateRequestDto.NumberOfSeats < 2
-                        ? existingVehicle is Suv ? ((Suv)existingVehicle).GetNumberOfSeats() : 0
-                        : vehicleUpdateRequestDto.NumberOfSeats
-                );
+                var suv = UpdateSuv(id, vehicleUpdateRequestDto, existingVehicle);
                 Vehicle? responseSuv = _vehiclesService.UpdateVehicle(suv);
                 VehicleResponseDto? responseSuvDto = responseSuv?.ToResponseDto();
-
                 return responseSuvDto;
 
             case DTOs.Enums.VehicleType.Truck:
-                Truck truck = new Truck(
-                    id,
-                    string.IsNullOrEmpty(vehicleUpdateRequestDto.Manufacturer) ? existingVehicle?.GetManufacturer() : vehicleUpdateRequestDto.Manufacturer,
-                    string.IsNullOrEmpty(vehicleUpdateRequestDto.Model) ? existingVehicle?.GetModel() : vehicleUpdateRequestDto.Model,
-                    vehicleUpdateRequestDto.Year == null || !IsValidYear(vehicleUpdateRequestDto.Year) ? existingVehicle?.GetYear() : vehicleUpdateRequestDto.Year,
-                    vehicleUpdateRequestDto.StartingBid == 0 || vehicleUpdateRequestDto.StartingBid == null ? existingVehicle?.GetStartingBid() : vehicleUpdateRequestDto.StartingBid,
-                    vehicleUpdateRequestDto.LoadCapacity == null || vehicleUpdateRequestDto.LoadCapacity <= 0 || vehicleUpdateRequestDto.LoadCapacity > 1000000
-                        ? existingVehicle is Truck ? ((Truck)existingVehicle).GetLoadCapacity() : 0
-                        : vehicleUpdateRequestDto.LoadCapacity
-                );
+                var truck = UpdateTruck(id, vehicleUpdateRequestDto, existingVehicle);
                 Vehicle? responseTruck = _vehiclesService.UpdateVehicle(truck);
                 VehicleResponseDto? responseTruckDto = responseTruck?.ToResponseDto();
 
@@ -164,6 +91,117 @@ public class AddVehicleHandler : IAddVehicleHandler
         }
     }
 
+    private Truck UpdateTruck(Guid id, VehicleUpdateRequestDto vehicleUpdateRequestDto, Vehicle? existingVehicle)
+    {
+        Truck truck = new Truck(
+            id,
+            string.IsNullOrEmpty(vehicleUpdateRequestDto.Manufacturer) ? existingVehicle?.GetManufacturer() : vehicleUpdateRequestDto.Manufacturer,
+            string.IsNullOrEmpty(vehicleUpdateRequestDto.Model) ? existingVehicle?.GetModel() : vehicleUpdateRequestDto.Model,
+            vehicleUpdateRequestDto.Year == null || !IsValidYear(vehicleUpdateRequestDto.Year) ? existingVehicle?.GetYear() : vehicleUpdateRequestDto.Year,
+            vehicleUpdateRequestDto.StartingBid == 0 || vehicleUpdateRequestDto.StartingBid == null ? existingVehicle?.GetStartingBid() : vehicleUpdateRequestDto.StartingBid,
+            vehicleUpdateRequestDto.LoadCapacity == null || vehicleUpdateRequestDto.LoadCapacity <= 0 || vehicleUpdateRequestDto.LoadCapacity > 1000000
+                ? existingVehicle is Truck ? ((Truck)existingVehicle).GetLoadCapacity() : 0
+                : vehicleUpdateRequestDto.LoadCapacity
+        );
+        return truck;
+    }
+
+    private Suv UpdateSuv(Guid id, VehicleUpdateRequestDto vehicleUpdateRequestDto, Vehicle? existingVehicle)
+    {
+        Suv suv = new Suv(
+            id,
+            string.IsNullOrEmpty(vehicleUpdateRequestDto.Manufacturer) ? existingVehicle?.GetManufacturer() : vehicleUpdateRequestDto.Manufacturer,
+            string.IsNullOrEmpty(vehicleUpdateRequestDto.Model) ? existingVehicle?.GetModel() : vehicleUpdateRequestDto.Model,
+            vehicleUpdateRequestDto.Year == null || !IsValidYear(vehicleUpdateRequestDto.Year) ? existingVehicle?.GetYear() : vehicleUpdateRequestDto.Year,
+            vehicleUpdateRequestDto.StartingBid == 0 || vehicleUpdateRequestDto.StartingBid == null ? existingVehicle?.GetStartingBid() : vehicleUpdateRequestDto.StartingBid,
+            vehicleUpdateRequestDto.NumberOfSeats == null || vehicleUpdateRequestDto.NumberOfSeats < 2
+                ? existingVehicle is Suv ? ((Suv)existingVehicle).GetNumberOfSeats() : 0
+                : vehicleUpdateRequestDto.NumberOfSeats
+        );
+        return suv;
+    }
+
+    private Sedan UpdateSedan(Guid id, VehicleUpdateRequestDto vehicleUpdateRequestDto, Vehicle? existingVehicle)
+    {
+        Sedan sedan = new Sedan(
+            id,
+            string.IsNullOrEmpty(vehicleUpdateRequestDto.Manufacturer) ? existingVehicle?.GetManufacturer() : vehicleUpdateRequestDto.Manufacturer,
+            string.IsNullOrEmpty(vehicleUpdateRequestDto.Model) ? existingVehicle?.GetModel() : vehicleUpdateRequestDto.Model,
+            vehicleUpdateRequestDto.Year == null || !IsValidYear(vehicleUpdateRequestDto.Year) ? existingVehicle?.GetYear() : vehicleUpdateRequestDto.Year,
+            vehicleUpdateRequestDto.StartingBid == 0 || vehicleUpdateRequestDto.StartingBid == null ? existingVehicle?.GetStartingBid() : vehicleUpdateRequestDto.StartingBid,
+            vehicleUpdateRequestDto.NumberOfDoors == null || vehicleUpdateRequestDto.NumberOfDoors < 2 || vehicleUpdateRequestDto.NumberOfDoors > 5
+                ? existingVehicle is Sedan ? ((Sedan)existingVehicle).GetNumberOfDoors() : 0
+                : vehicleUpdateRequestDto.NumberOfDoors
+        );
+        return sedan;
+    }
+
+    private Hatchback UpdateHatchback(Guid id, VehicleUpdateRequestDto vehicleUpdateRequestDto, Vehicle? existingVehicle)
+    {
+        Hatchback hatchback = new Hatchback(
+            id,
+            string.IsNullOrEmpty(vehicleUpdateRequestDto.Manufacturer) ? existingVehicle?.GetManufacturer() : vehicleUpdateRequestDto.Manufacturer,
+            string.IsNullOrEmpty(vehicleUpdateRequestDto.Model) ? existingVehicle?.GetModel() : vehicleUpdateRequestDto.Model,
+            vehicleUpdateRequestDto.Year == null || !IsValidYear(vehicleUpdateRequestDto.Year) ? existingVehicle?.GetYear() : vehicleUpdateRequestDto.Year,
+            vehicleUpdateRequestDto.StartingBid == 0 || vehicleUpdateRequestDto.StartingBid == null ? existingVehicle?.GetStartingBid() : vehicleUpdateRequestDto.StartingBid,
+            vehicleUpdateRequestDto.NumberOfDoors == null || vehicleUpdateRequestDto.NumberOfDoors < 2 || vehicleUpdateRequestDto.NumberOfDoors > 5
+                ? existingVehicle is Hatchback ? ((Hatchback)existingVehicle).GetNumberOfDoors() : 0
+                : vehicleUpdateRequestDto.NumberOfDoors
+        );
+        return hatchback;
+    }
+
+    private static Truck CreateTruck(VehicleRequestDto vehicleRequestDto)
+    {
+        Truck truck = new Truck(
+            Guid.NewGuid(),
+            vehicleRequestDto.Manufacturer,
+            vehicleRequestDto.Model,
+            vehicleRequestDto.Year,
+            vehicleRequestDto.StartingBid,
+            vehicleRequestDto.LoadCapacity
+        );
+        return truck;
+    }
+
+    private static Suv CreateSuv(VehicleRequestDto vehicleRequestDto)
+    {
+        Suv suv = new Suv(
+            Guid.NewGuid(),
+            vehicleRequestDto.Manufacturer,
+            vehicleRequestDto.Model,
+            vehicleRequestDto.Year,
+            vehicleRequestDto.StartingBid,
+            vehicleRequestDto.NumberOfSeats
+        );
+        return suv;
+    }
+
+    private static Sedan CreateSedan(VehicleRequestDto vehicleRequestDto)
+    {
+        Sedan sedan = new Sedan(
+            Guid.NewGuid(),
+            vehicleRequestDto.Manufacturer,
+            vehicleRequestDto.Model,
+            vehicleRequestDto.Year,
+            vehicleRequestDto.StartingBid,
+            vehicleRequestDto.NumberOfDoors
+        );
+        return sedan;
+    }
+
+    private static Hatchback CreateHatchback(VehicleRequestDto vehicleRequestDto)
+    {
+        Hatchback hatchback = new Hatchback(
+            Guid.NewGuid(),
+            vehicleRequestDto.Manufacturer,
+            vehicleRequestDto.Model,
+            vehicleRequestDto.Year,
+            vehicleRequestDto.StartingBid,
+            vehicleRequestDto.NumberOfDoors
+        );
+        return hatchback;
+    }
     private bool IsValidYear(int? year)
     {
         return year >= 1886 && year <= DateTime.Now.Year;

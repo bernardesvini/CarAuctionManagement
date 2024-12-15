@@ -42,7 +42,6 @@ public class VehiclesService : IVehiclesService
 
     public Vehicle? UpdateVehicle(Vehicle? vehicle)
     {
-        vehicle?.Validate();
         List<Vehicle?> existingVehicles = _vehiclesRepository.GetVehicles();
         VehicleValidations(vehicle, existingVehicles, true);
         Vehicle? vehicleToUpdate = UpdateVehicleType(vehicle, existingVehicles);
