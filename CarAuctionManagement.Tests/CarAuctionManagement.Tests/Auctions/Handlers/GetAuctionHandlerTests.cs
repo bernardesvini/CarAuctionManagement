@@ -1,5 +1,4 @@
 ﻿using CarAuctionManagement.Handlers.Auctions.GetAuctions;
-using CarAuctionManagement.Handlers.Auctions.PlaceBid;
 using CarAuctionManagement.Models.Auctions;
 using CarAuctionManagement.Models.Bidders;
 using CarAuctionManagement.Models.Vehicles;
@@ -25,7 +24,7 @@ public class GetAuctionHandlerTests
     [Fact]
 public void GetAuctions_ShouldReturnPaginatedListOfAuctions()
 {
-    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), null, false, null) };
+    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), new Hatchback( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), false, null) };
     _auctionsServiceMock.Setup(a => a.GetAuctions()).Returns(auctions);
 
     var result = _handler.GetAuctions(1, 10);
@@ -41,7 +40,7 @@ public void GetAuctions_ShouldReturnPaginatedListOfAuctions()
 public void GetAuctionById_ShouldReturnAuction_WhenAuctionExists()
 {
     var auctionId = Guid.NewGuid();
-    var auction = new Auction(auctionId, null, false, null);
+    var auction = new Auction(auctionId, new Hatchback( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), false, null);
     _auctionsServiceMock.Setup(a => a.GetAuctionById(auctionId)).Returns(auction);
 
     var result = _handler.GetAuctionById(auctionId);
@@ -64,7 +63,7 @@ public void GetAuctionById_ShouldReturnNull_WhenAuctionDoesNotExist()
 [Fact]
 public void GetActiveAuctions_ShouldReturnPaginatedListOfActiveAuctions()
 {
-    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), null, true, null) };
+    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), new Hatchback( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), true, null) };
     _auctionsServiceMock.Setup(a => a.GetActiveAuctions()).Returns(auctions);
 
     var result = _handler.GetActiveAuctions(1, 10);
@@ -79,7 +78,7 @@ public void GetActiveAuctions_ShouldReturnPaginatedListOfActiveAuctions()
 [Fact]
 public void GetClosedAuctions_ShouldReturnPaginatedListOfClosedAuctions()
 {
-    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), null, false, null) };
+    var auctions = new List<Auction> { new Auction(Guid.NewGuid(), new Suv( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1200.00m,  4 ), false, null) };
     _auctionsServiceMock.Setup(a => a.GetClosedAuctions()).Returns(auctions);
 
     var result = _handler.GetClosedAuctions(1, 10);
@@ -96,7 +95,7 @@ public void GetHighestBidder_ShouldReturnHighestBidderWithAmount_WhenBidderExist
 {
     var auctionId = Guid.NewGuid();
     var highestBidder = new Bidder(Guid.NewGuid(), "John Doe", "sdas@sadas");
-    var vehicle = new Vehicle( Guid.NewGuid(), "Ford", "Focus", 2010, 10000);
+    var vehicle = new Hatchback( Guid.NewGuid(), "Hyundai", "Santa Fé", 2021, 1800.00m,  4 );
     var auction = new Auction(auctionId, vehicle, false, null, 10000, Guid.NewGuid());
     _auctionsServiceMock.Setup(a => a.GetHighestBidder(auctionId)).Returns(highestBidder);
     _auctionsServiceMock.Setup(a => a.GetAuctionById(auctionId)).Returns(auction);

@@ -1,4 +1,5 @@
 ﻿using CarAuctionManagement.DTOs.Vehicles.Requests;
+using CarAuctionManagement.ErrorHandling;
 using CarAuctionManagement.Handlers.Vehicles.AddVehicle;
 using CarAuctionManagement.Models.Vehicles;
 using CarAuctionManagement.Services.Vehicles;
@@ -118,13 +119,35 @@ namespace CarAuctionManagement.Tests.Vehicles.Handlers
         }
 
         [Theory]
-        [InlineData(null, "Model", 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
-        [InlineData("Manufacturer", null, 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
-        [InlineData("Manufacturer", "Model", 1800, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
+        [InlineData("00000000-0000-0000-0000-000000000000",null, "Model", 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 0, default, default)]
+        [InlineData("3fa85f64-5717-4562-b3fc-2c963f66afa6","Manufacturer", null, 2020, 1000.00, DTOs.Enums.VehicleType.Sedan, 4, default, default)]
         public void UpdateVehicle_ShouldThrowValidationException_WhenRequestIsInvalid(
-            string manufacturer, string model, int year, double? startingBid, DTOs.Enums.VehicleType type, int? numberOfDoors, int? numberOfSeats, double? loadCapacity)
+            Guid id, string manufacturer, string model, int year, double? startingBid, DTOs.Enums.VehicleType type, int? numberOfDoors, int? numberOfSeats, double? loadCapacity)
         {
-            var id = Guid.NewGuid();
+            
+            var request = new VehicleUpdateRequestDto
+            {
+                Manufacturer = manufacturer,
+                Model = model,
+                Year = year,
+                StartingBid = startingBid.HasValue ? (decimal)startingBid : null,
+                Type = type,
+                NumberOfDoors = numberOfDoors,
+                NumberOfSeats = numberOfSeats,
+                LoadCapacity = loadCapacity.HasValue ? (decimal)loadCapacity : null
+            };
+
+            Assert.Throws<CustomExceptions.ValidationException>(() => _handler.UpdateVehicle(id, request));
+        }
+        
+        [Theory]
+        [InlineData("3fa85f64-5717-4562-b3fc-2c963f66afa6","Manufacturer", "Model", 1800, 1000.00, DTOs.Enums.VehicleType.Truck, 4, default, default)]
+        [InlineData("3fa85f64-5717-4562-b3fc-2c963f66afa6","Manufacturer", "Model", 1800, 1000.00, DTOs.Enums.VehicleType.Truck, 4, default, 1000001.0)]
+        [InlineData("3fa85f64-5717-4562-b3fc-2c963f66afa6","Manufacturer", "Model", 1800, 1000.00, DTOs.Enums.VehicleType.Suv, 4, default, 1000001.0)]
+        public void UpdateVehicle_ShouldThrowValidationException_WhenRequestIsInvalidFluentValidation(
+            Guid id, string manufacturer, string model, int year, double? startingBid, DTOs.Enums.VehicleType type, int? numberOfDoors, int? numberOfSeats, double? loadCapacity)
+        {
+            
             var request = new VehicleUpdateRequestDto
             {
                 Manufacturer = manufacturer,
