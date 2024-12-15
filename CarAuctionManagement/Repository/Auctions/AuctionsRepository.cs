@@ -31,19 +31,19 @@ public class AuctionsRepository : IAuctionsRepository
     }
     public void EndAuction(Guid? auctionId)
     {
-        _database.Auctions?.Where(activeAuction => activeAuction?.GetId() == auctionId).ToList().ForEach(auction1 =>
+        _database.Auctions?.Where(activeAuction => activeAuction?.GetId() == auctionId).ToList().ForEach(auction =>
         {
-            auction1?.SetIsActive(false);
+            auction?.SetIsActive(false);
         });
     }
     
     public Bid? PlaceBid(Bid? bidAdd)
     {
-        _database.Auctions?.Where(activeAuction => activeAuction?.GetId() == bidAdd?.GetAuctionId()).ToList().ForEach(auction1 =>
+        _database.Auctions?.Where(activeAuction => activeAuction?.GetId() == bidAdd?.GetAuctionId()).ToList().ForEach(auction =>
         {
-            auction1?.SetHighestBid(bidAdd?.GetAmount());
-            auction1?.SetHighestBidder(bidAdd?.GetBidderId());
-            auction1?.GetBids()?.Add(bidAdd);
+            auction?.SetHighestBid(bidAdd?.GetAmount());
+            auction?.SetHighestBidder(bidAdd?.GetBidderId());
+            auction?.GetBids()?.Add(bidAdd);
         });
         return bidAdd;
     }

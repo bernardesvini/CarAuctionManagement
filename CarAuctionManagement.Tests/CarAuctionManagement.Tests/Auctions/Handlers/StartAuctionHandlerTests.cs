@@ -34,7 +34,7 @@ public class StartAuctionHandlerTests
     public void StartAuction_ShouldReturnResponse_WhenRequestIsValid()
     {
         var vehicle = new Vehicle(Guid.NewGuid(), "Model", "Make", 2020, 1000.00m);
-        var auction = new Auction(Guid.NewGuid(), vehicle, true, new List<Bid>(), 1000.00m, Guid.NewGuid());
+        var auction = new Auction(Guid.NewGuid(), vehicle, true, new List<Bid?>(), 1000.00m, Guid.NewGuid());
         var request = new StartAuctionRequestDto { VehicleId = vehicle.GetId() };
     
         _vehiclesServiceMock.Setup(v => v.GetVehicleById(It.IsAny<Guid>())).Returns(vehicle);

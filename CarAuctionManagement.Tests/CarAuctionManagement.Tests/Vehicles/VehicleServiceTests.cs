@@ -3,7 +3,6 @@ using CarAuctionManagement.Models.Vehicles;
 using CarAuctionManagement.Repository.Auctions;
 using CarAuctionManagement.Repository.Vehicles;
 using CarAuctionManagement.Services.Vehicles;
-using FluentValidation;
 using Moq;
 
 namespace CarAuctionManagement.Tests.Vehicles
@@ -11,14 +10,13 @@ namespace CarAuctionManagement.Tests.Vehicles
     public class VehiclesServiceTests
     {
         private readonly Mock<IVehiclesRepository> _vehiclesRepositoryMock;
-        private readonly Mock<IAuctionsRepository> _auctionsRepositoryMock;
         private readonly VehiclesService _service;
 
         public VehiclesServiceTests()
         {
             _vehiclesRepositoryMock = new Mock<IVehiclesRepository>();
-            _auctionsRepositoryMock = new Mock<IAuctionsRepository>();
-            _service = new VehiclesService(_vehiclesRepositoryMock.Object, _auctionsRepositoryMock.Object);
+            Mock<IAuctionsRepository> auctionsRepositoryMock = new();
+            _service = new VehiclesService(_vehiclesRepositoryMock.Object, auctionsRepositoryMock.Object);
         }
 
         [Fact]
@@ -31,7 +29,7 @@ namespace CarAuctionManagement.Tests.Vehicles
             var result = _service.AddVehicle(vehicle);
 
             Assert.NotNull(result);
-            Assert.Equal(vehicle.GetId(), result?.GetId());
+            Assert.Equal(vehicle.GetId(), result.GetId());
             _vehiclesRepositoryMock.Verify(r => r.AddVehicle(vehicle), Times.Once);
         }
 
@@ -81,8 +79,8 @@ namespace CarAuctionManagement.Tests.Vehicles
             var result = _service.UpdateVehicle(updatedVehicle);
 
             Assert.NotNull(result);
-            Assert.Equal(2021, result?.GetYear());
-            Assert.Equal(1200.00m, result?.GetStartingBid());
+            Assert.Equal(2021, result.GetYear());
+            Assert.Equal(1200.00m, result.GetStartingBid());
         }
 
         [Fact]

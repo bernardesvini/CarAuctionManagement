@@ -5,11 +5,11 @@ namespace CarAuctionManagement.Models.Vehicles;
 
 public class Vehicle
 {
-    private Guid? Id { get; set; }
-    private string? Manufacturer { get; set; }
-    private string? Model { get; set; }
-    private int? Year { get; set; }
-    private decimal? StartingBid { get; set; }
+    private Guid? Id { get; }
+    private string? Manufacturer { get; }
+    private string? Model { get; }
+    private int? Year { get; }
+    private decimal? StartingBid { get; }
     private bool IsDeleted { get; set; }
     
     public Vehicle(Guid? id, string? manufacturer, string? model, int? year, decimal? startingBid)

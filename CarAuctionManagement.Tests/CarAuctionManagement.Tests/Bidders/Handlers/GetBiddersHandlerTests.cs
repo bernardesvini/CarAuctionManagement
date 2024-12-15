@@ -25,10 +25,10 @@ namespace CarAuctionManagement.Tests.Bidders.Handlers
             var result = _handler.GetBidders(1, 10);
 
             Assert.NotNull(result);
-            Assert.Equal(bidders.Count, result?.TotalCount);
-            Assert.Equal(1, result?.Page);
-            Assert.Equal(10, result?.PageSize);
-            Assert.Equal(bidders.Count, result?.BiddersList?.Count);
+            Assert.Equal(bidders.Count, result.TotalCount);
+            Assert.Equal(1, result.Page);
+            Assert.Equal(10, result.PageSize);
+            Assert.Equal(bidders.Count, result.BiddersList?.Count);
         }
 
         [Fact]
@@ -40,10 +40,10 @@ namespace CarAuctionManagement.Tests.Bidders.Handlers
             var result = _handler.GetActivesBidders(1, 10);
 
             Assert.NotNull(result);
-            Assert.Equal(bidders.Count, result?.TotalCount);
-            Assert.Equal(1, result?.Page);
-            Assert.Equal(10, result?.PageSize);
-            Assert.Equal(bidders.Count, result?.BiddersList?.Count);
+            Assert.Equal(bidders.Count, result.TotalCount);
+            Assert.Equal(1, result.Page);
+            Assert.Equal(10, result.PageSize);
+            Assert.Equal(bidders.Count, result.BiddersList?.Count);
         }
 
         [Fact]
@@ -55,10 +55,10 @@ namespace CarAuctionManagement.Tests.Bidders.Handlers
             var result = _handler.GetInactivesBidders(1, 10);
 
             Assert.NotNull(result);
-            Assert.Equal(bidders.Count, result?.TotalCount);
-            Assert.Equal(1, result?.Page);
-            Assert.Equal(10, result?.PageSize);
-            Assert.Equal(bidders.Count, result?.BiddersList?.Count);
+            Assert.Equal(bidders.Count, result.TotalCount);
+            Assert.Equal(1, result.Page);
+            Assert.Equal(10, result.PageSize);
+            Assert.Equal(bidders.Count, result.BiddersList?.Count);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace CarAuctionManagement.Tests.Bidders.Handlers
             var result = _handler.GetBidderById(bidderId);
 
             Assert.NotNull(result);
-            Assert.Equal(bidderId, result?.Id);
+            Assert.Equal(bidderId, result.Id);
         }
 
         [Fact]

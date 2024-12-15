@@ -5,7 +5,7 @@ namespace CarAuctionManagement.Models.Vehicles;
 
 public sealed class Suv : Vehicle
 {
-    private int? NumberOfSeats { get; set; }
+    private int? NumberOfSeats { get; }
     
     public Suv(Guid? id, string? manufacturer, string? model, int? year, decimal? startingBid, int? numberOfSeats)
         : base(id, manufacturer, model, year, startingBid)

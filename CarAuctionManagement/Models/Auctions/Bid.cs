@@ -5,10 +5,10 @@ namespace CarAuctionManagement.Models.Auctions;
 
 public class Bid
 {
-    private Guid? Id { get; set; }
-    private Guid? BidderId { get; set; }
-    private Guid? AuctionId { get; set; }
-    private decimal? Amount { get; set; }
+    private Guid? Id { get; }
+    private Guid? BidderId { get; }
+    private Guid? AuctionId { get; }
+    private decimal? Amount { get; }
     
     public Bid(Guid? id, Guid? bidderId, Guid? auctionId, decimal? amount)
     {
@@ -34,8 +34,8 @@ public class Bid
             Amount = GetAmount()
         };
     }
-    
-    public void Validate()
+
+    private void Validate()
     {
         if (Guid.Empty.Equals(Id))
         {

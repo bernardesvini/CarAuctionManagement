@@ -28,8 +28,8 @@ namespace CarAuctionManagement.Tests.Bidders.Handlers
             var result = _handler.CreateBidder(request);
 
             Assert.NotNull(result);
-            Assert.Equal(request.Name, result?.Name);
-            Assert.Equal(request.Email, result?.Email);
+            Assert.Equal(request.Name, result.Name);
+            Assert.Equal(request.Email, result.Email);
         }
 
         [Fact]
@@ -53,8 +53,8 @@ namespace CarAuctionManagement.Tests.Bidders.Handlers
             var result = _handler.UpdateBidder(request, bidderId);
 
             Assert.NotNull(result);
-            Assert.Equal(request.Name, result?.Name);
-            Assert.Equal(request.Email, result?.Email);
+            Assert.Equal(request.Name, result.Name);
+            Assert.Equal(request.Email, result.Email);
         }
 
         [Fact]

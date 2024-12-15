@@ -5,7 +5,7 @@ namespace CarAuctionManagement.Models.Vehicles;
 
 public sealed class Hatchback : Vehicle
 {
-    private int? NumberOfDoors { get; set; }
+    private int? NumberOfDoors { get; }
 
     public Hatchback(Guid? id, string? manufacturer, string? model, int? year, decimal? startingBid, int? numberOfDoors)
         : base(id, manufacturer, model, year, startingBid)
