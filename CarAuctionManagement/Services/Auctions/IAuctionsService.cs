@@ -1,5 +1,5 @@
-﻿using CarAuctionManagement.DTOs.Auctions.Responses;
-using CarAuctionManagement.Models.Auctions;
+﻿using CarAuctionManagement.Models.Auctions;
+using CarAuctionManagement.Models.Bidders;
 
 namespace CarAuctionManagement.Services.Auctions;
 
@@ -12,4 +12,5 @@ public interface IAuctionsService
     Bid? PlaceBid(Bid? newBid);
     List<Auction?>? GetActiveAuctions();
     List<Auction?>? GetClosedAuctions();
+    Bidder? GetHighestBidder(Guid? auctionId);
 }

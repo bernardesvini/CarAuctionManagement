@@ -44,8 +44,8 @@ public class CreateBidderHandler : ICreateBidderHandler
         Bidder updatedBidder = new Bidder
         (
             bidder.Id,
-            string.IsNullOrEmpty(bidder.Name)? existingBidder.GetName() : bidder.Name,
-            string.IsNullOrEmpty(bidder.Email)? existingBidder.GetEmail() : bidder.Email
+            string.IsNullOrEmpty(bidder.Name)? existingBidder?.GetName() : bidder.Name,
+            string.IsNullOrEmpty(bidder.Email)? existingBidder?.GetEmail() : bidder.Email
         );
 
         Bidder? updatedBidderResponse = _biddersService.UpdateBidder(updatedBidder);

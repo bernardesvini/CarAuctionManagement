@@ -142,6 +142,12 @@ app.MapPost("/auctions/PlaceBid", ([FromBody]PlaceBidRequestDto bid, IPlaceBidHa
     return result;
 });
 
+app.MapPost("/auctions/GetAuctionHighestBidder", (Guid auctionId, IGetAuctionHandler auctionHandler) =>
+{
+    var result = auctionHandler.GetHighestBidder(auctionId);
+    return result;
+});
+
 app.MapPost("/bidders/CreateBidder", ([FromBody]CreateBidderRequestDto bidder, ICreateBidderHandler bidderHandler) =>
 {
     var result = bidderHandler.CreateBidder(bidder);

@@ -22,7 +22,12 @@ public class BiddersRepository : IBiddersRepository
     {
         return _database.Bidders?.Where(bidder => bidder != null && !bidder.GetIsDeleted()).ToList();
     }
-    
+
+    public Bidder? GetBidderById(Guid? bidderId)
+    {
+        return _database.Bidders?.FirstOrDefault(bidder => bidder?.GetId() == bidderId) ?? null;
+    }
+
     public Bidder? UpdateBidder(Bidder? bidder)
     {
         _database.Bidders?.Where(existingBidder => existingBidder?.GetId() == bidder?.GetId())

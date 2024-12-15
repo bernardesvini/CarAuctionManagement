@@ -27,9 +27,10 @@ public class BiddersService : IBiddersService
         return bidders;
     }
 
-    public Bidder GetBidderById(Guid? id)
+    public Bidder? GetBidderById(Guid? id)
     {
-        Bidder bidder = GetBidderByIdValidation(id);
+        Bidder? bidder = _biddersRepository.GetBidderById(id);
+        GetBidderByIdValidation(bidder);
         return bidder;
     }
     
@@ -43,17 +44,15 @@ public class BiddersService : IBiddersService
     
     public void RemoveBidder(Guid? id)
     {
-        Bidder bidderToRemove = GetBidderByIdValidation(id);
-        _biddersRepository.RemoveBidder(bidderToRemove.GetId());
+        Bidder? bidderToRemove = _biddersRepository.GetBidderById(id);
+        GetBidderByIdValidation(bidderToRemove);
+        _biddersRepository.RemoveBidder(bidderToRemove?.GetId());
     }
 
-    private Bidder GetBidderByIdValidation(Guid? id)
+    private void GetBidderByIdValidation(Bidder? bidder)
     {
-        List<Bidder?>? existingBidders = _biddersRepository.GetBidders();
-        Bidder? bidder = existingBidders?.FirstOrDefault(b => b?.GetId() == id);
         if (bidder == null)
-            throw new CustomExceptions.BidderNotFoundByIdException(id);
-        return bidder;
+            throw new CustomExceptions.BidderNotFoundByIdException(bidder?.GetId());
     }
 
     private void BidderValidations(Bidder? bidder)

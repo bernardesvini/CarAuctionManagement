@@ -1,5 +1,7 @@
 ﻿using CarAuctionManagement.DTOs.Auctions.Responses;
+using CarAuctionManagement.DTOs.Bidder.Responses;
 using CarAuctionManagement.Models.Auctions;
+using CarAuctionManagement.Models.Bidders;
 using CarAuctionManagement.Services.Auctions;
 
 namespace CarAuctionManagement.Handlers.Auctions.GetAuctions;
@@ -36,5 +38,12 @@ public class GetAuctionHandler : IGetAuctionHandler
     {
         List<GetAuctionResponseDto?>? auctions = _auctionsService.GetClosedAuctions()?.Select(auction => auction?.ToGetResponseDto()).ToList();
         return auctions;
+    }
+
+    public BidderResponseDto? GetHighestBidder(Guid? auctionId)
+    {
+        Bidder? highestBidder = _auctionsService.GetHighestBidder(auctionId);
+        BidderResponseDto? response = highestBidder?.ToResponseDto();
+        return response;
     }
 }

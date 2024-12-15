@@ -1,7 +1,9 @@
 ﻿using CarAuctionManagement.ErrorHandling;
 using CarAuctionManagement.Models.Auctions;
+using CarAuctionManagement.Models.Bidders;
 using CarAuctionManagement.Models.Vehicles;
 using CarAuctionManagement.Repository.Auctions;
+using CarAuctionManagement.Repository.Bidders;
 using CarAuctionManagement.Repository.Vehicles;
 
 namespace CarAuctionManagement.Services.Auctions;
@@ -10,11 +12,13 @@ public class AuctionsService : IAuctionsService
 {
     private readonly IAuctionsRepository _auctionsRepository;
     private readonly IVehiclesRepository _vehiclesRepository;
+    private readonly IBiddersRepository _biddersRepository;
 
-    public AuctionsService(IAuctionsRepository auctionsRepository, IVehiclesRepository vehiclesRepository)
+    public AuctionsService(IAuctionsRepository auctionsRepository, IVehiclesRepository vehiclesRepository, IBiddersRepository biddersRepository)
     {
         _auctionsRepository = auctionsRepository;
         _vehiclesRepository = vehiclesRepository;
+        _biddersRepository = biddersRepository;
     }
 
     public Auction? StartAuction(Auction? auction)
@@ -76,6 +80,22 @@ public class AuctionsService : IAuctionsService
         if (closedAuctions == null || closedAuctions.Count == 0)
             throw new CustomExceptions.NoClosedAuctionsFoundException();
         return closedAuctions;
+    }
+
+    public Bidder? GetHighestBidder(Guid? auctionId)
+    {
+        Auction? auction = _auctionsRepository.GetHighestBidderId(auctionId);
+        HighestBidderValidations(auctionId, auction);
+        Bidder? highestBidder = _biddersRepository.GetBidderById(auction?.GetHighestBidder());
+        return highestBidder;
+    }
+
+    private static void HighestBidderValidations(Guid? auctionId, Auction? auction)
+    {
+        if (auction == null)
+            throw new CustomExceptions.AuctionNotFoundException(auctionId);
+        if (auction?.GetHighestBidder() == null || auction?.GetHighestBidder() == Guid.Empty)
+            throw new CustomExceptions.NoHighestBidderException(auctionId);
     }
 
     private void StartAuctionValidations(Auction? auction)
